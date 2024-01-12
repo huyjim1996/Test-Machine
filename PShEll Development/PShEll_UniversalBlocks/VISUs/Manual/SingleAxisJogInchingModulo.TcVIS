@@ -1,0 +1,2670 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <Visu Name="SingleAxisJogInchingModulo" Id="{e99f2d53-57eb-4ba6-98d3-95e146688fba}">
+    <XmlArchive>
+      <Data>
+        <o xml:space="preserve" t="VisualObject">
+          <n n="LastVisuLanguageModelEntry" />
+          <v n="UniqueIdGenerator">"11"</v>
+          <o n="VisualElemList" t="VisualElemList">
+            <l n="VisualElementList" t="VisualElemCollection" cet="GenericVisualElem">
+              <o>
+                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-16777216</v>
+                        <v n="CanonicalName">"Black"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-1</v>
+                        <v n="CanonicalName">"BasicElement-Fill-Color"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-65536</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-12337</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"LEFT"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value" t="Int16">5</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value" t="Int16">75</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value">110</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value">20</v>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="FontDescription">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="FontName">"Tahoma"</v>
+                          <v n="FontSize">15</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-10263709</v>
+                            <v n="CanonicalName">"Font-Default-Color"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">550940142L</v>
+                      <v n="Value">60</v>
+                    </o>
+                    <o>
+                      <v n="Id">1473355128L</v>
+                      <v n="Value">85</v>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value" t="Int16">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">564465120L</v>
+                      <v n="Value">"VISU_ST_RECTANGLE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">"Position:"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1782330054L</v>
+                      <v n="Value">"BS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">true</v>
+                    </o>
+                    <o>
+                      <v n="Id">2827249010L</v>
+                      <v n="Value">"PS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">823443203L</v>
+                      <v n="Value">"2517"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Rectangle"</v>
+                <v n="VisualElementTypeName">"VisuFbElemSimple"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_2"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" />
+                <v n="VisualElementIdentification">{8a6216ad-5e0e-473b-aa94-b7209bc81330}</v>
+                <v n="VisualElementOwningObjectGuid">{e99f2d53-57eb-4ba6-98d3-95e146688fba}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">1</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
+              <o>
+                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-16777216</v>
+                          <v n="CanonicalName">"Black"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-1</v>
+                          <v n="CanonicalName">"White"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-65536</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-12337</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"LEFT"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value" t="Int16">115</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value" t="Int16">75</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value" t="Int16">150</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value">20</v>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="FontDescription">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="FontName">"Tahoma"</v>
+                          <v n="FontSize">15</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-10263709</v>
+                            <v n="CanonicalName">"Font-Default-Color"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">550940142L</v>
+                      <v n="Value">190</v>
+                    </o>
+                    <o>
+                      <v n="Id">1473355128L</v>
+                      <v n="Value">85</v>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value" t="Int16">1</v>
+                    </o>
+                    <o>
+                      <v n="Id">564465120L</v>
+                      <v n="Value">"VISU_ST_RECTANGLE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">"%6.3f"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1782330054L</v>
+                      <v n="Value">"BS_SOLID"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"lrPosition"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">2827249010L</v>
+                      <v n="Value">"PS_SOLID"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">823443203L</v>
+                      <v n="Value">"21"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Rectangle"</v>
+                <v n="VisualElementTypeName">"VisuFbElemSimple"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_4"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" ckt="String" cvt="InputBoxInputAction[]">
+                  <v>OnMouseClick</v>
+                  <a cet="InputBoxInputAction">
+                    <o>
+                      <v n="InputBoxVariable">""</v>
+                      <v n="InputType">"VisuDialogs.Numpad"</v>
+                      <v n="InputBoxMin">""</v>
+                      <v n="InputBoxMax">""</v>
+                      <v n="InputBoxDialogTitle">""</v>
+                      <v n="Password">false</v>
+                      <v n="UseTextOutputVariable">true</v>
+                      <v n="TextOutputVariableInitialized">true</v>
+                      <v n="OtherVarConversion">""</v>
+                      <v n="Format">""</v>
+                      <v n="DialogPosition" t="DialogPositionSetting">UseGlobalSetting</v>
+                      <v n="DialogXPos">""</v>
+                      <v n="DialogYPos">""</v>
+                    </o>
+                  </a>
+                </d>
+                <v n="VisualElementIdentification">{3220ffdd-48b9-47af-995c-c778320e43eb}</v>
+                <v n="VisualElementOwningObjectGuid">{e99f2d53-57eb-4ba6-98d3-95e146688fba}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">3</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
+              <o>
+                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-16777216</v>
+                        <v n="CanonicalName">"Black"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-1</v>
+                        <v n="CanonicalName">"BasicElement-Fill-Color"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-65536</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-12337</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"LEFT"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value" t="Int16">275</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value" t="Int16">75</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value" t="Int16">44</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value">18</v>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="FontDescription">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="FontName">"Tahoma"</v>
+                          <v n="FontSize">15</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-10263709</v>
+                            <v n="CanonicalName">"Font-Default-Color"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">550940142L</v>
+                      <v n="Value">374</v>
+                    </o>
+                    <o>
+                      <v n="Id">1473355128L</v>
+                      <v n="Value">143</v>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value" t="Int16">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">564465120L</v>
+                      <v n="Value">"VISU_ST_RECTANGLE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">"[%s]"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1782330054L</v>
+                      <v n="Value">"BS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"sUnit"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">2827249010L</v>
+                      <v n="Value">"PS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">823443203L</v>
+                      <v n="Value">"374"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Rectangle"</v>
+                <v n="VisualElementTypeName">"VisuFbElemSimple"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_6"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" />
+                <v n="VisualElementIdentification">{12510c8f-e9b0-4df7-b595-65a4ddd0ef0b}</v>
+                <v n="VisualElementOwningObjectGuid">{e99f2d53-57eb-4ba6-98d3-95e146688fba}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">5</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
+              <o>
+                <a n="ConfiguredComplexInputs" cet="ComplexInput">
+                  <o>
+                    <n n="DescriptionTree" />
+                    <o n="VisualElemMemberList" t="VisualElemMemberList">
+                      <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                        <o>
+                          <v n="Id">1186196937L</v>
+                          <v n="Value">"btnJogPositive"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <v n="SignatureName">"Visu_TapInput"</v>
+                    <v n="Name">"Tap"</v>
+                    <v n="Description">"Configure the tapping of a Boolean variable"</v>
+                  </o>
+                </a>
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"HCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1647042231L</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <v n="Value">4294967295U</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value" t="Int16">10</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value">5</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value" t="Int16">300</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value" t="Int16">50</v>
+                    </o>
+                    <o>
+                      <v n="Id">1651471674L</v>
+                      <v n="Value">true</v>
+                    </o>
+                    <o>
+                      <v n="Id">2341735680L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-2830136</v>
+                          <v n="CanonicalName">"Element-Control-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">438423234L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-2830136</v>
+                          <v n="CanonicalName">"Element-Alarm-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleFont">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="CanonicalName">"Font-Heading"</v>
+                          <v n="FontName">"Segoe UI"</v>
+                          <v n="FontSize">20</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-10263709</v>
+                            <v n="CanonicalName">"Element-Button-FontColor"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">550940142L</v>
+                      <v n="Value">271</v>
+                    </o>
+                    <o>
+                      <v n="Id">1473355128L</v>
+                      <v n="Value">64</v>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <v n="Value">4294967295U</v>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value">1U</v>
+                    </o>
+                    <o>
+                      <v n="Id">2478807622L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">"Jog"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">4168582468L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">823443203L</v>
+                      <v n="Value">"2436"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Button"</v>
+                <v n="VisualElementTypeName">"VisuFbElemButton"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_10"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" />
+                <v n="VisualElementIdentification">{62c3d396-d847-4854-8150-29a4df2422a7}</v>
+                <v n="VisualElementOwningObjectGuid">{e99f2d53-57eb-4ba6-98d3-95e146688fba}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">9</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
+              <o>
+                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-16777216</v>
+                        <v n="CanonicalName">"Black"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-1</v>
+                        <v n="CanonicalName">"BasicElement-Fill-Color"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-65536</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-12337</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"LEFT"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value" t="Int16">5</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value" t="Int16">105</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value">110</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value">20</v>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="FontDescription">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="FontName">"Tahoma"</v>
+                          <v n="FontSize">15</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-10263709</v>
+                            <v n="CanonicalName">"Font-Default-Color"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">550940142L</v>
+                      <v n="Value">60</v>
+                    </o>
+                    <o>
+                      <v n="Id">1473355128L</v>
+                      <v n="Value">115</v>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value" t="Int16">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">564465120L</v>
+                      <v n="Value">"VISU_ST_RECTANGLE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">"Velocity:"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1782330054L</v>
+                      <v n="Value">"BS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">true</v>
+                    </o>
+                    <o>
+                      <v n="Id">2827249010L</v>
+                      <v n="Value">"PS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">823443203L</v>
+                      <v n="Value">"1334"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Rectangle"</v>
+                <v n="VisualElementTypeName">"VisuFbElemSimple"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_12"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" />
+                <v n="VisualElementIdentification">{819c873d-a3d0-4ffe-bc62-36a3c973a7e0}</v>
+                <v n="VisualElementOwningObjectGuid">{e99f2d53-57eb-4ba6-98d3-95e146688fba}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">11</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
+              <o>
+                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-16777216</v>
+                          <v n="CanonicalName">"Black"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-1</v>
+                          <v n="CanonicalName">"White"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-65536</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-12337</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"LEFT"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value" t="Int16">115</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value" t="Int16">105</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value" t="Int16">150</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value">20</v>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="FontDescription">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="FontName">"Tahoma"</v>
+                          <v n="FontSize">15</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-10263709</v>
+                            <v n="CanonicalName">"Font-Default-Color"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">550940142L</v>
+                      <v n="Value">190</v>
+                    </o>
+                    <o>
+                      <v n="Id">1473355128L</v>
+                      <v n="Value">115</v>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value" t="Int16">1</v>
+                    </o>
+                    <o>
+                      <v n="Id">564465120L</v>
+                      <v n="Value">"VISU_ST_RECTANGLE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">"%6.3f"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1782330054L</v>
+                      <v n="Value">"BS_SOLID"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"lrVelocity"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">2827249010L</v>
+                      <v n="Value">"PS_SOLID"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">823443203L</v>
+                      <v n="Value">"21"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Rectangle"</v>
+                <v n="VisualElementTypeName">"VisuFbElemSimple"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_14"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" ckt="String" cvt="InputBoxInputAction[]">
+                  <v>OnMouseClick</v>
+                  <a cet="InputBoxInputAction">
+                    <o>
+                      <v n="InputBoxVariable">""</v>
+                      <v n="InputType">"VisuDialogs.Numpad"</v>
+                      <v n="InputBoxMin">""</v>
+                      <v n="InputBoxMax">""</v>
+                      <v n="InputBoxDialogTitle">""</v>
+                      <v n="Password">false</v>
+                      <v n="UseTextOutputVariable">true</v>
+                      <v n="TextOutputVariableInitialized">true</v>
+                      <v n="OtherVarConversion">""</v>
+                      <v n="Format">""</v>
+                      <v n="DialogPosition" t="DialogPositionSetting">UseGlobalSetting</v>
+                      <v n="DialogXPos">""</v>
+                      <v n="DialogYPos">""</v>
+                    </o>
+                  </a>
+                </d>
+                <v n="VisualElementIdentification">{d193b4a1-caaa-43d0-b587-63c55c630151}</v>
+                <v n="VisualElementOwningObjectGuid">{e99f2d53-57eb-4ba6-98d3-95e146688fba}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">13</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
+              <o>
+                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-16777216</v>
+                        <v n="CanonicalName">"Black"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-1</v>
+                        <v n="CanonicalName">"BasicElement-Fill-Color"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-65536</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-12337</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"LEFT"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value" t="Int16">275</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value" t="Int16">105</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value" t="Int16">44</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value">18</v>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="FontDescription">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="FontName">"Tahoma"</v>
+                          <v n="FontSize">15</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-10263709</v>
+                            <v n="CanonicalName">"Font-Default-Color"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">550940142L</v>
+                      <v n="Value">374</v>
+                    </o>
+                    <o>
+                      <v n="Id">1473355128L</v>
+                      <v n="Value">172</v>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value" t="Int16">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">564465120L</v>
+                      <v n="Value">"VISU_ST_RECTANGLE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">"[%s]"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1782330054L</v>
+                      <v n="Value">"BS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"sUnit"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">2827249010L</v>
+                      <v n="Value">"PS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">823443203L</v>
+                      <v n="Value">"374"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Rectangle"</v>
+                <v n="VisualElementTypeName">"VisuFbElemSimple"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_16"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" />
+                <v n="VisualElementIdentification">{ba34da03-9e90-4088-9a69-9d77f6aafb49}</v>
+                <v n="VisualElementOwningObjectGuid">{e99f2d53-57eb-4ba6-98d3-95e146688fba}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">15</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
+              <o>
+                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-16777216</v>
+                        <v n="CanonicalName">"Black"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-1</v>
+                        <v n="CanonicalName">"BasicElement-Fill-Color"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-65536</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-12337</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"LEFT"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value" t="Int16">5</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value" t="Int16">135</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value">110</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value">20</v>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="FontDescription">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="FontName">"Tahoma"</v>
+                          <v n="FontSize">15</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-10263709</v>
+                            <v n="CanonicalName">"Font-Default-Color"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">550940142L</v>
+                      <v n="Value">60</v>
+                    </o>
+                    <o>
+                      <v n="Id">1473355128L</v>
+                      <v n="Value">145</v>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value" t="Int16">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">564465120L</v>
+                      <v n="Value">"VISU_ST_RECTANGLE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">"Acceleration:"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1782330054L</v>
+                      <v n="Value">"BS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">true</v>
+                    </o>
+                    <o>
+                      <v n="Id">2827249010L</v>
+                      <v n="Value">"PS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">823443203L</v>
+                      <v n="Value">"494"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Rectangle"</v>
+                <v n="VisualElementTypeName">"VisuFbElemSimple"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_18"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" />
+                <v n="VisualElementIdentification">{e0d94af2-531c-4165-a257-edda713c01cb}</v>
+                <v n="VisualElementOwningObjectGuid">{e99f2d53-57eb-4ba6-98d3-95e146688fba}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">17</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
+              <o>
+                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-16777216</v>
+                          <v n="CanonicalName">"Black"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-1</v>
+                          <v n="CanonicalName">"White"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-65536</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-12337</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"LEFT"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value" t="Int16">115</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value" t="Int16">135</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value" t="Int16">150</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value">20</v>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="FontDescription">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="FontName">"Tahoma"</v>
+                          <v n="FontSize">15</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-10263709</v>
+                            <v n="CanonicalName">"Font-Default-Color"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">550940142L</v>
+                      <v n="Value">190</v>
+                    </o>
+                    <o>
+                      <v n="Id">1473355128L</v>
+                      <v n="Value">145</v>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value" t="Int16">1</v>
+                    </o>
+                    <o>
+                      <v n="Id">564465120L</v>
+                      <v n="Value">"VISU_ST_RECTANGLE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">"%6.3f"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1782330054L</v>
+                      <v n="Value">"BS_SOLID"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"lrAcceleration"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">2827249010L</v>
+                      <v n="Value">"PS_SOLID"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">823443203L</v>
+                      <v n="Value">"21"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Rectangle"</v>
+                <v n="VisualElementTypeName">"VisuFbElemSimple"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_20"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" ckt="String" cvt="InputBoxInputAction[]">
+                  <v>OnMouseClick</v>
+                  <a cet="InputBoxInputAction">
+                    <o>
+                      <v n="InputBoxVariable">""</v>
+                      <v n="InputType">"VisuDialogs.Numpad"</v>
+                      <v n="InputBoxMin">""</v>
+                      <v n="InputBoxMax">""</v>
+                      <v n="InputBoxDialogTitle">""</v>
+                      <v n="Password">false</v>
+                      <v n="UseTextOutputVariable">true</v>
+                      <v n="TextOutputVariableInitialized">true</v>
+                      <v n="OtherVarConversion">""</v>
+                      <v n="Format">""</v>
+                      <v n="DialogPosition" t="DialogPositionSetting">UseGlobalSetting</v>
+                      <v n="DialogXPos">""</v>
+                      <v n="DialogYPos">""</v>
+                    </o>
+                  </a>
+                </d>
+                <v n="VisualElementIdentification">{f14912aa-7357-48d8-a7a9-6408bb715664}</v>
+                <v n="VisualElementOwningObjectGuid">{e99f2d53-57eb-4ba6-98d3-95e146688fba}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">19</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
+              <o>
+                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-16777216</v>
+                        <v n="CanonicalName">"Black"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-1</v>
+                        <v n="CanonicalName">"BasicElement-Fill-Color"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-65536</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-12337</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"LEFT"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value" t="Int16">275</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value" t="Int16">135</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value" t="Int16">44</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value">18</v>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="FontDescription">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="FontName">"Tahoma"</v>
+                          <v n="FontSize">15</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-10263709</v>
+                            <v n="CanonicalName">"Font-Default-Color"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">550940142L</v>
+                      <v n="Value">374</v>
+                    </o>
+                    <o>
+                      <v n="Id">1473355128L</v>
+                      <v n="Value">201</v>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value" t="Int16">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">564465120L</v>
+                      <v n="Value">"VISU_ST_RECTANGLE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">"[%s]"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1782330054L</v>
+                      <v n="Value">"BS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"sUnit"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">2827249010L</v>
+                      <v n="Value">"PS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">823443203L</v>
+                      <v n="Value">"374"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Rectangle"</v>
+                <v n="VisualElementTypeName">"VisuFbElemSimple"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_22"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" />
+                <v n="VisualElementIdentification">{30c7c805-bf7d-4e0f-b394-1f8d84ad7ec2}</v>
+                <v n="VisualElementOwningObjectGuid">{e99f2d53-57eb-4ba6-98d3-95e146688fba}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">21</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
+              <o>
+                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-16777216</v>
+                        <v n="CanonicalName">"Black"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-1</v>
+                        <v n="CanonicalName">"BasicElement-Fill-Color"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-65536</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-12337</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"LEFT"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value" t="Int16">5</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value" t="Int16">165</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value">110</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value">20</v>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="FontDescription">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="FontName">"Tahoma"</v>
+                          <v n="FontSize">15</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-10263709</v>
+                            <v n="CanonicalName">"Font-Default-Color"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">550940142L</v>
+                      <v n="Value">60</v>
+                    </o>
+                    <o>
+                      <v n="Id">1473355128L</v>
+                      <v n="Value">175</v>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value" t="Int16">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">564465120L</v>
+                      <v n="Value">"VISU_ST_RECTANGLE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">"Deceleration:"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1782330054L</v>
+                      <v n="Value">"BS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">true</v>
+                    </o>
+                    <o>
+                      <v n="Id">2827249010L</v>
+                      <v n="Value">"PS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">823443203L</v>
+                      <v n="Value">"1092"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Rectangle"</v>
+                <v n="VisualElementTypeName">"VisuFbElemSimple"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_24"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" />
+                <v n="VisualElementIdentification">{8cfc4b97-0a0c-4680-af57-3a8463c6cb83}</v>
+                <v n="VisualElementOwningObjectGuid">{e99f2d53-57eb-4ba6-98d3-95e146688fba}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">23</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
+              <o>
+                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-16777216</v>
+                          <v n="CanonicalName">"Black"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-1</v>
+                          <v n="CanonicalName">"White"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-65536</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-12337</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"LEFT"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value" t="Int16">115</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value" t="Int16">165</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value" t="Int16">150</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value">20</v>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="FontDescription">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="FontName">"Tahoma"</v>
+                          <v n="FontSize">15</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-10263709</v>
+                            <v n="CanonicalName">"Font-Default-Color"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">550940142L</v>
+                      <v n="Value">190</v>
+                    </o>
+                    <o>
+                      <v n="Id">1473355128L</v>
+                      <v n="Value">175</v>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value" t="Int16">1</v>
+                    </o>
+                    <o>
+                      <v n="Id">564465120L</v>
+                      <v n="Value">"VISU_ST_RECTANGLE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">"%6.3f"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1782330054L</v>
+                      <v n="Value">"BS_SOLID"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"lrDeceleration"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">2827249010L</v>
+                      <v n="Value">"PS_SOLID"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">823443203L</v>
+                      <v n="Value">"21"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Rectangle"</v>
+                <v n="VisualElementTypeName">"VisuFbElemSimple"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_26"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" ckt="String" cvt="InputBoxInputAction[]">
+                  <v>OnMouseClick</v>
+                  <a cet="InputBoxInputAction">
+                    <o>
+                      <v n="InputBoxVariable">""</v>
+                      <v n="InputType">"VisuDialogs.Numpad"</v>
+                      <v n="InputBoxMin">""</v>
+                      <v n="InputBoxMax">""</v>
+                      <v n="InputBoxDialogTitle">""</v>
+                      <v n="Password">false</v>
+                      <v n="UseTextOutputVariable">true</v>
+                      <v n="TextOutputVariableInitialized">true</v>
+                      <v n="OtherVarConversion">""</v>
+                      <v n="Format">""</v>
+                      <v n="DialogPosition" t="DialogPositionSetting">UseGlobalSetting</v>
+                      <v n="DialogXPos">""</v>
+                      <v n="DialogYPos">""</v>
+                    </o>
+                  </a>
+                </d>
+                <v n="VisualElementIdentification">{f4a85ee3-9d1a-43ce-bcff-3bd0526525b2}</v>
+                <v n="VisualElementOwningObjectGuid">{e99f2d53-57eb-4ba6-98d3-95e146688fba}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">25</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
+              <o>
+                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-16777216</v>
+                        <v n="CanonicalName">"Black"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-1</v>
+                        <v n="CanonicalName">"BasicElement-Fill-Color"</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-65536</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-12337</v>
+                          <v n="CanonicalName">"BasicElement-Alarm-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"LEFT"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value" t="Int16">275</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value" t="Int16">165</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value" t="Int16">44</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value">18</v>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="FontDescription">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="FontName">"Tahoma"</v>
+                          <v n="FontSize">15</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-10263709</v>
+                            <v n="CanonicalName">"Font-Default-Color"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">550940142L</v>
+                      <v n="Value">374</v>
+                    </o>
+                    <o>
+                      <v n="Id">1473355128L</v>
+                      <v n="Value">232</v>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value" t="Int16">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">564465120L</v>
+                      <v n="Value">"VISU_ST_RECTANGLE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">"[%s]"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1782330054L</v>
+                      <v n="Value">"BS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"sUnit"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">2827249010L</v>
+                      <v n="Value">"PS_HOLLOW"</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">823443203L</v>
+                      <v n="Value">"374"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Rectangle"</v>
+                <v n="VisualElementTypeName">"VisuFbElemSimple"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_28"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" />
+                <v n="VisualElementIdentification">{94b8745c-d8f1-4259-9c2c-b4576c6ac049}</v>
+                <v n="VisualElementOwningObjectGuid">{e99f2d53-57eb-4ba6-98d3-95e146688fba}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">27</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
+            </l>
+            <v n="BackgroundBitmapId">""</v>
+            <v n="BackgroundColor">16777215</v>
+            <o n="Background" t="BackgroundSettings">
+              <n n="BgGradient" />
+              <n n="BgNamedColor" />
+              <v n="BgBmpId">""</v>
+              <v n="BgUseBmp">false</v>
+              <v n="BgColor">false</v>
+              <v n="BgUseColor">16777215</v>
+              <v n="BgUseGradient">false</v>
+            </o>
+          </o>
+          <o n="GeneratedLMMDescriptions" t="GeneratedLanguageModelEntriesData">
+            <o n="GeneratedVisuFbDescription" t="GenericFbDescription">
+              <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
+                <v>HasVisibilityAccess</v>
+                <v>d616f5fc-ce31-49e7-90e4-aa312309a64e</v>
+                <v>ContainsPoint</v>
+                <v>cf4a9e7f-1b6e-46b3-8aba-bd1281d856b9</v>
+                <v>HasInputAccess</v>
+                <v>f72d2b9c-ca8d-401d-9d7f-e2cef27e8536</v>
+                <v>HasInputAccessIntern</v>
+                <v>171c4305-a2d5-42bf-bddc-167bf8c56144</v>
+                <v>GetTooltip</v>
+                <v>8a6a7dae-1069-4c4e-84b9-03da5dd695b8</v>
+                <v>GetDialogInterfaceSize</v>
+                <v>732b6af3-9304-42e0-b173-f1a049182c99</v>
+                <v>GetUpdateRects</v>
+                <v>5ef3a5ea-f78e-4e21-a6c3-1f1fefcd7d96</v>
+                <v>GetNamespace</v>
+                <v>d3ec1964-de86-4599-b624-147479287cfd</v>
+                <v>SetResult</v>
+                <v>47d8cfd1-4e69-4a12-bb36-f9515b19ec5c</v>
+                <v>GetTranslator</v>
+                <v>5c159d16-c384-4da1-8a4c-83357e466999</v>
+                <v>Update</v>
+                <v>a53f7fe0-df44-4868-8859-174742f8d7cc</v>
+                <v>SetClientData</v>
+                <v>a56a4a21-142b-400a-8a16-2dad62fd6061</v>
+                <v>HasVisibilityAccessIntern</v>
+                <v>f101bf82-304e-4fd3-84da-36c2f665b737</v>
+                <v>GetInstance</v>
+                <v>f797a8fe-b148-4c86-914c-63aa63552bbf</v>
+                <v>GetClientData</v>
+                <v>86e2b367-2dcf-49f6-a8d9-8392453bdeca</v>
+                <v>Paint</v>
+                <v>b493d3cd-8102-465f-8a35-61027184d740</v>
+                <v>GetElementArray</v>
+                <v>c2e54753-03ed-406e-875d-104992d465e2</v>
+                <v>SetVisuFlagsInternal</v>
+                <v>2594c268-d926-4bf3-8f4c-fefd465b2e9e</v>
+                <v>GetText</v>
+                <v>a85161f1-c5cc-4134-8505-e9848316e42e</v>
+                <v>GetTextProperties</v>
+                <v>56941ce9-9eca-4de6-9f73-37515ae97fb9</v>
+                <v>IsAntialiasingInactive</v>
+                <v>3751c9de-6e3c-4f42-8192-9695dfa54c86</v>
+                <v>Initialize</v>
+                <v>3606c93f-ac46-4ac9-96e1-258796106129</v>
+                <v>Destruct</v>
+                <v>8d060711-f9b8-4fe5-af04-dbdeb69480cd</v>
+                <v>SetStaticState</v>
+                <v>2b1b47f7-e035-4792-b6c7-db03b56f0a44</v>
+                <v>GetSurroundingRect</v>
+                <v>21b86f61-9d27-4939-a782-8989c6f53277</v>
+                <v>GetResult</v>
+                <v>027cd491-dc34-43cd-90b9-f2a95da3cbe9</v>
+                <v>GetLocalUsergroup</v>
+                <v>3affc631-de02-4824-b6e3-230e12d4e597</v>
+                <v>GetName</v>
+                <v>d04a1d2c-ee5a-4a34-8c61-c8a2cc755aff</v>
+                <v>GetSize</v>
+                <v>07549538-08e9-4489-a5a7-6a97fbc720ce</v>
+                <v>SetDialogInterface</v>
+                <v>ba84bce7-84ae-4145-822b-f57399fe91a5</v>
+                <v>FB_Reinit</v>
+                <v>6183c748-0d5c-4c8a-855b-bb2a6c610da4</v>
+                <v>FB_Exit</v>
+                <v>766a847c-f092-4a5e-af74-a937af399198</v>
+                <v>GetInitializeVersion</v>
+                <v>b4c03c44-6281-4bdb-920b-c02d3dd5dd03</v>
+                <v>GetDialogInterface</v>
+                <v>c496773a-2b21-4bdd-935c-9a27ac55b3ee</v>
+                <v>GetElementIdArray</v>
+                <v>e9dfca99-27d4-413d-b5c8-b707bbc2ef43</v>
+                <v>HandleInput</v>
+                <v>67db3ba2-8b02-4b1e-aad5-b3459009a3bc</v>
+                <v>ElementInfo</v>
+                <v>06627538-e87f-43c3-83d9-667e9f50c297</v>
+              </d>
+              <v n="FbName">"NotImportant"</v>
+              <v n="FbGuid">{e99f2d53-57eb-4ba6-98d3-95e146688fba}</v>
+            </o>
+            <v n="GeneratedGlobalVisuVarsGuid">{80437f68-b8a4-425c-b4a1-de995ea8d7fc}</v>
+            <v n="GeneratedGlobalTheVisuVarlistGuid">{ed1c5514-e4f2-4fa4-b86a-5d2147c56ce5}</v>
+            <v n="GeneratedGlobalVisuConstants">{fbc1c80e-a4a0-495a-aa2e-7b3141303eee}</v>
+            <d n="GeneratedAllElementsEntries" t="Hashtable" />
+            <o n="VisuRegDesc" t="GenericFbDescription">
+              <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
+                <v>FB_Init</v>
+                <v>b529a08d-25f6-4825-9e35-594e7aa03452</v>
+                <v>FB_Reinit</v>
+                <v>f5a4b1d4-d121-4ffd-9924-81117bfecf40</v>
+                <v>FB_Exit</v>
+                <v>4ec15fca-ef44-45c3-b9f3-8ea376d3fcc7</v>
+              </d>
+              <v n="FbName">"NotImportant"</v>
+              <v n="FbGuid">{1ee1af06-e9ef-46fd-94eb-6ec5ae010f53}</v>
+            </o>
+            <v n="VisuRegisterGvl">{f07502b4-2b02-43a2-ac3c-b47759d554cc}</v>
+            <n n="SettingsPou" />
+            <n n="MemManPou" />
+            <o n="InputsPou" t="GenericFbDescription">
+              <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
+                <v>ExecuteLooseCapture</v>
+                <v>9f386624-20b4-4255-9e8c-c8e683ff660a</v>
+                <v>ExecuteMouseDblClick</v>
+                <v>ebe37e13-9576-44c9-94d5-bbfd8f414d88</v>
+                <v>ExecuteMouseDown</v>
+                <v>3b0ca7ec-a983-4d4e-b01f-db2a691ca996</v>
+                <v>ExecuteMouseUp</v>
+                <v>3ea8543e-54d7-4af9-8fd0-a32da66afcfe</v>
+                <v>GetElementInfo</v>
+                <v>b43ce8fd-0ece-4396-935c-3d8bac5e4f54</v>
+                <v>abstrGetDefaultCursor</v>
+                <v>34568b48-41ad-44b0-846c-2464de714384</v>
+                <v>ExecuteDialogClosed</v>
+                <v>d59cd376-a85c-4a89-9018-c6d5771b4baf</v>
+                <v>ExecuteKeyUp</v>
+                <v>c70070c4-8726-4036-88fe-b4eb5ff613d1</v>
+                <v>ExecuteKeyDown</v>
+                <v>ed98aec2-1f08-4542-bf8b-3ab3df10a466</v>
+                <v>ExecuteMouseMove</v>
+                <v>a8a4f4e9-8c86-4153-b981-3a2862a07d55</v>
+                <v>Initialize</v>
+                <v>33f773ff-f708-4fae-9130-0ad8f1dd3df8</v>
+                <v>ExecuteMouseEnter</v>
+                <v>94f58b42-0f55-49c1-8748-a3e21dc29f46</v>
+                <v>ExecuteMouseLeave</v>
+                <v>02a2f89e-b042-416f-b389-d37dc561bfbf</v>
+                <v>ExecuteMouseClick</v>
+                <v>a1304308-f023-4cc3-9c85-0562e0359ae6</v>
+              </d>
+              <v n="FbName">"NotImportant"</v>
+              <v n="FbGuid">{073b4f6c-3112-4657-ae7d-a3f84cb3ddf2}</v>
+            </o>
+            <v n="DialogDut">{c5c40261-9447-42e2-9053-97a2ba65a6b0}</v>
+          </o>
+          <v n="LastUsedIdForIdentifier">29</v>
+          <o n="TextDocument" t="TextDocument">
+            <a n="TextLines" cet="TextLine">
+              <o>
+                <v n="Id">4L</v>
+                <n n="Tag" />
+                <v n="Text">"VAR_IN_OUT"</v>
+              </o>
+              <o>
+                <v n="Id">6L</v>
+                <n n="Tag" />
+                <v n="Text">"	btnJogPositive	: BOOL;"</v>
+              </o>
+              <o>
+                <v n="Id">7L</v>
+                <n n="Tag" />
+                <v n="Text">"	btnJogNegative	: BOOL;"</v>
+              </o>
+              <o>
+                <v n="Id">8L</v>
+                <n n="Tag" />
+                <v n="Text">"	lrPosition		: LREAL;"</v>
+              </o>
+              <o>
+                <v n="Id">9L</v>
+                <n n="Tag" />
+                <v n="Text">"	lrVelocity		: LREAL;"</v>
+              </o>
+              <o>
+                <v n="Id">10L</v>
+                <n n="Tag" />
+                <v n="Text">"	lrAcceleration	: LREAL;"</v>
+              </o>
+              <o>
+                <v n="Id">5L</v>
+                <n n="Tag" />
+                <v n="Text">"	lrDeceleration	: LREAL;"</v>
+              </o>
+              <o>
+                <v n="Id">11L</v>
+                <n n="Tag" />
+                <v n="Text">"	sUnit			: STRING;"</v>
+              </o>
+              <o>
+                <v n="Id">1L</v>
+                <n n="Tag" />
+                <v n="Text">"END_VAR"</v>
+              </o>
+            </a>
+          </o>
+          <v n="GvlCreated">false</v>
+          <n n="LMEntry" />
+          <v n="ProfileCompatibilityId">4140216668L</v>
+          <v n="LMVerMinor">0</v>
+          <v n="LMVerMajor">1</v>
+          <o n="Hotkeys" t="HotkeyConfiguration">
+            <v n="IdMin">481037385728L</v>
+            <v n="IdMax">549755813887L</v>
+            <v n="Id">481037385728L</v>
+            <v n="IdMask">549754765312L</v>
+            <v n="IdStep">1048576L</v>
+            <l2 n="Inputs" />
+          </o>
+          <o n="VisuSizeManager" t="VisualObjectSizeManager">
+            <d2 n="Size" ckt="Int32" cvt="VisualObjectSize">
+              <v>0</v>
+              <o>
+                <v n="Width">320</v>
+                <v n="Height">200</v>
+              </o>
+              <v>1</v>
+              <o>
+                <v n="Width">320</v>
+                <v n="Height">200</v>
+              </o>
+            </d2>
+            <v n="Version">1</v>
+          </o>
+        </o>
+      </Data>
+      <TypeList>
+        <Type n="ArrayList">System.Collections.ArrayList</Type>
+        <Type n="BackgroundSettings">{1038f12c-dd4b-4f96-87a3-a350fe8f3552}</Type>
+        <Type n="Boolean">System.Boolean</Type>
+        <Type n="CaseInsensitiveHashtable">{7df88604-7ac5-4e36-91c4-55e4fdad3e68}</Type>
+        <Type n="ComplexInput">{1de566f6-72a7-494c-9353-9a418172c96e}</Type>
+        <Type n="DialogPositionSetting">{16f3f59a-37ad-4991-a1af-cc2926974e08}</Type>
+        <Type n="Double">System.Double</Type>
+        <Type n="FontDescription">{896a5e54-96c3-433b-96d2-4f1442fef591}</Type>
+        <Type n="GeneratedLanguageModelEntriesData">{703465dc-4679-4ff2-bcc3-c57d0a204da3}</Type>
+        <Type n="GenericFbDescription">{40d6dd8d-dfd0-493a-8e29-c9a35e1e6539}</Type>
+        <Type n="GenericVisualElem">{f86c2928-8614-4cca-824b-e819ac4d58c4}</Type>
+        <Type n="Guid">System.Guid</Type>
+        <Type n="Hashtable">System.Collections.Hashtable</Type>
+        <Type n="HotkeyConfiguration">{6b108d46-58af-4e41-a3f4-174d8f160cc4}</Type>
+        <Type n="InputBoxInputAction">{e8e7e747-f76f-4dee-ab1c-b9637e41ac26}</Type>
+        <Type n="InputBoxInputAction[]">_3S.CoDeSys.VisualElem.InputBoxInputAction[], VisualElem.plugin, Version=3.5.13.31, Culture=neutral, PublicKeyToken=null</Type>
+        <Type n="Int16">System.Int16</Type>
+        <Type n="Int32">System.Int32</Type>
+        <Type n="Int64">System.Int64</Type>
+        <Type n="NamedStyleColor">{fa491db2-51ff-4bc1-9cd0-ce8c94ff6216}</Type>
+        <Type n="NamedStyleFont">{9e842eb2-1463-4af2-b605-4fbb17044f94}</Type>
+        <Type n="String">System.String</Type>
+        <Type n="TextDocument">{f3878285-8e4f-490b-bb1b-9acbb7eb04db}</Type>
+        <Type n="TextLine">{a5de0b0b-1cb5-4913-ac21-9d70293ec00d}</Type>
+        <Type n="UInt16">System.UInt16</Type>
+        <Type n="UInt32">System.UInt32</Type>
+        <Type n="VisualElemCollection">{ef9d0b20-c96e-48db-b361-2ded4063150e}</Type>
+        <Type n="VisualElemList">{f285c9a3-7019-446b-b98c-ccec3a0af8fa}</Type>
+        <Type n="VisualElemMember">{c694e3a2-5c0b-4177-ab35-cb06bd5a6a02}</Type>
+        <Type n="VisualElemMemberCollection">{a4b83bea-3742-489c-9fe8-d96d68dba7ab}</Type>
+        <Type n="VisualElemMemberList">{17e26cd1-bb9b-47fe-a3d5-18fcd63b9c96}</Type>
+        <Type n="VisualObject">{f18bec89-9fef-401d-9953-2f11739a6808}</Type>
+        <Type n="VisualObjectSize">{6ad3e88f-aee2-4766-a7ea-a8790037ef51}</Type>
+        <Type n="VisualObjectSizeManager">{5f612b0e-b404-455f-8177-27864e9f5332}</Type>
+      </TypeList>
+    </XmlArchive>
+    <ObjectProperties>
+      <XmlArchive>
+        <Data>
+          <o xml:space="preserve" t="VisualProperty">
+            <v n="VisuUsageType">0</v>
+            <v n="SizeX">320</v>
+            <v n="SizeY">200</v>
+            <v n="IsStartVisu">false</v>
+            <v n="VisuSizeMode" t="VisualVisuSizeMode">Specified</v>
+            <v n="Internal">false</v>
+            <v n="DialogIsOpaque">false</v>
+            <v n="DialogIsOpaqueIsSet">false</v>
+          </o>
+        </Data>
+        <TypeList>
+          <Type n="Boolean">System.Boolean</Type>
+          <Type n="Int32">System.Int32</Type>
+          <Type n="VisualProperty">{477d844b-9b2a-407e-90a4-d36fd6dde2fc}</Type>
+          <Type n="VisualVisuSizeMode">{34718b76-91f6-43de-8c65-b77e0b1ee621}</Type>
+        </TypeList>
+      </XmlArchive>
+    </ObjectProperties>
+  </Visu>
+</TcPlcObject>

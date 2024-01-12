@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_DigitalOutput_Test" Id="{ab5f3dff-b5ad-464c-933e-27a9747ff628}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_DigitalOutput_Test
+VAR
+	bFirstCycle		: BOOL := TRUE;
+	bValue			: BOOL;					(* Output value to set on object *)
+	poTestOutput	: FB_DigitalOutput();	(* Digital output object *)
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	poTestOutput.MR_FirstCycle('My test digital output');
+END_IF
+
+poTestOutput.Out := bValue;
+poTestOutput();
+]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_DigitalOutput_Test">
+      <LineId Id="75" Count="6" />
+      <LineId Id="12" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

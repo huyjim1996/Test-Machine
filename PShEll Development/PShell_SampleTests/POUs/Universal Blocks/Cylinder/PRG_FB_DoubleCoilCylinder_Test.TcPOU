@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_DoubleCoilCylinder_Test" Id="{e5f6a955-8c77-401f-ae7d-802cc3c28087}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_DoubleCoilCylinder_Test
+VAR
+	bFirstCycle : BOOL := TRUE;
+	(* Commands *)
+	bInit			: BOOL;					(* Cylinder init command *)
+	bAbort			: BOOL;					(* Cylinder deinit command *)
+	bGoHome			: BOOL;					(* Go to home position command *)
+	bGoActive		: BOOL;					(* Go to active position command *)
+	bRelease		: BOOL;					(* Cylinder release command *)
+	bReset			: BOOL;					(* Cylinder reset command *)
+	
+	(* Parameters *)
+	tDelay			: TIME := T#100MS;		(*  *)
+	tActiveTimeout	: TIME := T#20S;		(*  *)
+	tHomeTimeout	: TIME := T#20S;		(*  *)
+	bSimulation 	: BOOL := TRUE;			(* Simulation enable bit *)
+	
+	(* Status *)
+	bActive			: REFERENCE TO BOOL;				(*  *)
+	bBusy			: REFERENCE TO BOOL;				(*  *)
+	bError			: REFERENCE TO BOOL;				(*  *)
+	eErrorID		: REFERENCE TO E_CylinderError;		(*  *)
+	tMoveActiveTime	: REFERENCE TO TIME;				(*  *)
+	tMoveHomeTime	: REFERENCE TO TIME;				(*  *)
+	bSensorHome		: REFERENCE TO BOOL;				(* Sensor home status bit *)
+	bSensorActive 	: REFERENCE TO BOOL;				(* Sensor active status bit *)
+	eState			: REFERENCE TO E_CylinderState;		(*  *)
+	
+	fbTestCylinder : FB_DoubleCoilCylinder;	(* Universal cylinder object *)	
+	iState: USINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	fbTestCylinder.MR_FirstCycle( 	sName := 'Double_Coil_Cylinder',
+									tGoHomeTimeout := T#10S,
+									tGoActiveTimeout := T#10S,
+									tDelay := tDelay);
+									
+	bActive			REF= fbTestCylinder.Active;
+	bBusy			REF= fbTestCylinder.Busy;
+	bError 			REF= fbTestCylinder.Error;
+	eErrorID 		REF= fbTestCylinder.ErrorID;
+	eState			REF= fbTestCylinder.State;
+	tMoveActiveTime REF= fbTestCylinder.MoveActiveTime;
+	tMoveHomeTime 	REF= fbTestCylinder.MoveHomeTime;
+	bSensorHome 	REF= fbTestCylinder.PositionHome;
+	bSensorActive 	REF= fbTestCylinder.PositionActive;
+END_IF
+
+(* Simple controler *)
+IF bReset THEN
+	bReset := FALSE;
+	iState := 60;
+	
+ELSIF bAbort THEN
+	bAbort := FALSE;
+	iState := 20;
+	
+END_IF
+
+CASE iState OF
+	0:
+		IF bInit THEN
+			bInit := FALSE;
+			iState := 10;
+			
+		ELSIF bGoHome THEN
+			bGoHome := FALSE;
+			iState := 30;
+			
+		ELSIF bGoActive THEN
+			bGoActive := FALSE;
+			iState := 40;
+			
+		ELSIF bRelease THEN
+			bRelease := FALSE;
+			iState := 50;
+			
+		END_IF
+	10:
+		fbTestCylinder.MR_Init();
+		
+		IF fbTestCylinder.Active THEN
+			iState := 0;
+		END_IF
+	20:
+		fbTestCylinder.MR_Abort();
+		
+		IF NOT fbTestCylinder.Active THEN
+			iState := 0;
+		END_IF
+	30:
+		fbTestCylinder.MR_GoHome();
+		
+		IF fbTestCylinder.PositionHome AND NOT fbTestCylinder.Busy THEN
+			iState := 0;
+		END_IF
+	40:
+		fbTestCylinder.MR_GoActive();
+		
+		IF fbTestCylinder.PositionActive AND NOT fbTestCylinder.Busy THEN
+			iState := 0;
+		END_IF
+	50:
+		fbTestCylinder.MR_Release();
+		
+		IF NOT fbTestCylinder.PositionHold AND NOT fbTestCylinder.Busy THEN
+			iState := 0;
+		END_IF
+	60:
+		fbTestCylinder.MR_Reset();
+		
+		IF NOT fbTestCylinder.Error THEN
+			iState := 0;
+		END_IF
+		
+END_CASE
+
+fbTestCylinder.Simulation := bSimulation;
+fbTestCylinder.Delay := tDelay;
+fbTestCylinder.ActiveTimeout := tActiveTimeout;
+fbTestCylinder.HomeTimeout := tHomeTimeout;
+fbTestCylinder();
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

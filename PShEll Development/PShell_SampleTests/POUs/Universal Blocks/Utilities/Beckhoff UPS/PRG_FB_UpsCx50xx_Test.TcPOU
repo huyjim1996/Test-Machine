@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_UpsCx50xx_Test" Id="{a37a6e2d-fa5a-4de7-9ebe-6903580f44ac}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_UpsCx50xx_Test
+VAR
+	iSample		: INT := 10;
+	fbUpsCX5000	: FB_UpsCx50xx;
+END_VAR
+VAR PERSISTENT
+	iSamplePersistent : INT := 10;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbUpsCX5000.MR_FirstCycle(	sName := 'Beckhoff UPS CX50xx',
+							sNetID := '',
+							iPlcPort := 852,
+							tTimeout := DEFAULT_ADS_TIMEOUT);
+
+fbUpsCX5000();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_UpsCx50xx_Test">
+      <LineId Id="27" Count="3" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

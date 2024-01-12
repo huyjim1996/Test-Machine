@@ -1,0 +1,379 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_Camera_Test" Id="{fd3cb17b-46cc-4807-aa6a-94378af9bbe3}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_Camera_Test
+VAR
+	bFirstCycle 			: BOOL := TRUE;
+	fbFileLogger			: FB_FileLogger; 
+	fbCamera				: FB_CognexCamera; 
+	
+	iState 					: USINT;
+	
+	bInit 					: BOOL;
+	bAbort 					: BOOL;
+	bReset					: BOOL;
+	bGetConnections			: BOOL;
+	bGetExpr				: BOOL;
+	bGetFileList			: BOOL;
+	bGetFile				: BOOL;	
+	bGetOnline				: BOOL;	
+	bGetValueEasyBuilder	: BOOL;	
+	bGetValueSpreadsheet 	: BOOL;	
+	bLoadFile				: BOOL;	
+	bPutLive				: BOOL;	
+	bPutPortnum				: BOOL;		
+	bPutTimeout				: BOOL;	
+	bPutUpdate				: BOOL;
+	bPutWatch				: BOOL;
+	bResetSystem			: BOOL;		
+	bSetOnline				: BOOL;		
+	bStoreFile				: BOOL;	
+	bSetJob					: BOOL;
+	bGetJob					: BOOL;
+	bGetPosition			: BOOL;
+	bImageTrigger			: BOOL;
+	bGetValues				: BOOL;
+	
+	bError					: BOOL;
+	iErrorID				: UDINT;
+	
+	sHost					: T_IPv4Addr;
+	iPort					: UINT;
+	
+	sCellIndexExpr			: STRING 	:= 'A';
+	iColumnExpr 			: INT		:= 0;
+	iRowExpr 				: INT		:= 0;
+	sEasyBuilderValuePositionX	: STRING	:= 'Pattern_1.Fixture.X';
+	sEasyBuilderValuePositionY	: STRING	:= 'Pattern_1.Fixture.Y';
+	sEasyBuilderValueRotation	: STRING	:= 'Pattern_1.Fixture.Angle';
+	sEasyBuilderValueQuantity	: STRING	:= 'Pattern_1.Number_Found';
+	
+	iColumnValueSpreadsheet	: INT		:= 0;
+	iRowValueSpreadsheet	: INT		:= 0;
+	sLoadFileName			: STRING	:= 'Test.job';
+	bEnableLiveAcquisition	: INT		:= 1;
+	iPortNumber				: INT		:= 200;
+	iTimeout				: INT		:= 20;	
+	iUpdateNumber			: INT		:= 4;
+	iColumnPut 				: INT		:= 0;
+	iRowPut 				: INT		:= 0;
+	iOutputEnable			: INT		:= 1;
+	iJobNumber				: INT		:= 2;
+	bSetCameraOnline		: INT		:= 1;
+	sStoreFileName			: STRING	:= 'Test.job';
+	
+	lrPositionX				: LREAL;
+	lrPositionY				: LREAL;
+	lrRotation				: LREAL;
+
+	lrValue1				: LREAL;
+	lrValue2				: LREAL;
+	lrValue3				: LREAL;
+	lrValue4				: LREAL;
+		
+	sDirectoryForSimulation : STRING := 'C:\TwinCAT\Tests\';
+	MR_ImageTrigger: INT;
+	
+	fbRobot					: FB_CR800EtherCAT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* Setting initial parameters *)
+IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	fbCamera.MR_FirstCycle( 	sCameraName 	:= 'PShEll Test Camera',
+								sClientHost		:= '192.168.0.151',
+								sClientAmsNetID := '',
+								iClientPort 	:= 23,
+								tTimeout 		:= T#15S);
+							
+	fbFileLogger.MR_FirstCycle( sName		:= 'File Logger',
+								sFileDir 	:= sDirectoryForSimulation,
+								sFileName 	:= 'LoggerVisionTest',
+								sAmsNetId 	:= '',
+								bAddTimeStamp := TRUE,
+								bAddHeader := TRUE);	
+								
+	iState := 0;
+END_IF
+
+bError := fbCamera.Error;
+iErrorID := fbCamera.ErrorID;
+
+
+(* Closing the client connection *)
+IF bAbort THEN
+	bAbort := FALSE;
+	iState := 20;
+END_IF
+
+IF bReset THEN
+	bReset := FALSE;
+	iState := 30;
+END_IF
+
+CASE iState OF
+	(* File logger initialization *)
+	0:
+		IF bInit THEN
+				bInit := FALSE;		
+				iState := 10;
+
+		END_IF
+		
+	(* Client connection initialization *)
+	10:
+		fbCamera.MR_Init();
+		IF fbCamera.Active THEN
+			iState := 40;
+		END_IF
+		
+	(* Client connection deinitialization *)
+	20:
+		fbCamera.MR_Abort();
+		IF NOT fbCamera.Active THEN
+			fbFileLogger.MR_Abort();
+			IF NOT fbFileLogger.Active THEN
+				iState := 0;	
+			END_IF;
+		END_IF
+	
+		
+	30:	
+		fbCamera.MR_Reset();
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+		
+	(* Waiting for commands *)
+	40:
+		IF bGetConnections THEN
+			bGetConnections := FALSE;
+			iState := 50;
+		ELSIF bGetExpr THEN
+			bGetExpr := FALSE;
+			iState := 60;	
+		ELSIF bGetFileList THEN
+			bGetFileList := FALSE;
+			iState := 70;	
+		ELSIF bGetFile THEN
+			bGetFile := FALSE;
+			iState := 80;	
+		ELSIF bGetOnline THEN
+			bGetOnline := FALSE;
+			iState := 90;	
+		ELSIF bGetValueEasyBuilder THEN
+			bGetValueEasyBuilder := FALSE;
+			iState := 100;	
+		ELSIF bGetValueSpreadsheet THEN
+			bGetValueSpreadsheet := FALSE;
+			iState := 110;	
+		ELSIF bLoadFile THEN
+			bLoadFile := FALSE;
+			iState := 120;	
+		ELSIF bPutLive THEN
+			bPutLive := FALSE;
+			iState := 130;	
+		ELSIF bPutPortnum THEN
+			bPutPortnum := FALSE;
+			iState := 140;	
+		ELSIF bPutTimeout THEN
+			bPutTimeout := FALSE;
+			iState := 150;	
+		ELSIF bPutUpdate THEN
+			bPutUpdate := FALSE;
+			iState := 160;	
+		ELSIF bPutWatch THEN
+			bPutWatch := FALSE;
+			iState := 170;	
+		ELSIF bResetSystem THEN
+			bResetSystem := FALSE;
+			iState := 180;	
+		ELSIF bSetOnline THEN
+			bSetOnline := FALSE;
+			iState := 190;	
+		ELSIF bStoreFile THEN
+			bStoreFile := FALSE;
+			iState := 200;	
+		ELSIF bSetJob THEN
+			bSetJob := FALSE;
+			iState := 210;	
+		ELSIF bGetJob THEN
+			bGetJob := FALSE;
+			iState := 220;	
+		ELSIF bGetPosition THEN
+			iState := 240;	
+		ELSIF bImageTrigger THEN
+			bImageTrigger := FALSE;
+			iState := 240;	
+		ELSIF bGetValues THEN
+			iState := 240;	
+		END_IF
+		
+	50:
+		fbCamera.MR_GetConnections();
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+
+	60:
+		
+		fbCamera.MR_GetExpr(sCellIndexExpr,iColumnExpr,iRowExpr);
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF		
+	
+	70:
+		fbCamera.MR_GetFileList();
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+		
+	80:
+		fbCamera.MR_GetFile();
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+
+	90:
+		fbCamera.MR_GetOnline();
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+		
+	100:
+		fbCamera.MR_GetValueEasyBuilder(sEasyBuilderValuePositionX);
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+
+	110:
+		fbCamera.MR_GetValueSpreadsheet(iColumnValueSpreadsheet,iRowValueSpreadsheet);
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+
+
+	120:
+		fbCamera.MR_LoadFile(sLoadFileName);
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+
+	130:
+		fbCamera.MR_PutLive(bEnableLiveAcquisition);
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+
+	140:
+		fbCamera.MR_PutPortnum(iPortNumber);
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+
+	150:
+		fbCamera.MR_PutTimeout(iTimeout);
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+
+	160:
+		fbCamera.MR_PutUpdate(iUpdateNumber);
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+
+	170:
+		fbCamera.MR_PutWatch(iColumnPut,iRowPut,iOutputEnable);
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+
+	180:
+		fbCamera.MR_ResetSystem();
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+
+	190:
+		fbCamera.MR_SetOnline(bSetCameraOnline);
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+
+	200:
+		fbCamera.MR_StoreFile(sStoreFileName);
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+
+	210:
+		fbCamera.MR_SetJob(iJobNumber);
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+
+	220:
+		fbCamera.MR_GetJob();
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+		
+	230:
+		fbCamera.MR_GetPosition(sPositionXVariable := sEasyBuilderValuePositionX,
+								sPositionYVariable := sEasyBuilderValuePositionY,
+								sRotationVariable := sEasyBuilderValueRotation,								
+								lrPositionX => lrPositionX,
+								lrPositionY => lrPositionY,
+								lrRotation => lrRotation);
+		IF NOT fbCamera.Busy THEN
+			iState := 40;	
+		END_IF
+		
+	240:
+		fbCamera.MR_ImageTrigger();
+		IF NOT fbCamera.Busy THEN
+			IF bGetPosition THEN
+				bGetPosition := FALSE;
+				iState := 230;
+			ELSIF bGetValues THEN
+				bGetValues := FALSE;
+				iState := 250;
+			ELSIF NOT bGetPosition AND NOT bGetValues THEN	
+				iState := 40;	
+			END_IF	
+		END_IF
+		
+	250:
+	fbCamera.MR_GetValues(sVariable1 := sEasyBuilderValuePositionX,
+							sVariable2 := sEasyBuilderValuePositionY,
+							sVariable3 := sEasyBuilderValueRotation,		
+							sVariable4 := sEasyBuilderValueQuantity,								
+							lrValue1 => lrValue1,
+							lrValue2 => lrValue2,
+							lrValue3 => lrValue3,
+							lrValue4 => lrValue4);
+	IF NOT fbCamera.Busy THEN
+		iState := 40;	
+	END_IF
+END_CASE
+
+fbFileLogger();
+fbCamera();
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_Camera_Test">
+      <LineId Id="3" Count="8" />
+      <LineId Id="369" Count="4" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="374" Count="0" />
+      <LineId Id="17" Count="21" />
+      <LineId Id="41" Count="1" />
+      <LineId Id="44" Count="20" />
+      <LineId Id="66" Count="222" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

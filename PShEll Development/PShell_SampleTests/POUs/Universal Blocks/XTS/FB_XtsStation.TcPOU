@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_XtsStation" Id="{099caa80-a810-426b-aacc-27444e4856a8}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_XtsStation EXTENDS FB_XtsUniversalStation
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	(*
+	Add MR_FirstCycle for declared station objects with initial setup.
+	bFirstCycle bit is reseted by parent.
+	*)
+	
+END_IF
+
+(* Parent code *)
+SUPER^();
+
+(*
+Add child main code here - handle declared station objects.
+State machine is executed by parent code.
+*)]]></ST>
+    </Implementation>
+    <Folder Name="Internal" Id="{1bde9033-7402-4158-aa56-e2806fc75e38}" />
+    <Method Name="M_RunningPerformProcess" Id="{a492201a-4e57-4dca-8a55-c56395129cb3}" FolderPath="Internal\">
+      <Declaration><![CDATA[METHOD PROTECTED M_RunningPerformProcess : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(*
+Add here code with process state machine e.g. perform action with robot and fixture.
+Remember to set "_RunningPerformProcess := TRUE;" when te process is finished successfull - it will move parent state machine forward.
+*)
+(* Process simulation *)
+tonProces( IN := TRUE, PT := T#3S);
+IF tonProces.Q THEN
+	tonProces( IN := FALSE);
+	M_RunningPerformProcess := TRUE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_XtsStation">
+      <LineId Id="3" Count="13" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_XtsStation.M_RunningPerformProcess">
+      <LineId Id="3" Count="8" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

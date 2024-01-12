@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_UniversalFixtureStateReset" Id="{cfae9f96-3b60-43f9-a03a-eb936300c099}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_UniversalFixtureStateReset :
+(
+	UNIVERSAL_FIXTURE_RESETING_FILE_LOGGER				:= 0,	(*  *)
+	UNIVERSAL_FIXTURE_RESETING_TCP_SERVER_SHUT_DOWN		:= 10,	(*  *)
+	UNIVERSAL_FIXTURE_RESETING_TCP_SERVER_TURN_ON		:= 20,	(*  *)
+	UNIVERSAL_FIXTURE_RESETING_TCP_CLIENT_SHUT_DOWN		:= 30,	(*  *)
+	UNIVERSAL_FIXTURE_RESETING_TCP_CLIENT_TURN_ON		:= 40,	(*  *)
+	UNIVERSAL_FIXTURE_RESETING_DONE						:= 50	(*  *)
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

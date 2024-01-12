@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_Beacon_Test" Id="{d73b84ce-2b0e-4070-ac77-269f6939cad2}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_Beacon_Test
+VAR CONSTANT
+	sBEACON_NAME	: STRING := 'Electrical_Cabinet_Beacon';
+END_VAR
+VAR	
+	bFirstCycle		: BOOL;
+	
+	(* Parameters *)
+	bAnyError 		: BOOL;					(* Error status bit *)
+	bAnyWarrning 	: BOOL;					(* Warrning status bit *)
+	bReady 			: BOOL;					(* Machine ready status bit *)
+	bRunning 		: BOOL;					(* Machine running status bit *)
+	tFlashingTime 	: TIME := T#500MS;		(* Flashing time of red lamp *)
+	
+	(* FB's *)
+	fbBeacon  		: FB_Beacon;			(* Beacon object *)
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	fbBeacon.MR_FirstCycle( sName := sBEACON_NAME);
+END_IF
+
+fbBeacon.AnyError		:= bAnyError;
+fbBeacon.AnyWarrning 	:= bAnyWarrning;
+fbBeacon.Ready 			:= bReady;
+fbBeacon.Running 		:= bRunning;
+
+fbBeacon.RedLampFlashingTime := tFlashingTime;
+fbBeacon();]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

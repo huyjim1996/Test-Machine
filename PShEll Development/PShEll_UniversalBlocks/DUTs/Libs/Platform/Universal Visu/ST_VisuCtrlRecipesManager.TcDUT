@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="ST_VisuCtrlRecipesManager" Id="{7a3b2fd8-124b-4790-a39b-596cf0825bfb}">
+    <Declaration><![CDATA[TYPE ST_VisuCtrlRecipesManager :
+STRUCT
+	btnCreate				: BOOL;																						(*  *)
+	btnRemove				: BOOL;																						(*  *)
+	btnLoad					: BOOL;																						(* Load recipe button for HMI frame *)
+	btnRead					: BOOL;																						(* Read recipe button for HMI frame *)
+	btnReaload 				: BOOL;																						(* Reload recipes button for HMI frame *)
+	btnBackup				: BOOL;																						(* Backup recipes to external directory button for HMI freame*)
+	btnRestore				: BOOL;																						(* Restore recipes from external directory button for HMI frame *)
+	bError					: BOOL;																						(* Error occured while executing last command *)
+	eRecipesManagerReturns	: E_RecipesManagerReturns;																	(* Result of last executed command *)
+	eReacipeManagerState	: E_RecipesManagerState;																	(* Current state of Recipe Manager *)
+	sRecipeName				: STRING;																					(* Current selected recipe name *)
+	iSelectedRecipe			: USINT;
+	//arrRecipeNames			: ARRAY	[0..iMAX_NUMBER_OF_VARIABLES_IN_RECIPES - 1] OF STRING(iMAX_RECIPE_NAME_LENGTH);(* Array of recipes detected at demanded directory *)
+	arrRecipeNames			: ARRAY	[0..127] OF STRING;																	(* Array of recipes names detected at demanded directory *)
+	sRecipeDescription		: STRING(iMAX_RECIPE_DESCRIPTION_LENGTH); 													(* Description of selected recipe *)
+	sRestoreBackupPath		: STRING(iMAX_RECIPE_RESTOR_BACKUP_PATH_LENGTH);											(* Path for backup/restoring of recipes *)
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

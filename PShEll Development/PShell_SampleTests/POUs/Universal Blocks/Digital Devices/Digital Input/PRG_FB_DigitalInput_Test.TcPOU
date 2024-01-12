@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_DigitalInput_Test" Id="{9480fef9-974d-4367-b8f0-69ca1fe95fd4}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_DigitalInput_Test
+VAR	
+	bFirstCycle : BOOL := TRUE;
+	
+	bValue					: BOOL;				(* Current value of input from object *)
+	bEnableForce			: BOOL;				(* Enables forcing in digital input object *)
+	bFallingTrigger			: BOOL;				(* Falling trigger detected bit *)
+	bRisingTrigger			: BOOL;				(* Rising trigger detected bit *)
+	bSetForceValue			: BOOL;				(* Triggers method that enables forcing value of input *)
+	bResetForceValue		: BOOL;				(* Triggers method that enables forcing value of input *)
+	
+	nFallingTriggerCounter	: USINT;			(* Falling trigger count *)
+	nRisingTriggerCounter	: USINT;			(* Rising trigger count *)
+	
+	piTestSensor 			: FB_DigitalInput;	(* Digital input object *)
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	piTestSensor.MR_FirstCycle('My test digital input');
+END_IF
+
+(* Control input simulation *)
+piTestSensor.EnableForce := bEnableForce;
+
+(* Assign status variables *)
+bValue := piTestSensor.In;
+bRisingTrigger := piTestSensor.RisingTrigger;
+bFallingTrigger := piTestSensor.FallingTrigger;
+
+(* Count falling trigger *)
+IF bFallingTrigger THEN
+	nFallingTriggerCounter := nFallingTriggerCounter + 1;
+END_IF
+
+(* Count rising trigger *)
+IF bRisingTrigger THEN
+	nRisingTriggerCounter := nRisingTriggerCounter + 1;
+END_IF
+
+(* If simulation of input enabled set it's value to TRUE *)
+IF bSetForceValue THEN
+	bSetForceValue := FALSE;
+	piTestSensor.MR_SetForceValue();
+END_IF
+
+(* If simulation of input enabled set it's value to FALSE *)
+IF bResetForceValue THEN
+	bResetForceValue := FALSE;
+	piTestSensor.MR_ResetForceValue();
+END_IF
+
+piTestSensor();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_DigitalInput_Test">
+      <LineId Id="131" Count="34" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_FixtureStateMeasurement" Id="{bacdff6f-c2c7-40cd-b827-847d64bf7346}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_FixtureStateMeasurement :
+(
+	FIXTURE_MEASUREMENT_START 				:= 0,
+	FIXTURE_MEASUREMENT_WAIT_FOR_BUSY 		:= 10,
+	FIXTURE_MEASUREMENT_WAIT_FOR_RESPONSE 	:= 20,
+	FIXTURE_MEASUREMENT_REMEASUREMENT		:= 30,
+	FIXTURE_MEASUREMENT_DONE				:= 40
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

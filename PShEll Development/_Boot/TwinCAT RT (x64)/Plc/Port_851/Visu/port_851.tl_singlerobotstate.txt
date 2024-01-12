@@ -1,0 +1,30 @@
+Id;Default
+0;Uninitialized$T
+10;Initializing
+20;Ready initialized
+30;Idle- not homed
+40;Going home
+50;Home done
+60;Idle homed
+70;Updating recipes
+80;Updating recipes done
+100;Going auto
+110;Going auto done
+120;Idle auto
+130;Doing action
+140;Doing action done
+200;Cycle stopping
+210;Cycle stopping done
+220;Idle auto paused
+230;Auto restoring
+240;Auto restoring done
+300;Cycle pausing
+310;Cycle pausing done
+320;Idle cycle paused
+330;Cycle restoring
+340;Cycle restoring done
+500;Reset
+510;Reset done
+-10;In external error
+-20;Aborting
+;

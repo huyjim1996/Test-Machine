@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_Axis_JennyScienceEthCA_Test" Id="{a33a4dbd-bd9f-46b3-8c81-3e9d97bef72f}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_Axis_JennyScienceEthCA_Test
+VAR
+	bFirstCycle 		: BOOL := TRUE;
+	
+	stAxisRef			: AXIS_REF;
+	iAxisRemoveID		: UINT;
+	
+	fbAxesGroupCA		: FB_AxesGroupCA;
+	fbAxisCA1			: FB_AxisJennyScienceEthercatCA;
+	fbAxisCA2			: FB_AxisJennyScienceEthercatCA;
+	
+	iState 				: INT;
+	
+	bInit 				: BOOL;
+	bGroupInit			: BOOL;
+	bGroupDeinit 		: BOOL;
+	bAdd				: BOOL;
+	bRemove				: BOOL;
+
+	bHome				: BOOL;
+	bMoveAbsCA1 		: BOOL;
+	bMoveAbsCA2 		: BOOL;
+	bStop 				: BOOL;
+	bHalt				: BOOL;
+	
+	rHomePositionCA1 	: REAL := 0.0;
+	rHomePositionCA2 	: REAL := 3000.0;
+	
+	rTargetPositionCA1 	: REAL;
+	rTargetPositionCA2 	: REAL;
+	
+	lrOverride			: LREAL;
+	lrVelocity			: LREAL;
+	lrAcceleration		: LREAL;
+	lrDeceleration		: LREAL;
+	lrJerk				: LREAL;
+	lrJogVelocity		: LREAL;
+	lrJogAcceleration	: LREAL;
+	lrJogDeceleration	: LREAL;
+	lrJogJerk			: LREAL;
+	lrStopDeceleration	: LREAL;
+	lrStopJerk			: LREAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	
+	lrOverride 			:= 100.0;
+	lrVelocity 			:= 50.0;
+	lrAcceleration		:= 150.0;
+	lrDeceleration		:= 150.0;
+	lrJerk				:= 150.0;
+	
+	lrJogVelocity 				:= 25.0;
+	lrJogAcceleration			:= 250.0;
+	lrJogDeceleration			:= 250.0;
+	lrJogJerk					:= 250.0;
+	
+	lrStopDeceleration			:= 250.0;
+	lrStopJerk					:= 250.0;
+	
+	fbAxisCA1.Override 			:= lrOverride;
+	fbAxisCA1.Velocity 			:= lrVelocity;
+	fbAxisCA1.Acceleration 		:= lrAcceleration;
+	fbAxisCA1.Deceleration 		:= lrDeceleration;
+	fbAxisCA1.Jerk 				:= lrJerk;
+	fbAxisCA1.StopDeceleration 	:= lrStopDeceleration;
+	fbAxisCA1.StopJerk			:= lrStopJerk;
+	
+	fbAxisCA2.Override 			:= lrOverride;
+	fbAxisCA2.Velocity 			:= lrVelocity;
+	fbAxisCA2.Acceleration 		:= lrAcceleration;
+	fbAxisCA2.Deceleration 		:= lrDeceleration;
+	fbAxisCA2.Jerk 				:= lrJerk;
+	fbAxisCA2.StopDeceleration 	:= lrStopDeceleration;
+	fbAxisCA2.StopJerk			:= lrStopJerk;
+	
+END_IF
+
+IF bStop THEN
+	bStop := FALSE;
+	iState := 100;
+	
+ELSIF bHalt THEN
+	bHalt := FALSE;
+	iState := 110;
+	
+END_IF
+
+CASE iState OF
+	0:	
+		IF bInit THEN
+			bInit := FALSE;
+			iState := 10;
+			
+			
+		ELSIF bGroupInit THEN
+			bGroupInit := FALSE;
+			iState := 50;
+			
+		ELSIF bGroupDeinit THEN
+			bGroupDeinit := FALSE;
+			iState := 80;
+			
+		ELSIF bHome THEN
+			bHome := FALSE;
+			iState := 90;
+		
+		ELSIF bMoveAbsCA1 THEN
+			bMoveAbsCA1 := FALSE;
+			iState := 110;
+			
+		ELSIF bMoveAbsCA2 THEN
+			bMoveAbsCA2 := FALSE;
+			iState := 120;
+			
+		ELSIF bRemove THEN
+			bRemove := FALSE;
+			iState := 130;
+			
+		END_IF
+	10:
+		fbAxisCA1.MR_Init();
+		
+		IF fbAxisCA1.PowerOn THEN
+			iState := 20;
+		END_IF
+		
+	20:
+		fbAxisCA2.MR_Init();
+		
+		IF fbAxisCA2.PowerOn THEN
+			iState := 30;
+		END_IF
+		
+	30:
+		fbAxisCA1.MR_Home(0.0);
+		
+		IF fbAxisCA1.IsHomed THEN
+			iState := 40;
+		END_IF
+	40:
+		fbAxisCA2.MR_Home(3000.0);
+		
+		IF fbAxisCA2.IsHomed THEN
+			iState := 50;
+		END_IF
+	50:
+		fbAxesGroupCA.MR_Init();
+		
+		IF fbAxesGroupCA.Active THEN
+			iState := 60;
+		END_IF
+		
+	60:
+		stAxisRef := fbAxisCA1.AxisRef;
+		fbAxesGroupCA.MR_Add(stAxisRef,1);
+		
+		IF fbAxesGroupCA.AxisAdded THEN
+			iState := 70;
+		END_IF
+		
+	70:
+		stAxisRef := fbAxisCA2.AxisRef;
+		fbAxesGroupCA.MR_Add(stAxisRef,2);
+		
+		IF fbAxesGroupCA.AxisAdded THEN
+			iState := 0;
+		END_IF
+	80:
+		fbAxesGroupCA.MR_Abort();
+		
+		IF NOT fbAxesGroupCA.Active THEN
+			iState := 0;
+		END_IF
+	90:	
+		fbAxisCA1.MR_Home(rHomePositionCA1);
+		
+		IF fbAxisCA1.IsHomed THEN
+			iState := 100;
+		END_IF
+	100:
+		fbAxisCA2.MR_Home(rHomePositionCA2);
+		
+		IF fbAxisCA2.IsHomed THEN
+			iState := 0;
+		END_IF
+		
+	110:
+		fbAxisCA1.MR_MoveAbsolute(rTargetPositionCA1);
+		
+		IF fbAxisCA1.InPosition THEN
+			iState := 0;
+		END_IF
+	120:
+		fbAxisCA2.MR_MoveAbsolute(rTargetPositionCA2);
+		
+		IF fbAxisCA2.InPosition THEN
+			iState := 0;
+		END_IF
+		
+	130:
+		fbAxesGroupCA.MR_Remove(iAxisRemoveID);
+		
+		IF fbAxesGroupCA.AxisRemoved THEN
+			iState := 0;
+		END_IF
+		
+	254:
+		fbAxisCA1.MR_Halt();
+		fbAxisCA2.MR_Halt();
+		
+		IF fbAxisCA1.Halted AND fbAxisCA2.Halted THEN
+			iState := 0;
+		END_IF
+	255:
+		fbAxisCA1.MR_Stop();
+		fbAxisCA2.MR_Stop();
+		
+		IF fbAxisCA1.Stopped AND fbAxisCA2.Stopped THEN
+			iState := 0;
+		END_IF
+END_CASE
+
+fbAxisCA1();
+fbAxisCA2();
+fbAxesGroupCA();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_Axis_JennyScienceEthCA_Test">
+      <LineId Id="9" Count="37" />
+      <LineId Id="229" Count="0" />
+      <LineId Id="47" Count="2" />
+      <LineId Id="230" Count="0" />
+      <LineId Id="50" Count="138" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

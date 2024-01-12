@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_VisuControl" Id="{a9e037ea-0598-4c0f-8919-31028af8671c}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_VisuControl
+VAR
+	iLoop 			: USINT;			(*  *)
+	bFirstCycle 	: BOOL := TRUE;		(*  *)
+	fbVisuControl	: FB_VisuControl;	(*  *)
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle AND stShell.stFlags.bMachineCtrlAssignamentsDone AND stShell.stFlags.bAlarmCtrlAssignamentsDone AND stShell.stFlags.bRecipesCtrlAssignamentsDone THEN
+	bFirstCycle := FALSE;
+	
+	fbVisuControl.MR_FirstCycle( 	sMachineName 		:= sMACHINE_NAME,
+									sSoftwareVersion	:= sSOFTWARE_VERSION);
+									
+	(*--- Append platform objects to HMI ---*)
+	(* Apped machine controler to HMI controler *)
+	fbVisuControl.MR_AppendUniversalMachine(ifMachine := stShell.stPlatform.ref_fbMachineControler);
+	
+	(* Append alarm controler to HMI controler *)
+	fbVisuControl.MR_AppendAlarmControler(ifAlarmControler := stShell.stPlatform.ref_fbAlarmControler);
+	
+	(* Append recipes manager to HMI controler *)
+	fbVisuControl.MR_AppendRecipesManager(ifRecipesManager := stShell.stPlatform.ref_fbRecipesManager);
+	
+	(* --- Append recipes parameters --- *)
+	fbVisuControl.MR_AppendRecipeParameter( ifRecipeParameter := stShell.stRecipeData.rpVar1);
+	fbVisuControl.MR_AppendRecipeParameter( ifRecipeParameter := stShell.stRecipeData.rpVar2);
+	fbVisuControl.MR_AppendRecipeParameter( ifRecipeParameter := stShell.stRecipeData.rpVar3);
+	fbVisuControl.MR_AppendRecipeParameter( ifRecipeParameter := stShell.stRecipeData.rpVar4);
+	fbVisuControl.MR_AppendRecipeParameter( ifRecipeParameter := stShell.stRecipeData.rpVar5);
+	fbVisuControl.MR_AppendRecipeParameter( ifRecipeParameter := stShell.stRecipeData.rpVar6);
+	fbVisuControl.MR_AppendRecipeParameter( ifRecipeParameter := stShell.stRecipeData.rpVar7);
+	fbVisuControl.MR_AppendRecipeParameter( ifRecipeParameter := stShell.stRecipeData.rpVar8);
+	fbVisuControl.MR_AppendRecipeParameter( ifRecipeParameter := stShell.stRecipeData.rpVar9);
+	fbVisuControl.MR_AppendRecipeParameter( ifRecipeParameter := stShell.stRecipeData.rpVar10);
+	
+	(* --- Append machine objects to HMI ---*)
+//	(* Append sample digital inputs *)
+//	FOR iLoop := 0 TO 19 DO
+//		fbVisuControl.MR_AppendInput(ifDigitalInput := stShell.stPlatform.ref_fbMachineControler.Inputs[iLoop]);
+//	END_FOR
+	
+//	(* Append sample digital outputs *)
+//	FOR iLoop := 0 TO 19 DO
+//		fbVisuControl.MR_AppendOutput(ifDigitalOutput := stShell.stPlatform.ref_fbMachineControler.Outputs[iLoop]);
+//	END_FOR
+	
+//	(* Append sample digital inputs *)
+//	FOR iLoop := 0 TO 19 DO
+//		fbVisuControl.MR_AppendSafeInput(ifSafeInput := stShell.stPlatform.ref_fbMachineControler.SafeInputs[iLoop]);
+//	END_FOR
+	
+//	(* Append sample digital outputs *)
+//	FOR iLoop := 0 TO 19 DO
+//		fbVisuControl.MR_AppendSafeOutput(ifSafeOutput := stShell.stPlatform.ref_fbMachineControler.SafeOutputs[iLoop]);
+//	END_FOR
+	
+//	(* Append sample double coil cylinders *)
+//	FOR iLoop := 0 TO 9 DO
+//		fbVisuControl.MR_AppendCylinder( 	ifCylinder 			:= stShell.stPlatform.ref_fbMachineControler.DoubleCoilCylinders[iLoop],
+//											eCylinderType 		:= CYLINDER_TYPE_DOUBLE_COIL,
+//											sActiveDescription	:= 'Active',
+//											sHomeDescription	:= 'Home');
+//	END_FOR
+	
+//	(* Append sample single coil cylinders *)
+//	FOR iLoop := 0 TO 9 DO
+//		fbVisuControl.MR_AppendCylinder( 	ifCylinder 			:= stShell.stPlatform.ref_fbMachineControler.SingleCoilCylinders[iLoop],
+//											eCylinderType 		:= CYLINDER_TYPE_SINGLE_COIL,
+//											sActiveDescription 	:= 'Active',
+//											sHomeDescription 	:= 'Home');
+//	END_FOR
+	(* Append sample scara robot *)
+	//FOR iLoop := 0 TO 4 DO
+		fbVisuControl.MR_AppendRobot(	ifRobot 	:= stShell.stPlatform.ref_fbMachineControler.Robots,
+										eRobotType	:= ROBOT_TYPE_MITSUBISHI_SCARA);
+	//END_FOR
+	
+//	(* Append sample 6 axis robot *)
+//	FOR iLoop := 5 TO 9 DO
+//		fbVisuControl.MR_AppendRobot(	ifRobot 	:= stShell.stPlatform.ref_fbMachineControler.Robots[iLoop],
+//										eRobotType	:= ROBOT_TYPE_MITSUBISHI_6_AXIS);
+//	END_FOR
+	
+//	(* Append sample axes *)
+//	FOR iLoop := 0 TO 19 DO
+//		fbVisuControl.MR_AppendAxis(	ifMotor		:= stShell.stPlatform.ref_fbMachineControler.Axes[iLoop],
+//										eMotorType	:= AXIS_TYPE_BECKHOFF_XTS_MOVER);
+//	END_FOR
+
+	(* Set assignamnet done bit *)
+	stShell.stFlags.bVisuCtrlAssignamentsDone := TRUE;
+END_IF
+
+(* Start running Visu Controler if all other controlers are assigned *)
+IF stShell.stFlags.bVisuCtrlAssignamentsDone THEN
+	fbVisuControl();
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_VisuControl">
+      <LineId Id="3" Count="88" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

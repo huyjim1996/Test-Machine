@@ -1,0 +1,1824 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_Fixture" Id="{1f5616c3-fca8-44f4-90ea-3502d887ca35}" SpecialFunc="None">
+    <Declaration><![CDATA[(*
+Copyrights	: Precision Systems Engineering
+Author		: ADBO
+Date		: 07/2022
+Description	: This function block extends standard functionality of FB_FixtureCore with platform pusher and product holder.
+*)
+FUNCTION_BLOCK FB_Fixture EXTENDS FB_FixtureJig
+VAR CONSTANT
+	(* Fixture platform cylinder default setup *)
+	sCOVER_PUSHER_NAME						: STRING	:= 'Cover Pusher';	(* Platform pusher name *)
+	tCOVER_PUSHER_OPEN_TIMEOUT				: TIME 		:= T#5S;			(* Platform pusher opening timeout *)
+	tCOVER_PUSHER_CLOSE_TIMEOUT				: TIME 		:= T#5S;			(* Platform pusher closing timeout *)
+	tCOVER_PUSHER_MOVE_DELAY 				: TIME 		:= T#0MS;			(* Platform pusher delay after position change *)
+	
+	(* Fixture product holder default setup *)
+	sCLAMP_NAME								: STRING 	:= 'Clamp Pusher';	(* Product holder name *)
+	tCLAMP_OPEN_TIMEOUT						: TIME 		:= T#5S;			(* Product holder opening timeout *)
+	tCLAMP_CLOSE_TIMEOUT					: TIME 		:= T#5S;			(* Product holder closing timeout *)
+	tCLAMP_MOVE_DELAY 						: TIME 		:= T#300MS;//750MS	(* Product holder delay after position change *)
+	
+	(* Norm loading keywords *)
+	sNORM_LOAD_COMMAND						: STRING := 'LDNORM:';			(* Load norm command send from PLC to UTU*)
+	sNORM_GSAMPLE_MEASURE_COMMAND			: STRING := 'MeasGSample';		(* Measure Golden sample command send from PLC to UTU after loading new norm *)	
+	sNORM_LOAD_SUCCESS 						: STRING := 'OK';				(* Response from UTU: norm loaded successfull *)
+	sNORM_LOAD_FAIL							: STRING := 'Fail';				(* Response from UTU: norm load failed *)
+	sNORM_GS_REQUEST						: STRING := 'GS:';				(* UTU requests golden sample *)
+ 	
+	(* UTU STATUS *)
+	sUTU_STATUS_OK							: STRING := 'OK';
+	sUTU_STATUS_NOK							: STRING := 'NOK';
+	sUTU_STATUS_bBusy						: STRING := 'bBusy';
+	sUTU_STATUS_BCHECKSETUP					: STRING := 'bCheckSetup';
+	
+	(* Measurement keywords *)
+	sMEASUREMENT_START_COMMAND				: STRING := 'bStart$R$N';		(* Start measurement command send from PLC to UTU*)
+	
+	sMEASUREMENT_BUSY						: STRING := 'bBusy';			(* Response from UTU: measurement started *)
+	sMEASUREMENT_FINISHED					: STRING := (*'bReady'; //*)'bDone';			(* Response from UTU: measurement passed *)
+	sMEASUREMENT_GOOD_PRODUCT				: STRING := 'bGood';			(* Response from UTU: good product *)
+	sMEASUREMENT_REWORK						: STRING := 'bRework';			(* Perform remeasurement of same product *)
+	sMEASUREMENT_REMEASURE					: STRING := 'bRemeasure';		(* Perform remeasurement of same product *)
+	sMEASUREMENT_ERROR_THD					: STRING := 'bTHDReject';		(* Response from UTU: measurement failed with THD error*)
+	sMEASUREMENT_ERROR_PHASE				: STRING := 'bPhaseReject';		(* Response from UTU: measurement failed with PHASE error*)
+	sMEASUREMENT_ERROR_SSPL					: STRING := 'bSSPLReject';		(* Response from UTU: measurement failed with SSPL error*)
+	sMEASUREMENT_ERROR_RUBBING				: STRING := 'bRubReject';		(* Response from UTU: measurement failed with RUBBING error*)
+	sMEASUREMENT_ERROR_IMP					: STRING := 'bImpReject';		(* Response from UTU: measurement failed with INP error*)
+	sMEASUREMENT_ERROR_HFA					: STRING := 'bHFAReject';		(* Response from UTU: measurement failed with HFA error*)
+	sMEASUREMENT_ERROR_SPL					: STRING := 'bSPLReject';		(* Response from UTU: measurement failed with SPL error*)
+	sMEASUREMENT_ERROR_CONNECTION			: STRING := 'bRejectConnect';	(* Response from UTU: measurement failed with connection problems *)
+	sMEASUREMENT_ERROR_OTHER				: STRING := 'bReject';			(* Response from UTU: measurement failed *)
+	sMEASUREMENT_FINISH_BATCH				: STRING := 'bFinishBatch';		(* Response from UTU: Batch END *)
+	sMEASUREMENT_READY						: STRING := 'bReady';
+END_VAR
+VAR
+	(* Auxilary command bits *)
+	bCoverActive 							: BOOL;
+	bCoverHome 								: BOOL;
+	bClampHold 								: BOOL;
+	bClampRelease 							: BOOL;
+	bCoverActiveAndJigOpen					: BOOL;
+	bCoverHomeAndJigClose					: BOOL;
+	bLoadNorm								: BOOL;
+//	bGSampleMeasure							: BOOL;
+//	bGoldenSampelReadyToMeasure				: BOOL;		(* Robot gived Golden sample to Fixture *)
+	
+	(* Parameters *)
+	sProductType							: STRING;
+	sProductQuantity						: STRING;
+	
+	//new
+	sConfig									: STRING;
+	iAmount									: UINT;
+	sPO										: STRING;
+	sBatch									: STRING;
+	sOPID									: STRING;
+	
+	(* Status flags *)
+	bNormLoaded								: BOOL;
+	bBatchEnd								: BOOL;
+	bGSampleMeasureRequested				: BOOL;
+	bReMeasure								: BOOL;
+	bGSampleMeasurmentDone					: BOOL;
+	eNormLoadResult							: E_FixtureLoadNormResult;
+	eMeasurementResultExt					: E_FixtureMeasurementResultExt;
+	
+	(* State machines *)
+	eFcqFixtureStateInit					: E_FixtureStateInit;
+	eFcqFixtureStateAbort					: E_FixtureStateAbort;
+	eFcqFixtrueStateReset					: E_FixtureStateReset;
+	eFcqFixtureState						: E_FixtureState;
+	eFcqFixtureStateLoadNorm				: E_FixtureStateLoadNorm;
+	eFcqFixtureStateGSampleMeas				: E_FcqFixtureStateGSampleMeas;
+	eFcqFixtureStateMeasurement 			: E_FixtureStateMeasurement;
+	eFcqFixtureStateMeasurementDataExchange	: E_FixtureStateMeasurementDataExchange;
+	
+	eGoldenSampleResult 					: E_GoldenSampleState;
+	
+	iGsampleId : USINT;
+	
+	
+	(* FB's *)
+	fbCover									: FB_DoubleCoilCylinder;		(*  *)
+	fbClamp									: FB_FixtureClamp;				(*  *)
+	
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	fbCover.MR_FirstCycle(	sName 					:= CONCAT(STR1 :=THIS^.sName, STR2:= sCOVER_PUSHER_NAME),
+							sHomeSensorModuleType	:= '?',
+							sHomeSensorPortID		:= '?',
+							sActiveSensorModuleType	:= '?',
+							sActiveSensorPortID		:= '?',
+							tGoHomeTimeout 			:= tCOVER_PUSHER_OPEN_TIMEOUT,
+							tGoActiveTimeout 		:= tCOVER_PUSHER_CLOSE_TIMEOUT,
+							tDelay					:= tCOVER_PUSHER_MOVE_DELAY);
+									
+	fbClamp.MR_FirstCycle(	sName 					:= CONCAT(STR1 := THIS^.sName, STR2:= sCLAMP_NAME),
+							sHomeSensorModuleType	:= '?',
+							sHomeSensorPortID		:= '?',
+							sActiveSensorModuleType := '?',
+							sActiveSensorPortID		:= '?',
+							tGoHomeTimeout 			:= tCLAMP_OPEN_TIMEOUT,
+							tGoActiveTimeout 		:= tCLAMP_CLOSE_TIMEOUT,
+							tDelay					:= tCLAMP_MOVE_DELAY);							
+END_IF
+
+(* Run parent main implementation *)
+SUPER^();
+
+(* Update status flags*)
+bError := bError OR fbClamp.Error OR fbCover.Error;
+//IF bError THEN
+//	bBusy := FALSE;
+//END_IF
+
+(* Run product holder cylinder instance *)
+fbClamp();
+
+(* Run fixture platform cylinder instance *)
+fbCover();]]></ST>
+    </Implementation>
+    <Folder Name="Internal" Id="{89905e4b-25ee-4002-a47a-6a9f53ba889b}" />
+    <Folder Name="Properties" Id="{9001b4ed-69b5-400d-a07a-e7f2c2b80c6d}">
+      <Folder Name="Parameters" Id="{059479bb-d11f-4bc0-a5a4-37cc0bd06833}" />
+      <Folder Name="References" Id="{da1ea5a7-51fc-4fed-aa45-c2985cd1803c}" />
+      <Folder Name="Status" Id="{8925dcbe-dde5-4aab-a60e-bd9c6a8e07f6}" />
+    </Folder>
+    <Folder Name="Requests" Id="{5af6e07a-7e86-4f47-af0d-b4f8fd01c659}" />
+    <Folder Name="StateMachine" Id="{9bfbf726-05b0-4dd1-891c-b4123a6d3055}" />
+    <Folder Name="StateMachineExt" Id="{978d252b-71d8-4bad-ba39-11aafb528ed2}" />
+    <Property Name="BatchEnd" Id="{7ae70c46-2774-4c1a-8acf-fe19ae8336a7}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY BatchEnd : REFERENCE TO BOOL]]></Declaration>
+      <Get Name="Get" Id="{52e0ac1a-33af-417f-babb-cae8ce13a424}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[BatchEnd REF= bBatchEnd;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ClampHold" Id="{bb9cc494-dd3b-4bb8-85ba-5c9b93d58b47}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY ClampHold : REFERENCE TO BOOL]]></Declaration>
+      <Get Name="Get" Id="{1fe8fefa-a718-4f4e-9cbb-38a58c9c62ee}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ClampHold REF= fbClamp.PositionActive;
+//ClampHold := NOT fbClamp.PositionActive;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ClampSimulation" Id="{8a133dc1-616a-4017-9769-70901fd91162}" FolderPath="Properties\Parameters\">
+      <Declaration><![CDATA[PROPERTY ClampSimulation : BOOL]]></Declaration>
+      <Get Name="Get" Id="{9cbe3a39-e212-4541-a61e-67701b3be4c3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ClampSimulation := fbClamp.Simulation;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{eb200717-5617-4f22-ba76-ea55ffb20eda}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[fbClamp.Simulation := ClampSimulation;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="CoverPositionActive" Id="{7cbc9927-b5d6-4e8c-98e1-01dffcee8b7d}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY CoverPositionActive : REFERENCE TO BOOL]]></Declaration>
+      <Get Name="Get" Id="{194a3eb5-ffde-40c2-850b-1651602fc1e0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CoverPositionActive REF= fbCover.PositionActive;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="CoverPositionHome" Id="{57796bb9-397c-4633-8b98-f2e72ed82814}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY CoverPositionHome : REFERENCE TO BOOL]]></Declaration>
+      <Get Name="Get" Id="{493eeb42-ad12-4b2b-86e0-f3b1de1d5ac6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CoverPositionHome REF= fbCover.PositionHome;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="CoverSimulation" Id="{ab0f792a-7733-46a1-8654-0c7635b3c3df}" FolderPath="Properties\Parameters\">
+      <Declaration><![CDATA[PROPERTY CoverSimulation : BOOL]]></Declaration>
+      <Get Name="Get" Id="{2ca7d535-4767-42f1-af1e-4f07a9aff141}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CoverSimulation := fbCover.Simulation;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{de660ab4-b58c-4986-986b-4c80a67b2af3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[fbCover.Simulation := CoverSimulation;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="GoldenSampleMeasDone" Id="{6c7216ca-79ca-4e69-bac6-0b839bf68b6f}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY GoldenSampleMeasDone : REFERENCE TO BOOL]]></Declaration>
+      <Get Name="Get" Id="{01c662e9-3bad-4db8-af42-7ed5166c7fef}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[GoldenSampleMeasDone REF= bGSampleMeasurmentDone;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="GoldenSampleMeasRequested" Id="{d02965be-dbc9-4199-b8a4-0b40a0a508cc}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY GoldenSampleMeasRequested : REFERENCE TO BOOL]]></Declaration>
+      <Get Name="Get" Id="{a6f24009-de5e-494c-b07c-438ba489f35f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[GoldenSampleMeasRequested REF= bGSampleMeasureRequested;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="GoldenSampleResult" Id="{155b26b2-b252-4565-bf9c-0ee8a2511d7d}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY GoldenSampleResult : REFERENCE TO E_GoldenSampleState]]></Declaration>
+      <Get Name="Get" Id="{3e276241-7ad1-464d-88e1-6ce337757dd5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[GoldenSampleResult REF= eGoldenSampleResult;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="GSampleId" Id="{5a4e4fb4-5ef3-46f7-a2af-32f5592c659b}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY GSampleId : REFERENCE TO USINT]]></Declaration>
+      <Get Name="Get" Id="{edf7a59e-a792-4c06-8e67-593855f22936}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[GSampleId REF= iGsampleId;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="M_MeasurementClient" Id="{059ce93c-3f97-4c14-8662-ce1aed6607e3}" FolderPath="Internal\">
+      <Declaration><![CDATA[METHOD PROTECTED M_MeasurementClient : BOOL
+VAR_INST
+	tonMeasSimulation : TON;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eFixtureStateMeasure OF
+	UNIVERSAL_FIXTURE_MEASURE_SEND_DATA:
+		sSendData := sMEASUREMENT_START_COMMAND;
+		FUN_StringToTcpBufferData(sMessageAddr := ADR(sSendData), stSendDataAddr := ADR(stSendData));
+		fbTcpClient.MR_AppendToSendBuffer(stData := stSendData);
+		
+		eFixtureStateMeasure := UNIVERSAL_FIXTURE_MEASURE_RECIVE_DATA;
+		eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_BUSY;
+		
+	UNIVERSAL_FIXTURE_MEASURE_RECIVE_DATA:
+		stReciveData := fbTcpClient.NextRecivedMessage;
+		
+		IF stReciveData.iLength > 0 THEN
+			FUN_TcpBufferDataToString(sMessageAddr := ADR(sRecivedData), stReturnDataAddr := ADR(stReciveData));
+		END_IF
+		
+			CASE eFcqFixtureStateMeasurementDataExchange OF
+				FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_BUSY:
+					IF MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_BUSY),INT_TO_UDINT(LEN(sMEASUREMENT_BUSY))) = 0 THEN
+						fbTcpClient.MR_ClearReciveBuffer();
+						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_FISNISH;
+					//	eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_PROCCESS_RESULTS;
+					END_IF
+				
+				FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_FISNISH:
+					IF (MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_FINISHED),INT_TO_UDINT(LEN(sMEASUREMENT_FINISHED))) = 0) OR (FIND(sRecivedData,sMEASUREMENT_FINISHED) > 0) THEN
+						IF bReMeasure THEN
+							fbTcpClient.MR_ClearReciveBuffer();
+							eFixtureStateMeasure := UNIVERSAL_FIXTURE_MEASURE_SEND_DATA;
+							eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_BUSY;
+						ELSE
+							eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_PROCCESS_RESULTS;
+//							eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_DONE;//
+						END_IF	
+					END_IF
+				
+				FIXTURE_MEASURE_DATA_EXCHANGING_PROCCESS_RESULTS:
+					(* Good product *)
+					IF (MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_GOOD_PRODUCT),INT_TO_UDINT(LEN(sMEASUREMENT_GOOD_PRODUCT))) = 0) OR (FIND(sRecivedData,sMEASUREMENT_GOOD_PRODUCT) > 0) THEN
+						IF bUseLogger THEN
+							sLoggerMessage := CONCAT(sLoggerMessage,sMEASUREMENT_GOOD_PRODUCT);
+							fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+						END_IF
+						fbTcpClient.MR_ClearReciveBuffer();
+						eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_ACCEPTED;
+						eMeasurementResultExt := FIXTURE_MEASUREMENT_RESULT_GOOD;
+						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_DONE;
+//						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_FISNISH; //
+
+					(* Bad product - rework *)
+					ELSIF (MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_REWORK),INT_TO_UDINT(LEN(sMEASUREMENT_REWORK))) = 0) OR (FIND(sRecivedData,sMEASUREMENT_REWORK) > 0) THEN
+						IF bUseLogger THEN
+							sLoggerMessage := CONCAT(sLoggerMessage,sMEASUREMENT_REWORK);
+							fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+						END_IF
+						fbTcpClient.MR_ClearReciveBuffer();
+						eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_REJECTED;
+						eMeasurementResultExt := FIXTURE_MEASUREMENT_RESULT_REWORK;
+						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_DONE;
+//						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_FISNISH; //
+						
+						
+					(* Bad product - remeaseure *)
+					ELSIF (MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_REMEASURE),INT_TO_UDINT(LEN(sMEASUREMENT_REMEASURE))) = 0) OR (FIND(sRecivedData,sMEASUREMENT_REMEASURE) > 0) THEN
+						fbTcpClient.MR_ClearSendBuffer();
+						fbTcpClient.MR_ClearReciveBuffer();
+//						bReMeasure := TRUE;
+//						eFcqFixtureStateMeasurementDataExchange :=FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_FISNISH;
+						eFixtureStateMeasure := UNIVERSAL_FIXTURE_MEASURE_SEND_DATA;
+						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_BUSY;
+						
+					(* Bad product - connection *)	
+					ELSIF (MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_ERROR_CONNECTION),INT_TO_UDINT(LEN(sMEASUREMENT_ERROR_CONNECTION))) = 0) OR  (FIND(sRecivedData,sMEASUREMENT_ERROR_CONNECTION) > 0)  THEN
+						IF bUseLogger THEN
+							sLoggerMessage := CONCAT(sLoggerMessage,sMEASUREMENT_ERROR_CONNECTION);
+							fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+						END_IF
+						fbTcpClient.MR_ClearReciveBuffer();
+						eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_REJECTED;
+						eMeasurementResultExt := FIXTURE_MEASUREMENT_RESULT_CONNECT;
+						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_DONE;
+//						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_FISNISH; //
+					
+					(* Bad product - THD *)
+					ELSIF (MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_ERROR_THD),INT_TO_UDINT(LEN(sMEASUREMENT_ERROR_THD))) = 0) OR (FIND(sRecivedData,sMEASUREMENT_ERROR_THD) > 0)  THEN
+						IF bUseLogger THEN
+							sLoggerMessage := CONCAT(sLoggerMessage,sMEASUREMENT_ERROR_THD);
+							fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+						END_IF
+						fbTcpClient.MR_ClearReciveBuffer();
+						eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_REJECTED;
+						eMeasurementResultExt := (*FIXTURE_MEASUREMENT_RESULT_REWORK;*)FIXTURE_MEASUREMENT_RESULT_THD;
+						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_DONE;
+//						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_FISNISH; //
+					
+					(* Bad product - PHASE *)
+					ELSIF (MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_ERROR_PHASE),INT_TO_UDINT(LEN(sMEASUREMENT_ERROR_PHASE))) = 0) OR (FIND(sRecivedData,sMEASUREMENT_ERROR_PHASE) > 0) THEN
+						IF bUseLogger THEN
+							sLoggerMessage := CONCAT(sLoggerMessage,sMEASUREMENT_ERROR_PHASE);
+							fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+						END_IF
+						fbTcpClient.MR_ClearReciveBuffer();
+						eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_REJECTED;
+						eMeasurementResultExt := FIXTURE_MEASUREMENT_RESULT_PHASE;
+						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_DONE;
+//						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_FISNISH; //
+					
+					(* Bad product - SSPL *)
+					ELSIF (MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_ERROR_SSPL),INT_TO_UDINT(LEN(sMEASUREMENT_ERROR_SSPL))) = 0) OR (FIND(sRecivedData,sMEASUREMENT_ERROR_SSPL) > 0) THEN
+						IF bUseLogger THEN
+							sLoggerMessage := CONCAT(sLoggerMessage,sMEASUREMENT_ERROR_SSPL);
+							fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+						END_IF
+						fbTcpClient.MR_ClearReciveBuffer();
+						eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_REJECTED;
+						eMeasurementResultExt := FIXTURE_MEASUREMENT_RESULT_SSPL;
+						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_DONE;
+//						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_FISNISH; //
+					
+					(* Bad product - Rubbing *)
+					ELSIF (MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_ERROR_RUBBING),INT_TO_UDINT(LEN(sMEASUREMENT_ERROR_RUBBING))) = 0) OR (FIND(sRecivedData,sMEASUREMENT_ERROR_RUBBING) > 0) THEN
+						IF bUseLogger THEN
+							sLoggerMessage := CONCAT(sLoggerMessage,sMEASUREMENT_ERROR_RUBBING);
+							fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+						END_IF
+						fbTcpClient.MR_ClearReciveBuffer();
+						eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_REJECTED;
+						eMeasurementResultExt := FIXTURE_MEASUREMENT_RESULT_RUBBING;
+						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_DONE;
+//						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_FISNISH; //
+					
+					(* Bad product - IMP *)
+					ELSIF (MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_ERROR_IMP),INT_TO_UDINT(LEN(sMEASUREMENT_ERROR_IMP))) = 0) OR (FIND(sRecivedData,sMEASUREMENT_ERROR_IMP) > 0) THEN
+						IF bUseLogger THEN
+							sLoggerMessage := CONCAT(sLoggerMessage,sMEASUREMENT_ERROR_IMP);
+							fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+						END_IF
+						fbTcpClient.MR_ClearReciveBuffer();
+						eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_REJECTED;
+						eMeasurementResultExt := FIXTURE_MEASUREMENT_RESULT_IMP;
+						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_DONE;
+//						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_FISNISH; //
+					
+					(* Bad product - HFA *)
+					ELSIF (MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_ERROR_HFA),INT_TO_UDINT(LEN(sMEASUREMENT_ERROR_HFA))) = 0) OR (FIND(sRecivedData,sMEASUREMENT_ERROR_HFA) > 0) THEN
+						IF bUseLogger THEN
+							sLoggerMessage := CONCAT(sLoggerMessage,sMEASUREMENT_ERROR_HFA);
+							fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+						END_IF
+						fbTcpClient.MR_ClearReciveBuffer();
+						eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_REJECTED;
+						eMeasurementResultExt := FIXTURE_MEASUREMENT_RESULT_HFA;
+						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_DONE;
+//						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_FISNISH; //
+						
+					(* Bad product - SPL *)
+					ELSIF (MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_ERROR_OTHER),INT_TO_UDINT(LEN(sMEASUREMENT_ERROR_OTHER))) = 0) OR (FIND(sRecivedData,sMEASUREMENT_ERROR_OTHER) > 0) THEN
+						IF bUseLogger THEN
+							sLoggerMessage := CONCAT(sLoggerMessage,sMEASUREMENT_ERROR_SPL);
+							fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+						END_IF
+						fbTcpClient.MR_ClearReciveBuffer();
+						eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_REJECTED;
+						eMeasurementResultExt := FIXTURE_MEASUREMENT_RESULT_SPL;
+						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_DONE;
+//						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_FISNISH; //
+					
+					ELSIF (MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_ERROR_OTHER),INT_TO_UDINT(LEN(sMEASUREMENT_ERROR_OTHER))) = 0) OR (FIND(sRecivedData,sMEASUREMENT_ERROR_OTHER) > 0)  THEN
+						IF bUseLogger THEN
+							sLoggerMessage := CONCAT(sLoggerMessage,sMEASUREMENT_ERROR_OTHER);
+							fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+						END_IF
+						fbTcpClient.MR_ClearReciveBuffer();
+						eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_REJECTED;
+						eMeasurementResultExt := FIXTURE_MEASUREMENT_RESULT_REJECT_OTHER;
+						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_DONE;
+					
+					ELSIF (MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_READY),INT_TO_UDINT(LEN(sMEASUREMENT_READY))) = 0) OR (FIND(sRecivedData,sMEASUREMENT_READY) > 0)  THEN 
+						eFcqFixtureStateMeasurementDataExchange := FIXTURE_MEASURE_DATA_EXCHANGING_DONE;	
+					END_IF
+					
+				FIXTURE_MEASURE_DATA_EXCHANGING_DONE:
+					IF (MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_READY),INT_TO_UDINT(LEN(sMEASUREMENT_READY))) = 0) OR (FIND(sRecivedData,sMEASUREMENT_READY) > 0) THEN
+						eFixtureStateMeasure := UNIVERSAL_FIXTURE_MEASURE_DONE;
+					END_IF
+			END_CASE		
+	//	END_IF
+	
+	UNIVERSAL_FIXTURE_MEASURE_DONE:
+		IF 	(MEMCMP(ADR(sRecivedData),ADR(sMEASUREMENT_FINISH_BATCH),INT_TO_UDINT(LEN(sMEASUREMENT_FINISH_BATCH))) = 0) OR (FIND(sRecivedData,sMEASUREMENT_FINISH_BATCH) > 0) THEN
+			bBatchEnd := TRUE;
+		END_IF
+		fbTcpClient.MR_ClearAllBuffers();
+		eFixtureState := UNIVERSAL_FIXTURE_METHOD_DONE;
+		
+END_CASE
+(*
+tonMeasSimulation(IN := TRUE, PT := T#2500MS);
+IF tonMeasSimulation.Q THEN
+	tonMeasSimulation(IN := FALSE);
+	eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_ACCEPTED;
+	eMeasurementResultExt := FIXTURE_MEASUREMENT_RESULT_GOOD;
+	eFixtureState := UNIVERSAL_FIXTURE_METHOD_DONE;
+END_IF
+*)]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="MeasurementResultExt" Id="{1bdec847-179d-43eb-8460-536d6a3998d5}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY MeasurementResultExt : REFERENCE TO E_FixtureMeasurementResultExt]]></Declaration>
+      <Get Name="Get" Id="{b69dadf1-39ba-451a-a16a-df5cdab8288c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MeasurementResultExt REF= eMeasurementResultExt;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="MR_ClampHold" Id="{a84ca68a-16b4-400c-9ce2-7d99e61055be}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_ClampHold : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eFixtureState = UNIVERSAL_FIXTURE_IDLE AND NOT fbClamp.PositionActive THEN
+	bBusy := TRUE;
+	bClampHold := TRUE;
+	MR_ClampHold := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_EXTENSION;
+	eFcqFixtureState := FIXTURE_EXTENSION_CLAMP_HOLD;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : product hold'));
+	
+ELSIF eFcqFixtureState = FIXTURE_EXTENSION_CLAMP_HOLD_DONE THEN
+	bClampHold := FALSE;
+	MR_ClampHold := TRUE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : product hold done'));
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_ClampRelease" Id="{dfd2a2c8-ea94-458c-ae2e-64fdd3d66f48}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_ClampRelease : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eFixtureState = UNIVERSAL_FIXTURE_IDLE AND fbClamp.PositionActive THEN
+	bBusy := TRUE;
+	bClampRelease := TRUE;
+	MR_ClampRelease := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_EXTENSION;
+	eFcqFixtureState := FIXTURE_EXTENSION_CLAMP_RELEASE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : product release'));
+	
+ELSIF eFcqFixtureState = FIXTURE_EXTENSION_CLAMP_RELEASE_DONE THEN
+	bClampRelease := FALSE;
+	MR_ClampRelease := TRUE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : product release done'));
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_CoverActive" Id="{6d774f73-8e6e-4ce2-a32a-00b2ea22d282}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_CoverActive : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eFixtureState = UNIVERSAL_FIXTURE_IDLE AND NOT fbCover.PositionActive THEN
+	bBusy := TRUE;
+	bCoverActive := TRUE;
+	MR_CoverActive := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_EXTENSION;
+	eFcqFixtureState := FIXTURE_EXTENSION_COVER_ACTIVE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : platform go active'));
+	
+ELSIF eFcqFixtureState = FIXTURE_EXTENSION_COVER_ACTIVE_DONE THEN
+	bCoverActive := FALSE;
+	MR_CoverActive := TRUE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : platform go active done'));
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_CoverActiveAndJigOpen" Id="{1319735a-57dc-45b7-becf-ba6497c01954}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_CoverActiveAndJigOpen : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//IF eFixtureState = UNIVERSAL_FIXTURE_IDLE AND (NOT fbCover.PositionActive AND NOT THIS^.SocketOpen) THEN
+IF eFixtureState = UNIVERSAL_FIXTURE_IDLE AND (NOT fbCover.PositionActive OR NOT THIS^.SocketOpen) THEN
+	bBusy := TRUE;
+	bCoverActiveAndJigOpen := TRUE;
+	MR_CoverActiveAndJigOpen := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_EXTENSION;
+	eFcqFixtureState := FIXTURE_EXTENSION_COVER_ACTIVE_AND_JIG_OPEN;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : platform go active and open'));
+	
+ELSIF eFcqFixtureState = FIXTURE_EXTENSION_COVER_ACTIVE_AND_JIG_OPEN_DONE THEN
+	bCoverActiveAndJigOpen := FALSE;
+	MR_CoverActiveAndJigOpen := TRUE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : platform go active and open done'));
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_CoverHome" Id="{dfa8dcbb-576d-487e-8a6f-0c53ee3e58ce}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_CoverHome : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eFixtureState = UNIVERSAL_FIXTURE_IDLE AND NOT fbCover.PositionHome THEN
+	bBusy := TRUE;
+	bCoverHome := TRUE;
+	MR_CoverHome := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_EXTENSION;
+	eFcqFixtureState := FIXTURE_EXTENSION_COVER_HOME;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : platform go home'));
+	
+ELSIF eFcqFixtureState = FIXTURE_EXTENSION_COVER_HOME_DONE THEN
+	bCoverHome := FALSE;
+	MR_CoverHome := TRUE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : platform go home done'));
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_CoverHomeAndJigClose" Id="{e9860585-0df9-4174-a642-ea6c27a06bb0}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_CoverHomeAndJigClose : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//IF eFixtureState = UNIVERSAL_FIXTURE_IDLE AND NOT fbCover.PositionHome AND THIS^.SocketOpen THEN
+IF eFixtureState = UNIVERSAL_FIXTURE_IDLE AND (NOT fbCover.PositionHome OR THIS^.SocketOpen) THEN
+	bBusy := TRUE;
+	bCoverHomeAndJigClose := TRUE;
+	MR_CoverHomeAndJigClose := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_EXTENSION;
+	eFcqFixtureState := FIXTURE_EXTENSION_COVER_HOME_AND_JIG_CLOSE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : platform go home and close'));
+	
+ELSIF eFcqFixtureState = FIXTURE_EXTENSION_COVER_HOME_AND_JIG_CLOSE_DONE THEN
+	bCoverHomeAndJigClose := FALSE;
+	MR_CoverHomeAndJigClose := TRUE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : platform go home and close done'));
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_GSampleMeas" Id="{980716de-93a1-4338-9c33-85c48e4f962b}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_GSampleMeas : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//IF eNormLoadResult = FIXTURE_NORM_LOAD_GOLDEN_SAMPLE_NEEDED AND eFcqFixtureStateLoadNorm = FIXTURE_LOADING_NORM_GOLDEN_SAMPLE_WAIT_FOR_END THEN
+IF eNormLoadResult = FIXTURE_NORM_LOAD_GOLDEN_SAMPLE_NEEDED AND eFixtureState = UNIVERSAL_FIXTURE_IDLE THEN
+	bBusy := TRUE;
+	bGSampleMeasurmentDone := FALSE;	
+	MR_GSampleMeas := FALSE;
+//	bGSampleMeasure := TRUE;
+	eGoldenSampleResult := GS_STATUS_UNKNOWN;
+	eFixtureState := UNIVERSAL_FIXTURE_EXTENSION;
+	eFcqFixtureState := FIXTURE_EXTENSION_GOLDEN_SAMPLE_MEASURE;
+	eFcqFixtureStateGSampleMeas := FIXTURE_GOLDEN_SAMPLE_SEND_MEASURE_COMMAND;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : Golden Sample measurment requested'));
+	
+	
+ELSIF eFcqFixtureState = FIXTURE_EXTENSION_GOLDEN_SAMPLE_MEASURE_DONE THEN
+	bBusy := FALSE;
+	MR_GSampleMeas := TRUE;
+	eFixtureState := UNIVERSAL_FIXTURE_EXTENSION;
+	eFcqFixtureState := FIXTURE_EXTENSION_LOAD_NORM;
+	//eFcqFixtureStateLoadNorm := FIXTURE_LOADING_NORM_WAIT_FOR_RESPONSE;
+	//fbMachineLogger.MR_AddLogs(CONCAT(sName,' : Golden Sample  '));
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,CONCAT(' : Golden Sample ID: ',CONCAT(UDINT_TO_STRING(iGsampleId),' measurment done'))));
+	bGSampleMeasurmentDone := TRUE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_LoadNorm" Id="{79191bd3-f77a-4cdf-8045-0dc7ee99e711}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_LoadNorm : BOOL
+VAR_INPUT
+	sConfig				: STRING;
+	iAmount				: UINT;
+	sPO					: STRING;
+	sBatch				: STRING;
+	sOPID				: STRING;
+//	sProductType 		: STRING;	(* Name of product possesed from MES*)
+//	sProductQuantity	: STRING;	(* Product quantity *)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eFixtureState = UNIVERSAL_FIXTURE_IDLE THEN
+	THIS^.sConfig := sConfig;
+	THIS^.iAmount := iAmount;
+	THIS^.sPO := sPO;
+	THIS^.sBatch := sBatch;
+	THIS^.sOPID := sOPID;
+	
+(*	OLD
+	THIS^.sProductType := sProductType;
+	THIS^.sProductQuantity := sProductQuantity;
+*)	
+	bNormLoaded := FALSE;
+	eNormLoadResult := FIXTURE_NORM_LOAD_UNKNOWN;
+//	bLoadNorm := TRUE;
+	MR_LoadNorm := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_EXTENSION;
+	eFcqFixtureState := FIXTURE_EXTENSION_LOAD_NORM;
+	eFcqFixtureStateLoadNorm := FIXTURE_LOADING_NORM_SEND_NORM_DATA;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : load norm requested'));
+	
+ELSIF eFcqFixtureState = FIXTURE_EXTENSION_LOAD_NORM_DONE THEN
+	bNormLoaded := (*NOT bGSampleMeasureRequested;//*)TRUE;
+	MR_LoadNorm := TRUE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : norm loaded '));
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_Reset" Id="{c571d1bc-8f20-43e9-a102-a8f141fdbeda}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_Reset : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eFixtureState = UNIVERSAL_FIXTURE_METHOD_DONE THEN
+	eFcqFixtrueStateReset:=FIXTURE_RESET_CLAMP;
+END_IF
+SUPER^.MR_Reset();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Aborting" Id="{387b38da-395d-4e10-a40e-06c55fcdec85}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Aborting
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eFcqFixtureStateAbort OF
+	FIXTURE_ABORT_CLAMP:
+		fbClamp.MR_Abort();
+		IF NOT fbClamp.Active THEN
+			eFcqFixtureStateAbort := FIXTURE_ABORT_COVER;
+		END_IF
+		
+	FIXTURE_ABORT_COVER:
+		fbCover.MR_Abort();
+		IF NOT fbCover.Active THEN
+			eJigStateAbort := FIXTURE_JIG_ABORT_JIG_PUSHER;
+			eFcqFixtureStateAbort := FIXTURE_ABORT_DONE;
+		END_IF
+		
+	FIXTURE_ABORT_DONE:
+		SUPER^.MS_Aborting();
+		
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_ClampHold" Id="{6ebdcd0b-68e1-413a-9e37-7f1fb0be3561}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_ClampHold
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbClamp.MR_GoActive();
+IF fbClamp.PositionActive AND NOT fbClamp.Busy THEN
+	eFcqFixtureState := FIXTURE_EXTENSION_CLAMP_HOLD_DONE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_ClampHoldDone" Id="{8f7929c3-1e42-4012-af91-c364c00acd5a}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_ClampHoldDone
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT bClampHold THEN
+	bBusy := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_IDLE;
+	eFcqFixtureState := FIXTURE_EXTENSION_IDLE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_ClampRelease" Id="{3d13e849-33a7-4d47-a5f2-1f759792fe36}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_ClampRelease
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbClamp.MR_GoHome();
+IF NOT fbClamp.PositionActive AND NOT fbClamp.Busy THEN
+	eFcqFixtureState := FIXTURE_EXTENSION_CLAMP_RELEASE_DONE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_ClampReleaseDone" Id="{63a4cdff-c2b0-4cf8-a872-93ada06e4273}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_ClampReleaseDone
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT bClampRelease THEN
+	bBusy := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_IDLE;
+	eFcqFixtureState := FIXTURE_EXTENSION_IDLE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_CoverActive" Id="{a56ced19-3082-4311-abac-e92652f9ed9a}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_CoverActive
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbCover.MR_GoActive();
+IF fbCover.PositionActive AND NOT fbCover.Busy THEN
+	eFcqFixtureState := FIXTURE_EXTENSION_COVER_ACTIVE_DONE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_CoverActiveAndJigOpen" Id="{90abf1f6-ca5e-49d7-8b90-09f89011bbaf}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_CoverActiveAndJigOpen : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbCover.MR_GoActive();
+fbJig.MR_GoActive();
+IF fbCover.PositionActive AND NOT fbCover.Busy AND
+	fbJig.PositionActive AND NOT fbJig.Busy THEN
+	eFcqFixtureState := FIXTURE_EXTENSION_COVER_ACTIVE_AND_JIG_OPEN_DONE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_CoverActiveAndJigOpenDone" Id="{d093094d-8171-432d-a4a6-d3504c27699e}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_CoverActiveAndJigOpenDone : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT bCoverActiveAndJigOpen THEN
+	bBusy := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_IDLE;
+	eFcqFixtureState := FIXTURE_EXTENSION_IDLE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_CoverActiveDone" Id="{f8def135-901d-4216-9011-e046695a85bf}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_CoverActiveDone
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT bCoverActive THEN
+	bBusy := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_IDLE;
+	eFcqFixtureState := FIXTURE_EXTENSION_IDLE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_CoverHome" Id="{0c8fafe9-0ded-453a-bf78-970d64e717e0}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_CoverHome
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbCover.MR_GoHome();
+IF fbCover.PositionHome AND NOT fbCover.Busy THEN
+	eFcqFixtureState := FIXTURE_EXTENSION_COVER_HOME_DONE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_CoverHomeAndJigClose" Id="{20d3a174-d73c-421a-a3b9-6b6fd09fe426}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_CoverHomeAndJigClose : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbCover.MR_GoHome();
+fbJig.MR_GoHome();
+IF fbCover.PositionHome AND NOT fbCover.Busy AND
+	fbJig.PositionHome AND NOT fbJig.Busy THEN
+	eFcqFixtureState := FIXTURE_EXTENSION_COVER_HOME_AND_JIG_CLOSE_DONE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_CoverHomeAndJigCloseDone" Id="{599a3eed-a5cd-4d13-a6bd-7c9d89f9bfcf}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_CoverHomeAndJigCloseDone : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT bCoverHomeAndJigClose THEN
+	bBusy := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_IDLE;
+	eFcqFixtureState := FIXTURE_EXTENSION_IDLE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_CoverHomeDone" Id="{b521ecfd-d9ad-4f39-8c4c-aacc00c34c9d}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_CoverHomeDone
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT bCoverHome THEN
+	bBusy := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_IDLE;
+	eFcqFixtureState := FIXTURE_EXTENSION_IDLE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Extension" Id="{1cca78b6-1bb8-4c47-a47a-fea2b5aee859}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Extension
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eFcqFixtureState OF
+	E_FixtureState.FIXTURE_EXTENSION_IDLE:
+		bBusy := FALSE;
+		
+	E_FixtureState.FIXTURE_EXTENSION_COVER_ACTIVE:
+		MS_CoverActive();
+		
+	E_FixtureState.FIXTURE_EXTENSION_COVER_ACTIVE_DONE:
+		MS_CoverActiveDone();
+		
+	E_FixtureState.FIXTURE_EXTENSION_COVER_HOME:
+		MS_CoverHome();
+		
+	E_FixtureState.FIXTURE_EXTENSION_COVER_HOME_DONE:
+		MS_CoverHomeDone();	
+	
+	E_FixtureState.FIXTURE_EXTENSION_CLAMP_HOLD:
+		MS_ClampHold();
+		
+	E_FixtureState.FIXTURE_EXTENSION_CLAMP_HOLD_DONE:
+		MS_ClampHoldDone();
+		
+	E_FixtureState.FIXTURE_EXTENSION_CLAMP_RELEASE:
+		MS_ClampRelease();
+		
+	E_FixtureState.FIXTURE_EXTENSION_CLAMP_RELEASE_DONE:
+		MS_ClampReleaseDone();
+	
+	FIXTURE_EXTENSION_COVER_ACTIVE_AND_JIG_OPEN:
+		MS_CoverActiveAndJigOpen();
+		
+	FIXTURE_EXTENSION_COVER_ACTIVE_AND_JIG_OPEN_DONE:
+		MS_CoverActiveAndJigOpenDone();
+		
+	FIXTURE_EXTENSION_COVER_HOME_AND_JIG_CLOSE:
+		MS_CoverHomeAndJigClose();
+		
+	FIXTURE_EXTENSION_COVER_HOME_AND_JIG_CLOSE_DONE:
+		MS_CoverHomeAndJigCloseDone();
+		
+	FIXTURE_EXTENSION_LOAD_NORM:
+		MS_LoadNorm();
+		
+	FIXTURE_EXTENSION_LOAD_NORM_DONE:
+		MS_LoadNormDone();
+		
+	FIXTURE_EXTENSION_GOLDEN_SAMPLE_MEASURE:	
+		MS_GSampleMeas();
+		
+	FIXTURE_EXTENSION_GOLDEN_SAMPLE_MEASURE_DONE:
+		MS_GSampleMeasDone();
+	
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_GSampleMeas" Id="{c1fd972d-0566-46b7-b157-7b3d8fc28123}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_GSampleMeas : BOOL]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[bBusy := MEMCMP(ADR(sRecivedData),ADR(sUTU_STATUS_bBusy),INT_TO_UDINT(LEN(sUTU_STATUS_bBusy))) = 0; (*	UTU busy flags *)	
+CASE eFcqFixtureStateGSampleMeas OF
+	//FIXTURE_GOLDEN_SAMPLE_CLOSE:
+	//	fbJig.MR_GoActive();
+	//	IF fbJig.PositionActive AND NOT fbJig.Busy THEN
+	//		eFcqFixtureStateGSampleMeas := FIXTURE_GOLDEN_SAMPLE_SEND_MEASURE_COMMAND;
+	//	END_IF
+	
+	FIXTURE_GOLDEN_SAMPLE_SEND_MEASURE_COMMAND:
+		sSendData := sNORM_GSAMPLE_MEASURE_COMMAND;
+		sSendData := CONCAT(sSendData, '$R$N');
+		FUN_StringToTcpBufferData(sMessageAddr := ADR(sSendData), stSendDataAddr := ADR(stSendData));
+		fbTcpClient.MR_AppendToSendBuffer(stData := stSendData);
+		eFcqFixtureStateGSampleMeas := FIXTURE_GOLDEN_SAMPLE_WAIT_FOR_RESPONSE;
+		
+	FIXTURE_GOLDEN_SAMPLE_WAIT_FOR_RESPONSE:
+		stReciveData := fbTcpClient.NextRecivedMessage;
+		IF stReciveData.iLength > 0 THEN
+			FUN_TcpBufferDataToString(sMessageAddr := ADR(sRecivedData), stReturnDataAddr := ADR(stReciveData));
+			(* UTU returns bCheckSetup *)
+			IF (MEMCMP(ADR(sRecivedData),ADR(sUTU_STATUS_BCHECKSETUP),INT_TO_UDINT(LEN(sUTU_STATUS_BCHECKSETUP))) = 0) THEN
+				IF bUseLogger THEN
+					sLoggerMessage := CONCAT(sLoggerMessage,sUTU_STATUS_BCHECKSETUP);
+					fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+				END_IF
+				eGoldenSampleResult := GS_STATUS_BCHECKSETUP;
+				//eNormLoadResult := FIXTURE_NORM_LOAD_FAIL;
+				eFcqFixtureStateGSampleMeas := FIXTURE_GOLDEN_SAMPLE_MEASUREMENT_DONE; 
+			(* UTU returns NOK *)	
+			ELSIF (MEMCMP(ADR(sRecivedData),ADR(sUTU_STATUS_NOK),INT_TO_UDINT(LEN(sUTU_STATUS_NOK))) = 0) THEN
+				eFcqFixtureStateGSampleMeas := FIXTURE_GOLDEN_SAMPLE_WAIT_FOR_UTU;
+				eGoldenSampleResult := GS_STATUS_NOK;
+			(* UTU returns OK *)		
+			ELSIF (MEMCMP(ADR(sRecivedData),ADR(sUTU_STATUS_OK),INT_TO_UDINT(LEN(sUTU_STATUS_OK))) = 0) THEN
+				IF bUseLogger THEN
+					sLoggerMessage := CONCAT(sLoggerMessage,sSAMPLE_ACCEPTED);
+					fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+				END_IF
+				eGoldenSampleResult := GS_STATUS_OK;
+				eFcqFixtureStateGSampleMeas := FIXTURE_GOLDEN_SAMPLE_MEASUREMENT_DONE;		
+			END_IF
+		END_IF
+		
+(*	FIXTURE_GOLDEN_SAMPLE_OPEN:
+		fbJig.MR_GoHome();
+		IF (fbJig.PositionHome AND NOT fbJig.Busy) AND NOT fbCover.PositionHome THEN
+ 			fbClamp.MR_GoHome(); 			
+		ELSE
+			fbClamp.MR_GoActive();
+		END_IF
+		IF fbJig.PositionHome AND fbClamp.PositionHome THEN
+			fbCover.MR_GoHome();
+		END_IF
+				
+		IF fbClamp.PositionActive AND NOT fbClamp.Busy AND fbCover.PositionHome AND NOT fbCover.Busy AND 
+			fbJig.PositionHome AND NOT fbJig.Busy THEN
+			eFcqFixtureStateGSampleMeas := FIXTURE_GOLDEN_SAMPLE_MEASUREMENT_DONE;
+		ELSE eFcqFixtureStateGSampleMeas := FIXTURE_GOLDEN_SAMPLE_OPEN;
+		END_IF
+*)
+	FIXTURE_GOLDEN_SAMPLE_WAIT_FOR_UTU:
+		stReciveData := fbTcpClient.NextRecivedMessage;
+		IF stReciveData.iLength > 0 THEN
+			FUN_TcpBufferDataToString(sMessageAddr := ADR(sRecivedData), stReturnDataAddr := ADR(stReciveData));
+			IF (MEMCMP(ADR(sRecivedData),ADR(sUTU_STATUS_BCHECKSETUP),INT_TO_UDINT(LEN(sUTU_STATUS_BCHECKSETUP))) = 0) THEN
+				IF bUseLogger THEN
+					sLoggerMessage := CONCAT(sLoggerMessage,sUTU_STATUS_BCHECKSETUP);
+					fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+				END_IF
+				eGoldenSampleResult := GS_STATUS_BCHECKSETUP;
+				//eNormLoadResult := FIXTURE_NORM_LOAD_FAIL;
+				eFcqFixtureStateGSampleMeas := FIXTURE_GOLDEN_SAMPLE_MEASUREMENT_DONE; 
+			(* UTU returns bCheckSetup *)
+			ELSIF (MEMCMP(ADR(sRecivedData),ADR(sNORM_GS_REQUEST),INT_TO_UDINT(LEN(sNORM_GS_REQUEST))) = 0) OR (FIND(sRecivedData,sNORM_GS_REQUEST) > 0) THEN
+				bGSampleMeasureRequested := TRUE;
+				iGsampleId := STRING_TO_USINT(LEFT(RIGHT(sRecivedData,2),1));
+				IF bUseLogger THEN
+					sLoggerMessage := CONCAT(sLoggerMessage,'Golden Sample Test');
+					fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+				END_IF
+				eFcqFixtureStateGSampleMeas := FIXTURE_GOLDEN_SAMPLE_MEASUREMENT_DONE;
+			END_IF
+		END_IF	
+		
+	FIXTURE_GOLDEN_SAMPLE_MEASUREMENT_DONE:
+		eFcqFixtureState := FIXTURE_EXTENSION_GOLDEN_SAMPLE_MEASURE_DONE;
+		
+END_CASE		
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_GSampleMeasDone" Id="{d32c2fb1-14c5-413b-aa70-f01436f5fd48}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_GSampleMeasDone : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[bBusy := FALSE;
+//eFixtureState := UNIVERSAL_FIXTURE_EXTENSION;
+//eFcqFixtureState := FIXTURE_EXTENSION_LOAD_NORM;
+//eFcqFixtureStateLoadNorm := FIXTURE_LOADING_NORM_WAIT_FOR_RESPONSE;
+eFixtureState := UNIVERSAL_FIXTURE_IDLE;
+eFcqFixtureState := FIXTURE_EXTENSION_IDLE;
+bGSampleMeasurmentDone := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Initializing" Id="{9307c2c4-2f46-48f3-a2d6-5139d9bd71d4}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Initializing
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eFcqFixtureStateInit OF
+	FIXTURE_INIT_CLAMP:
+		fbClamp.MR_Init();
+		
+		IF fbClamp.Active THEN
+			eFcqFixtureStateInit := FIXTURE_INIT_COVER;
+		END_IF
+		
+	FIXTURE_INIT_COVER:
+		fbCover.MR_Init();
+		
+		IF fbCover.Active THEN
+			eJigStateInit := FIXTURE_JIG_INIT_JIG_PUSHER;
+			eFcqFixtureStateInit := FIXTURE_INIT_DONE;
+		END_IF
+		
+	FIXTURE_INIT_DONE:
+		SUPER^.MS_Initializing();
+		
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_LoadNorm" Id="{7c00fcea-1aaa-40c0-ad3f-0a8234d51dac}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_LoadNorm
+VAR_INST
+	TestTON :	TON;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[bBusy := MEMCMP(ADR(sRecivedData),ADR(sUTU_STATUS_bBusy),INT_TO_UDINT(LEN(sUTU_STATUS_bBusy))) = 0; (*	UTU busy flags *)	
+
+		
+CASE eFcqFixtureStateLoadNorm OF
+	FIXTURE_LOADING_NORM_SEND_NORM_DATA:
+		(* Prepare and send data to client *)
+		sSendData := CONCAT(STR1 := sNORM_LOAD_COMMAND, 
+			STR2 :=	CONCAT(STR1 := sConfig,STR2 := CONCAT(STR1 := ':', 
+			STR2 := CONCAT(STR1 := UINT_TO_STRING(iAmount),	STR2 := CONCAT(STR1 := ':',
+			STR2 := CONCAT(STR1:= sPO, STR2:= CONCAT(STR1:= ':', 
+			STR2 := CONCAT(STR1 := sBatch, STR2 := CONCAT(STR1:= ':',
+			STR2 := CONCAT(STR1:=sOPID, STR2:= ':'))))))))));
+		
+		sSendData := CONCAT(sSendData, '$R$N');
+		FUN_StringToTcpBufferData(sMessageAddr := ADR(sSendData), stSendDataAddr := ADR(stSendData));
+		fbTcpClient.MR_AppendToSendBuffer(stData := stSendData);
+		
+		(* Prepare data for logger *)
+		IF bUseLogger THEN
+			MEMSET(ADR(sLoggerMessage),0,INT_TO_UDINT(LEN(sLoggerMessage)));
+			sLoggerMessage := CONCAT(STR1 := 'Load norm request:',STR2 := CONCAT(STR1 := sProductType,STR2 := (*USINT_TO_STRING*)(sProductQuantity)));
+		END_IF
+		
+		eFcqFixtureStateLoadNorm := FIXTURE_LOADING_NORM_WAIT_FOR_RESPONSE;
+		
+	FIXTURE_LOADING_NORM_WAIT_FOR_RESPONSE:
+		stReciveData := fbTcpClient.NextRecivedMessage;
+		IF stReciveData.iLength > 0  THEN
+		FUN_TcpBufferDataToString(sMessageAddr := ADR(sRecivedData), stReturnDataAddr := ADR(stReciveData));
+		(* Norm loading Gold Sample *)
+			IF (MEMCMP(ADR(sRecivedData),ADR(sNORM_GS_REQUEST),INT_TO_UDINT(LEN(sNORM_GS_REQUEST))) = 0) OR (FIND(sRecivedData,sNORM_GS_REQUEST) > 0) THEN
+				iSampleID := STRING_TO_USINT(LEFT(RIGHT(sRecivedData,2),1));
+				bGSampleMeasureRequested := TRUE;
+				IF bUseLogger THEN
+					sLoggerMessage := CONCAT(sLoggerMessage,'Golden Sample Test');
+					fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+				END_IF
+				
+				bGSampleMeasurmentDone := FALSE;
+				bBusy := FALSE;
+				eNormLoadResult := FIXTURE_NORM_LOAD_GOLDEN_SAMPLE_NEEDED;
+				eFcqFixtureStateLoadNorm := FIXTURE_LOADING_NORM_DONE;
+				
+//			eFcqFixtureStateLoadNorm :=FIXTURE_LOADING_NORM_GOLDEN_SAMPLE_TEST;
+							
+//			ELSIF MEMCMP(ADR(sRecivedData),ADR(sUTU_STATUS_NOK),INT_TO_UDINT(LEN(sUTU_STATUS_NOK))) = 0 THEN
+//				IF bUseLogger THEN
+//					sLoggerMessage := CONCAT(sLoggerMessage,CONCAT('golden sample ID:',CONCAT(USINT_TO_STRING(iGsampleId),'	NOK')));
+//					fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+//				END_IF
+				
+			(* Norm loading successfull *)
+			ELSIF MEMCMP(ADR(sRecivedData),ADR(sNORM_LOAD_SUCCESS),INT_TO_UDINT(LEN(sNORM_LOAD_SUCCESS))) = 0 THEN
+				IF bUseLogger THEN
+					sLoggerMessage := CONCAT(sLoggerMessage,sSAMPLE_ACCEPTED);
+					fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+				END_IF
+				bGSampleMeasureRequested := FALSE;
+				bBusy := FALSE;
+				eNormLoadResult := FIXTURE_NORM_LOAD_SUCCESS;
+				eFcqFixtureStateLoadNorm := FIXTURE_LOADING_NORM_DONE;
+				
+				
+			(* Norm loading failed *)
+			ELSIF (MEMCMP(ADR(sRecivedData),ADR(sNORM_LOAD_FAIL),INT_TO_UDINT(LEN(sNORM_LOAD_FAIL))) = 0) THEN
+				IF bUseLogger THEN
+					sLoggerMessage := CONCAT(sLoggerMessage,sSAMPLE_REJECTED);
+					fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+				END_IF
+				bGSampleMeasureRequested := FALSE;
+				bBusy := FALSE;
+				eNormLoadResult := FIXTURE_NORM_LOAD_FAIL;
+				eFcqFixtureStateLoadNorm := FIXTURE_LOADING_NORM_DONE;
+			
+			(* UTU returns bCheckSetup *)
+			ELSIF (MEMCMP(ADR(sRecivedData),ADR(sUTU_STATUS_BCHECKSETUP),INT_TO_UDINT(LEN(sUTU_STATUS_BCHECKSETUP))) = 0) THEN
+				IF bUseLogger THEN
+					sLoggerMessage := CONCAT(sLoggerMessage,sUTU_STATUS_BCHECKSETUP);
+					fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+				END_IF
+				bGSampleMeasureRequested := FALSE;
+				bBusy := FALSE;
+				eNormLoadResult := FIXTURE_NORM_LOAD_FAIL;
+				eFcqFixtureStateLoadNorm := FIXTURE_LOADING_NORM_DONE;
+			END_IF
+		END_IF
+			
+	FIXTURE_LOADING_NORM_DONE:
+		fbTcpClient.MR_ClearAllBuffers();
+		eFcqFixtureState := FIXTURE_EXTENSION_LOAD_NORM_DONE;
+		
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_LoadNormDone" Id="{d278ec86-3588-4b3e-bdb6-3e68ec6597d1}" FolderPath="StateMachineExt\">
+      <Declaration><![CDATA[METHOD MS_LoadNormDone
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT bLoadNorm THEN
+	bBusy := FALSE;
+	bBatchEnd := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_IDLE;
+	eFcqFixtureState := FIXTURE_EXTENSION_IDLE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_MethodDone" Id="{42d7f3dd-9b70-45ca-abe5-ec05fed60233}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_MethodDone
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[bBusy := FALSE;
+SUPER^.MS_MethodDone();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Ready" Id="{1a89915f-d569-41db-8855-9aef83440988}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Ready
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eFcqFixtureStateInit := FIXTURE_INIT_CLAMP;
+eFixtureState := UNIVERSAL_FIXTURE_IDLE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Reset" Id="{70f992d0-ec66-43cd-bef0-00b72e8b0896}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eFcqFixtrueStateReset OF
+	FIXTURE_RESET_CLAMP:
+		fbClamp.MR_Reset();
+		
+		IF NOT fbClamp.Error THEN
+			eFcqFixtrueStateReset := FIXTURE_RESET_COVER;
+		END_IF
+		
+	FIXTURE_RESET_COVER:
+		fbCover.MR_Reset();
+		
+		IF NOT fbCover.Error THEN
+			eJigStateReset := FIXTURE_JIG_RESET_JIG_PUSHER;
+			eFcqFixtrueStateReset := FIXTURE_RESET_DONE;
+		END_IF
+	
+	FIXTURE_RESET_DONE:
+		SUPER^.MS_Reset();
+	
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Uninitialized" Id="{e5476f48-7990-48bb-ada3-68d5c93cc0a7}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Uninitialized
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[bNormLoaded := FALSE;
+
+SUPER^.MS_Uninitialized();]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="NormLoaded" Id="{66e6b5d7-1834-499b-8eaa-8a84a381c494}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY NormLoaded : REFERENCE TO BOOL]]></Declaration>
+      <Get Name="Get" Id="{641b316e-c574-4db6-9b16-93449624139e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NormLoaded REF= bNormLoaded;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="NormLoadResults" Id="{96673ae4-51ed-40f1-a0f8-282fa6205524}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY NormLoadResults : REFERENCE TO E_FixtureLoadNormResult]]></Declaration>
+      <Get Name="Get" Id="{2afe6081-f443-4ee5-a3f5-bebebf67c8a3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NormLoadResults REF= eNormLoadResult;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ref_Clamp" Id="{49c505e2-f58a-4747-a541-916ae5c865ce}" FolderPath="Properties\References\">
+      <Declaration><![CDATA[PROPERTY ref_Clamp : REFERENCE TO FB_FixtureClamp]]></Declaration>
+      <Get Name="Get" Id="{7492b162-d196-4e81-8563-389f913f9e06}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ref_Clamp REF= fbClamp;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ref_Cover" Id="{3a7ae8d7-9bf1-4722-a1ab-863056ed0be3}" FolderPath="Properties\References\">
+      <Declaration><![CDATA[PROPERTY ref_Cover : REFERENCE TO FB_DoubleCoilCylinder]]></Declaration>
+      <Get Name="Get" Id="{bfa92e06-b06b-4e1d-a788-ee3e4e34ba93}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ref_Cover REF= fbCover;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="StateExt" Id="{d0b38adb-6abf-4c49-89de-54a4ce30dc41}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY StateExt : REFERENCE TO E_FixtureState]]></Declaration>
+      <Get Name="Get" Id="{0cc28eb4-16ca-4d10-8f82-953680a7397b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[StateExt REF= eFcqFixtureState;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="StateMachine" Id="{f2d90476-4ae2-45da-a431-68f71ef3d71d}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED StateMachine
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^.StateMachine();
+
+CASE eFcqFixtureState OF
+	E_FixtureState.FIXTURE_EXTENSION_COVER_ACTIVE:
+		MS_CoverActive();
+		
+	E_FixtureState.FIXTURE_EXTENSION_COVER_ACTIVE_DONE:
+		MS_CoverActiveDone();
+		
+	E_FixtureState.FIXTURE_EXTENSION_COVER_HOME:
+		MS_CoverHome();
+		
+	E_FixtureState.FIXTURE_EXTENSION_COVER_HOME_DONE:
+		MS_CoverHomeDone();
+		
+	E_FixtureState.FIXTURE_EXTENSION_CLAMP_HOLD:
+		MS_ClampHold();
+		
+	E_FixtureState.FIXTURE_EXTENSION_CLAMP_HOLD_DONE:
+		MS_ClampHoldDone();
+		
+	E_FixtureState.FIXTURE_EXTENSION_CLAMP_RELEASE:
+		MS_ClampRelease();
+		
+	E_FixtureState.FIXTURE_EXTENSION_CLAMP_RELEASE_DONE:
+		MS_ClampReleaseDone();
+		
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_Fixture">
+      <LineId Id="1534" Count="1" />
+      <LineId Id="1637" Count="3" />
+      <LineId Id="1536" Count="4" />
+      <LineId Id="1642" Count="3" />
+      <LineId Id="1541" Count="2" />
+      <LineId Id="1545" Count="6" />
+      <LineId Id="1751" Count="2" />
+      <LineId Id="1552" Count="5" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.BatchEnd.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.ClampHold.Get">
+      <LineId Id="5" Count="0" />
+      <LineId Id="8" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.ClampSimulation.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.ClampSimulation.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.CoverPositionActive.Get">
+      <LineId Id="3" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.CoverPositionHome.Get">
+      <LineId Id="3" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.CoverSimulation.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.CoverSimulation.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.GoldenSampleMeasDone.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.GoldenSampleMeasRequested.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.GoldenSampleResult.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.GSampleId.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.M_MeasurementClient">
+      <LineId Id="6" Count="1" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="11" Count="1" />
+      <LineId Id="19" Count="1" />
+      <LineId Id="274" Count="0" />
+      <LineId Id="21" Count="6" />
+      <LineId Id="358" Count="0" />
+      <LineId Id="175" Count="0" />
+      <LineId Id="177" Count="1" />
+      <LineId Id="333" Count="0" />
+      <LineId Id="180" Count="0" />
+      <LineId Id="341" Count="0" />
+      <LineId Id="181" Count="3" />
+      <LineId Id="186" Count="0" />
+      <LineId Id="334" Count="0" />
+      <LineId Id="322" Count="0" />
+      <LineId Id="325" Count="0" />
+      <LineId Id="323" Count="0" />
+      <LineId Id="321" Count="0" />
+      <LineId Id="347" Count="0" />
+      <LineId Id="324" Count="0" />
+      <LineId Id="187" Count="2" />
+      <LineId Id="294" Count="0" />
+      <LineId Id="190" Count="4" />
+      <LineId Id="327" Count="0" />
+      <LineId Id="195" Count="1" />
+      <LineId Id="275" Count="0" />
+      <LineId Id="348" Count="0" />
+      <LineId Id="379" Count="0" />
+      <LineId Id="371" Count="1" />
+      <LineId Id="380" Count="7" />
+      <LineId Id="378" Count="0" />
+      <LineId Id="370" Count="0" />
+      <LineId Id="295" Count="0" />
+      <LineId Id="198" Count="2" />
+      <LineId Id="346" Count="0" />
+      <LineId Id="316" Count="0" />
+      <LineId Id="320" Count="0" />
+      <LineId Id="284" Count="0" />
+      <LineId Id="283" Count="0" />
+      <LineId Id="296" Count="0" />
+      <LineId Id="285" Count="0" />
+      <LineId Id="326" Count="0" />
+      <LineId Id="288" Count="3" />
+      <LineId Id="329" Count="0" />
+      <LineId Id="292" Count="1" />
+      <LineId Id="349" Count="0" />
+      <LineId Id="286" Count="0" />
+      <LineId Id="201" Count="0" />
+      <LineId Id="297" Count="0" />
+      <LineId Id="202" Count="4" />
+      <LineId Id="330" Count="0" />
+      <LineId Id="207" Count="1" />
+      <LineId Id="350" Count="0" />
+      <LineId Id="276" Count="0" />
+      <LineId Id="210" Count="0" />
+      <LineId Id="298" Count="0" />
+      <LineId Id="211" Count="4" />
+      <LineId Id="331" Count="0" />
+      <LineId Id="216" Count="1" />
+      <LineId Id="277" Count="0" />
+      <LineId Id="351" Count="0" />
+      <LineId Id="219" Count="0" />
+      <LineId Id="299" Count="0" />
+      <LineId Id="220" Count="4" />
+      <LineId Id="332" Count="0" />
+      <LineId Id="344" Count="0" />
+      <LineId Id="226" Count="0" />
+      <LineId Id="352" Count="0" />
+      <LineId Id="278" Count="0" />
+      <LineId Id="228" Count="0" />
+      <LineId Id="300" Count="0" />
+      <LineId Id="229" Count="4" />
+      <LineId Id="339" Count="0" />
+      <LineId Id="234" Count="1" />
+      <LineId Id="353" Count="0" />
+      <LineId Id="279" Count="0" />
+      <LineId Id="237" Count="0" />
+      <LineId Id="301" Count="0" />
+      <LineId Id="238" Count="4" />
+      <LineId Id="338" Count="0" />
+      <LineId Id="243" Count="1" />
+      <LineId Id="354" Count="0" />
+      <LineId Id="280" Count="0" />
+      <LineId Id="246" Count="0" />
+      <LineId Id="302" Count="0" />
+      <LineId Id="247" Count="4" />
+      <LineId Id="337" Count="0" />
+      <LineId Id="252" Count="1" />
+      <LineId Id="281" Count="0" />
+      <LineId Id="355" Count="0" />
+      <LineId Id="303" Count="1" />
+      <LineId Id="256" Count="4" />
+      <LineId Id="336" Count="0" />
+      <LineId Id="261" Count="1" />
+      <LineId Id="282" Count="0" />
+      <LineId Id="356" Count="0" />
+      <LineId Id="264" Count="0" />
+      <LineId Id="307" Count="0" />
+      <LineId Id="340" Count="0" />
+      <LineId Id="309" Count="2" />
+      <LineId Id="335" Count="0" />
+      <LineId Id="312" Count="3" />
+      <LineId Id="363" Count="1" />
+      <LineId Id="306" Count="0" />
+      <LineId Id="305" Count="0" />
+      <LineId Id="266" Count="0" />
+      <LineId Id="366" Count="0" />
+      <LineId Id="267" Count="0" />
+      <LineId Id="367" Count="0" />
+      <LineId Id="173" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="368" Count="0" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="359" Count="2" />
+      <LineId Id="50" Count="2" />
+      <LineId Id="398" Count="0" />
+      <LineId Id="405" Count="0" />
+      <LineId Id="416" Count="0" />
+      <LineId Id="406" Count="1" />
+      <LineId Id="410" Count="1" />
+      <LineId Id="409" Count="0" />
+      <LineId Id="408" Count="0" />
+      <LineId Id="417" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MeasurementResultExt.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MR_ClampHold">
+      <LineId Id="23" Count="8" />
+      <LineId Id="33" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MR_ClampRelease">
+      <LineId Id="23" Count="8" />
+      <LineId Id="33" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MR_CoverActive">
+      <LineId Id="22" Count="12" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MR_CoverActiveAndJigOpen">
+      <LineId Id="38" Count="0" />
+      <LineId Id="22" Count="12" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MR_CoverHome">
+      <LineId Id="23" Count="1" />
+      <LineId Id="26" Count="10" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MR_CoverHomeAndJigClose">
+      <LineId Id="38" Count="0" />
+      <LineId Id="22" Count="12" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MR_GSampleMeas">
+      <LineId Id="5" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="10" Count="1" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="17" Count="1" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MR_LoadNorm">
+      <LineId Id="3" Count="1" />
+      <LineId Id="33" Count="2" />
+      <LineId Id="37" Count="1" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="6" Count="10" />
+      <LineId Id="18" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MR_Reset">
+      <LineId Id="6" Count="2" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_Aborting">
+      <LineId Id="25" Count="2" />
+      <LineId Id="29" Count="5" />
+      <LineId Id="36" Count="7" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_ClampHold">
+      <LineId Id="25" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="18" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_ClampHoldDone">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_ClampRelease">
+      <LineId Id="12" Count="0" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="13" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_ClampReleaseDone">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_CoverActive">
+      <LineId Id="3" Count="0" />
+      <LineId Id="5" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_CoverActiveAndJigOpen">
+      <LineId Id="12" Count="1" />
+      <LineId Id="15" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_CoverActiveAndJigOpenDone">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_CoverActiveDone">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_CoverHome">
+      <LineId Id="3" Count="0" />
+      <LineId Id="5" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_CoverHomeAndJigClose">
+      <LineId Id="3" Count="1" />
+      <LineId Id="6" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_CoverHomeAndJigCloseDone">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_CoverHomeDone">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_Extension">
+      <LineId Id="558" Count="44" />
+      <LineId Id="607" Count="1" />
+      <LineId Id="603" Count="0" />
+      <LineId Id="609" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_GSampleMeas">
+      <LineId Id="140" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="107" Count="0" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="125" Count="2" />
+      <LineId Id="70" Count="0" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="71" Count="2" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="135" Count="0" />
+      <LineId Id="74" Count="0" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="75" Count="1" />
+      <LineId Id="136" Count="0" />
+      <LineId Id="77" Count="11" />
+      <LineId Id="151" Count="0" />
+      <LineId Id="100" Count="0" />
+      <LineId Id="90" Count="5" />
+      <LineId Id="97" Count="1" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="143" Count="0" />
+      <LineId Id="62" Count="0" />
+      <LineId Id="139" Count="0" />
+      <LineId Id="113" Count="0" />
+      <LineId Id="119" Count="3" />
+      <LineId Id="114" Count="0" />
+      <LineId Id="144" Count="0" />
+      <LineId Id="115" Count="1" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="118" Count="0" />
+      <LineId Id="111" Count="1" />
+      <LineId Id="142" Count="0" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="153" Count="0" />
+      <LineId Id="155" Count="2" />
+      <LineId Id="169" Count="6" />
+      <LineId Id="168" Count="0" />
+      <LineId Id="158" Count="2" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="161" Count="3" />
+      <LineId Id="154" Count="0" />
+      <LineId Id="165" Count="1" />
+      <LineId Id="152" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="66" Count="2" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_GSampleMeasDone">
+      <LineId Id="11" Count="0" />
+      <LineId Id="17" Count="1" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="12" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_Initializing">
+      <LineId Id="24" Count="18" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_LoadNorm">
+      <LineId Id="130" Count="0" />
+      <LineId Id="246" Count="0" />
+      <LineId Id="131" Count="0" />
+      <LineId Id="3" Count="3" />
+      <LineId Id="76" Count="4" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="81" Count="0" />
+      <LineId Id="8" Count="12" />
+      <LineId Id="22" Count="2" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="262" Count="0" />
+      <LineId Id="266" Count="0" />
+      <LineId Id="56" Count="2" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="261" Count="0" />
+      <LineId Id="249" Count="0" />
+      <LineId Id="257" Count="3" />
+      <LineId Id="219" Count="0" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="145" Count="0" />
+      <LineId Id="142" Count="2" />
+      <LineId Id="62" Count="0" />
+      <LineId Id="140" Count="0" />
+      <LineId Id="25" Count="5" />
+      <LineId Id="263" Count="0" />
+      <LineId Id="124" Count="0" />
+      <LineId Id="31" Count="1" />
+      <LineId Id="53" Count="0" />
+      <LineId Id="33" Count="6" />
+      <LineId Id="264" Count="0" />
+      <LineId Id="125" Count="0" />
+      <LineId Id="40" Count="2" />
+      <LineId Id="104" Count="1" />
+      <LineId Id="107" Count="3" />
+      <LineId Id="265" Count="0" />
+      <LineId Id="126" Count="0" />
+      <LineId Id="111" Count="0" />
+      <LineId Id="106" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="146" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="46" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_LoadNormDone">
+      <LineId Id="3" Count="1" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="5" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_MethodDone">
+      <LineId Id="6" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_Ready">
+      <LineId Id="9" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_Reset">
+      <LineId Id="25" Count="18" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.MS_Uninitialized">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.NormLoaded.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.NormLoadResults.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.ref_Clamp.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.ref_Cover.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.StateExt.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture.StateMachine">
+      <LineId Id="3" Count="26" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

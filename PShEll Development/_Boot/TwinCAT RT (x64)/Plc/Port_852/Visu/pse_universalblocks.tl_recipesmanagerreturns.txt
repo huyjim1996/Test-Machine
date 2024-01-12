@@ -1,0 +1,21 @@
+Id;Default
+0;-
+10;Operation failed
+20;Incorrect parameters
+30;The data server object is not initialized
+40;The data server does not implement
+50;Not all variables of a recipe definition can be written via the data server
+60;The recipe definition has no free memory to create a new recipe
+70;The recipe file was not found
+80;The contents of the recipe file do not match the current recipe
+90;The storage procedure failed
+100;The recipe does not exist
+110;The recipe definition does not exist
+120;The recipe already exists in the recipe definition
+130;The global recipe manager has not been created
+140;The recipe definition contains more variables than the recipe file
+150;The recipe manager was blocked during the online change
+160;Source exhausted
+170;Target exhausted
+180;Source illegal
+;

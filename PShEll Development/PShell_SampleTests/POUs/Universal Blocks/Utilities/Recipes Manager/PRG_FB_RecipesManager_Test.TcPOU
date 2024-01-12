@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_RecipesManager_Test" Id="{cd337081-031c-4850-95e8-9a571e88f1ba}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_RecipesManager_Test
+VAR
+	bFirstCycle : BOOL := TRUE;
+	
+	bInit				: BOOL;						(*  *)
+	bAbort				: BOOL;						(*  *)
+	bCreate				: BOOL;						(*  *)
+	bLoad				: BOOL;						(*  *)
+	bLoadAndWritte		: BOOL;						(*  *)
+	bRead				: BOOL;						(*  *)
+	bReadAndSave		: BOOL;						(*  *)
+	bRemove				: BOOL;						(*  *)
+	bSave				: BOOL;						(*  *)
+	bWritte				: BOOL;						(*  *)
+	bGetRecipeCount		: BOOL;						(*  *)
+	bGetRecipeNames		: BOOL;						(*  *)
+	bGetVariableNames	: BOOL;						(*  *)
+	bGetVariableValues	: BOOL;						(*  *)
+	bReload				: BOOL;						(*  *)
+	bRestore			: BOOL;						(*  *)
+	bBackup				: BOOL;						(*  *)
+	
+	sLocalStoragePath	: STRING(512) := 'C:\TwinCAT\Tests\Recipes\';	(*  *)
+	sRecipesDefinition	: STRING := 'Recipes';						(*  *)
+	sRecipeName			: STRING := 'R1';							(*  *)
+
+	fbRecipesControler	: FB_RecipesControler;
+	
+	rVar1 : REAL;
+	rVar2 : REAL;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	fbRecipesControler.MR_FirstCycle(	sLocalStoragePath 	:= sLocalStoragePath,
+										sRecipesDefinition	:= sRecipesDefinition,
+										sDefaultRecipeName	:= sRecipeName);
+	
+END_IF
+
+IF bInit THEN
+	fbRecipesControler.MR_Init();
+	IF fbRecipesControler.Active THEN
+		bInit := FALSE;
+	END_IF
+	
+ELSIF bAbort THEN
+	fbRecipesControler.MR_Abort();
+	IF NOT fbRecipesControler.Active THEN
+		bAbort := FALSE;
+	END_IF
+	
+ELSIF bCreate THEN
+	IF fbRecipesControler.MR_Create(sRecipesDefinition, sRecipeName) THEN
+		bCreate := FALSE;
+	END_IF
+	
+ELSIF bLoad THEN
+	IF fbRecipesControler.MR_Load(sRecipesDefinition, sRecipeName) THEN
+		bLoad := FALSE;
+	END_IF
+	
+ELSIF bLoadAndWritte THEN
+	IF fbRecipesControler.MR_LoadAndWritte(sRecipesDefinition, sRecipeName) THEN
+		bLoadAndWritte := FALSE;
+	END_IF
+	
+ELSIF bRead THEN
+	IF fbRecipesControler.MR_Read(sRecipesDefinition, sRecipeName) THEN
+		bRead := FALSE;
+	END_IF
+	
+ELSIF bReadAndSave THEN
+	IF fbRecipesControler.MR_ReadAndSave(sRecipesDefinition, sRecipeName) THEN
+		bReadAndSave := FALSE;
+	END_IF
+	
+ELSIF bRemove THEN
+	IF fbRecipesControler.MR_Remove(sRecipesDefinition, sRecipeName) THEN
+		bRemove := FALSE;
+	END_IF
+	
+ELSIF bSave THEN
+	IF fbRecipesControler.MR_Save(sRecipesDefinition, sRecipeName) THEN
+		bSave := FALSE;
+	END_IF
+	
+ELSIF bWritte THEN
+	IF fbRecipesControler.MR_Writte(sRecipesDefinition, sRecipeName) THEN
+		bWritte := FALSE;
+	END_IF
+	
+ELSIF bReload THEN
+	IF fbRecipesControler.MR_Reload(sRecipeName,sRecipesDefinition) THEN
+		bReload := FALSE;
+	END_IF
+	
+ELSIF bGetRecipeNames THEN
+	IF fbRecipesControler.MR_GetRecipesNames(sRecipesDefinition) THEN
+		bGetRecipeNames := FALSE;
+	END_IF
+	
+ELSIF bGetVariableNames THEN
+	IF fbRecipesControler.MR_GetVariablesNames(sRecipesDefinition,sRecipeName) THEN
+		bGetVariableNames := FALSE;
+	END_IF
+	
+ELSIF bGetVariableValues THEN
+	IF fbRecipesControler.MR_GetVariableValues(sRecipesDefinition,sRecipeName) THEN
+		bGetVariableValues := FALSE;
+	END_IF
+	
+END_IF
+
+fbRecipesControler();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_RecipesManager_Test">
+      <LineId Id="3" Count="81" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

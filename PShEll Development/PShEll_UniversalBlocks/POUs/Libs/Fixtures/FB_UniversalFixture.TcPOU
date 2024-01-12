@@ -1,0 +1,1004 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_UniversalFixture" Id="{871ce81f-e673-4772-aced-b3c5dd104678}" SpecialFunc="None">
+    <Declaration><![CDATA[(* 
+:Description: This function block is base for all other measurement fixtures.
+*)
+FUNCTION_BLOCK ABSTRACT FB_UniversalFixture IMPLEMENTS  I_UniversalFixture
+VAR CONSTANT
+	sSAMPLE_ACCEPTED : STRING := 'ACCEPTED';					(* Sample accepted - compare keyword for TCP/IP message from measurement device *)
+	sSAMPLE_REJECTED : STRING := 'REJECTED';					(* Sample rejected - compare keyword for TCP/IP message from measurement device *)
+END_VAR
+VAR
+	bFirstCycle				: BOOL := TRUE;						(* First cycle bit *)
+	sName 					: STRING; 							(* Fixture name for other utilities *)
+	
+	bActive 				: BOOL;								(* Fixture device is initialized and ready to wokr *)
+	bBusy					: BOOL;								(* Fixture device is busy *)
+	bError 					: BOOL;								(* Error occured while executing *)
+	iErrorID 				: UDINT;							(* Error ID *)
+	
+	eSampleResult			: E_UniversalFixtureSampleResult;	(* Result of current measured product *)
+	iSampleID				: UDINT;							(* Id of current measured product *)
+	bSocketOpen				: BOOL;								(* Socket open flag *)
+	
+	sSendData				: STRING;							(* String message to send via TCP/IP to measurement device *)
+	sRecivedData			: STRING;							(* String message to recive via TCP/IP from measurement device *)
+	sLoggerMessage			: STRING;							(* String message for measurement txt logger *)
+	stSendData				: ST_TcpBufferData;					(* Byte message to send via TCP/IP to measurement device *)
+	stReciveData			: ST_TcpBufferData;					(* Byte message to recive via TCP/IP from measurement device *)
+	fbTcpServer				: FB_TcpServer;						(* TCP/IP server instance *)
+	fbTcpClient				: FB_TcpClient;						(* TCP/IP client instance *)
+	bUseLogger				: BOOL;								(* Enables using of internal fixture file logger *)
+	fbMeasurementLogger 	: FB_TXTDataExchanger;				(* Measurement TXT-File logger *)
+	
+	rtError					: R_TRIG; 							(* Rising edge trigger for function block error *)
+	
+	eFixtureState			: E_UniversalFixtureState;			(* Current state of measurement fixture device *)
+	eFixtureStateInit		: E_UniversalFixtureStateInit;		(* Current state of measurement fixture device initialization *)
+	eFixtureStateAbort		: E_UniversalFixtureStateAbort;		(* Current state of measurement fixture device aborting *)
+	eFixtureStateReset		: E_UniversalFixtureStateReset;		(* Current state of measurement fixture device reseting *)
+	eFixtureStateMeasure	: E_UniversalFixtureStateMeasure; 	(* Current measurement state if measurement has began *)
+	eConnnectionType		: E_UniversalFixtureConnectionType;
+	
+	bClientConnection 		: BOOL; 							(* If true then fixture connect as a client, if false it behaves like a server *)
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* First cycle assignamnets *)
+IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	
+END_IF
+
+(* Update status flags *)
+bActive := eFixtureState >= UNIVERSAL_FIXTURE_READY;
+bError := fbTcpServer.Error OR fbMeasurementLogger.Error;
+
+(* Run server instance *)
+IF eConnnectionType = UNIVERSAL_FIXTURE_SERVER_CONNECTION THEN
+	fbTcpServer();
+	
+ELSIF eConnnectionType = UNIVERSAL_FIXTURE_CLIENT_CONNECTION THEN
+	fbTcpClient();
+	
+END_IF 
+
+(* Report errors that occur *)
+rtError(CLK:=bError);
+
+IF rtError.Q THEN 
+	fbMachineLogger.MR_AddLogs(FUN_MergeStrings5(sName, ' : Error occured (error ID: ', UDINT_TO_STRING(iErrorID), ')', ''));
+	
+END_IF
+
+(* Run internal measurement logger instance if it's enabled *)
+IF bUseLogger THEN
+	fbMeasurementLogger();
+	
+END_IF
+
+(* Run main state machine *)
+StateMachine();]]></ST>
+    </Implementation>
+    <Folder Name="FirstCycle" Id="{6ac848c3-8849-420d-9545-ab512f6fc4bd}" />
+    <Folder Name="Internal" Id="{ee5fedc1-8906-4cf6-8983-a137bf6000f4}" />
+    <Folder Name="Properties" Id="{2a131754-db76-4f9b-8a4e-4f30746c4409}">
+      <Folder Name="References" Id="{45360bee-050b-4e56-aee3-4609f5cce1d5}" />
+      <Folder Name="Status" Id="{db161780-2258-42e8-9377-940a048dd600}" />
+    </Folder>
+    <Folder Name="Requests" Id="{26310939-11e6-4da6-a46c-7469a248a566}" />
+    <Folder Name="StateMachine" Id="{c657b9b2-0d96-4635-bfd8-c36ce219a6e0}" />
+    <Property Name="Active" Id="{1cc65cf1-7e33-42d6-83d6-557ea8985d18}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY Active : REFERENCE TO BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{f16a351b-a11c-46e5-99e0-ae9c6d0b1588}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Active REF= bActive;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Busy" Id="{9930e1cd-28f5-4631-b6e2-6732b10b85bd}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY Busy : REFERENCE TO BOOL]]></Declaration>
+      <Get Name="Get" Id="{2ed76f81-35b8-496c-b07e-a25e46ec6514}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Busy REF= bBusy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{473cc5f2-97bd-40ed-a7b6-76a06c7d6131}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY Error : REFERENCE TO BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{26531b75-ecec-4e06-8005-46266d0429cd}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error REF= bError;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="M_MeasurementClient" Id="{88cb3cca-71f4-425d-9c2b-45da1987ac06}" FolderPath="Internal\">
+      <Declaration><![CDATA[METHOD PROTECTED M_MeasurementClient : BOOL
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eFixtureStateMeasure OF
+	UNIVERSAL_FIXTURE_MEASURE_SEND_DATA:
+		(* Prepare and send data to client *)
+		sSendData := CONCAT('START;',UDINT_TO_STRING(iSampleID));
+		sSendData := CONCAT(sSendData, '$R$N');
+		FUN_StringToTcpBufferData(sMessageAddr := ADR(sSendData), stSendDataAddr := ADR(stSendData));
+		fbTcpClient.MR_AppendToSendBuffer(stData := stSendData);
+		
+		(* Prepare data for logger *)
+		IF bUseLogger THEN
+			MEMSET(ADR(sLoggerMessage),0,INT_TO_UDINT(LEN(sLoggerMessage)));
+			sLoggerMessage := CONCAT('SampleID:',UDINT_TO_STRING(iSampleID));
+			
+		END_IF
+		
+		eFixtureStateMeasure := UNIVERSAL_FIXTURE_MEASURE_RECIVE_DATA;
+		
+	UNIVERSAL_FIXTURE_MEASURE_RECIVE_DATA:
+		stReciveData := fbTcpClient.NextRecivedMessage;
+		
+		IF stReciveData.iLength > 0 THEN
+			FUN_TcpBufferDataToString(sMessageAddr := ADR(sRecivedData), stReturnDataAddr := ADR(stReciveData));
+			
+			(* Sample accepted *)
+			IF MEMCMP(ADR(sRecivedData),ADR(sSAMPLE_ACCEPTED),INT_TO_UDINT(LEN(sSAMPLE_ACCEPTED))) = 0 THEN
+				IF bUseLogger THEN
+					sLoggerMessage := CONCAT(sLoggerMessage,sSAMPLE_ACCEPTED);
+					fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+					
+				END_IF
+				eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_ACCEPTED;
+				eFixtureStateMeasure := UNIVERSAL_FIXTURE_MEASURE_DONE;
+				
+			(* Sample rejected *)
+			ELSIF MEMCMP(ADR(sRecivedData),ADR(sSAMPLE_REJECTED),INT_TO_UDINT(LEN(sSAMPLE_REJECTED))) = 0 THEN
+				IF bUseLogger THEN
+					sLoggerMessage := CONCAT(sLoggerMessage,sSAMPLE_REJECTED);
+					fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+					
+				END_IF
+				eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_REJECTED;
+				eFixtureStateMeasure := UNIVERSAL_FIXTURE_MEASURE_DONE;
+				
+			END_IF
+		END_IF
+		
+	UNIVERSAL_FIXTURE_MEASURE_DONE:
+		fbTcpClient.MR_ClearAllBuffers();
+		eFixtureStateMeasure := UNIVERSAL_FIXTURE_MEASURE_SEND_DATA;
+		eFixtureState := UNIVERSAL_FIXTURE_METHOD_DONE;
+		
+END_CASE
+		]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="M_MeasurementServer" Id="{09f740ba-5846-4b85-bcc9-58f44a7c5edd}" FolderPath="Internal\">
+      <Declaration><![CDATA[METHOD PROTECTED M_MeasurementServer : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eFixtureStateMeasure OF
+	UNIVERSAL_FIXTURE_MEASURE_WAIT_FOR_CLIENT:
+		IF fbTcpServer.ServerState = TCPIP_SERVER_RUNNING_DATA_EXCHANGE THEN
+			eFixtureStateMeasure := UNIVERSAL_FIXTURE_MEASURE_SEND_DATA;
+		END_IF
+		
+	UNIVERSAL_FIXTURE_MEASURE_SEND_DATA:
+		(* Prepare and send data to client *)
+		sSendData := CONCAT('START;',UDINT_TO_STRING(iSampleID));
+		sSendData := CONCAT(sSendData, '$R$N');
+		FUN_StringToTcpBufferData(sMessageAddr := ADR(sSendData), stSendDataAddr := ADR(stSendData));
+		fbTcpServer.MR_AppendToSendBuffer(stData := stSendData);
+		
+		(* Prepare data for logger *)
+		IF bUseLogger THEN
+			MEMSET(ADR(sLoggerMessage),0,INT_TO_UDINT(LEN(sLoggerMessage)));
+			sLoggerMessage := CONCAT('SampleID:',UDINT_TO_STRING(iSampleID));
+		END_IF
+		
+		eFixtureStateMeasure := UNIVERSAL_FIXTURE_MEASURE_RECIVE_DATA;
+		
+	UNIVERSAL_FIXTURE_MEASURE_RECIVE_DATA:
+		stReciveData := fbTcpServer.LastRecivedMessage;
+		IF stReciveData.iLength > 0 THEN
+			FUN_TcpBufferDataToString(sMessageAddr := ADR(sRecivedData), stReturnDataAddr := ADR(stReciveData));
+			
+			(* Sample accepted *)
+			IF MEMCMP(ADR(sRecivedData),ADR(sSAMPLE_ACCEPTED),INT_TO_UDINT(LEN(sSAMPLE_ACCEPTED))) = 0 THEN
+				IF bUseLogger THEN
+					sLoggerMessage := CONCAT(sLoggerMessage,sSAMPLE_ACCEPTED);
+					fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+				END_IF
+				eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_ACCEPTED;
+				eFixtureStateMeasure := UNIVERSAL_FIXTURE_MEASURE_DONE;
+				
+			(* Sample rejected *)
+			ELSIF MEMCMP(ADR(sRecivedData),ADR(sSAMPLE_REJECTED),INT_TO_UDINT(LEN(sSAMPLE_REJECTED))) = 0 THEN
+				IF bUseLogger THEN
+					sLoggerMessage := CONCAT(sLoggerMessage,sSAMPLE_REJECTED);
+					fbMeasurementLogger.MR_AddLogs(sLoggerMessage);
+				END_IF
+				eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_REJECTED;
+				eFixtureStateMeasure := UNIVERSAL_FIXTURE_MEASURE_DONE;
+				
+			END_IF
+		END_IF
+		
+	UNIVERSAL_FIXTURE_MEASURE_DONE:
+		fbTcpServer.MR_ClearAllBuffers();
+		eFixtureStateMeasure := UNIVERSAL_FIXTURE_MEASURE_WAIT_FOR_CLIENT;
+		eFixtureState := UNIVERSAL_FIXTURE_METHOD_DONE;
+		
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_Abort" Id="{5f8a8145-8308-450c-80b3-bea419e7a94d}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_Abort : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eFixtureState >= UNIVERSAL_FIXTURE_INITIALIZING THEN
+	bBusy := TRUE;
+	MR_Abort := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_ABORTING;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : abort requested'));	
+
+ELSIF eFixtureState = UNIVERSAL_FIXTURE_UNINITIALIZED THEN
+	bBusy := FALSE;
+	MR_Abort := TRUE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : abort done'));	
+
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_Close" Id="{bcd26b28-6c76-4c74-8e76-db1e0c1c5310}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_Close : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eFixtureState = UNIVERSAL_FIXTURE_IDLE AND THIS^.SocketOpen THEN
+	bBusy := TRUE;	
+	MR_Close := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_CLOSE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : close requested'));	
+	
+ELSIF eFixtureState = UNIVERSAL_FIXTURE_METHOD_DONE THEN
+	bBusy := FALSE;
+	MR_Close := TRUE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : close done'));	
+
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_FirstCycle" Id="{47401250-f48c-4724-9c74-af31e541cf35}" FolderPath="FirstCycle\">
+      <Declaration><![CDATA[METHOD MR_FirstCycle : BOOL
+VAR_INPUT
+	sFixtureName 		: STRING;		(*  *)
+	sHost				: T_IPv4Addr;	(*  *)
+	sAmsNetID 			: T_AmsNetID;	(*  *)
+	iPort				: UINT;			(*  *)
+	tTimeout			: TIME;			(*  *)
+	bUseLogger			: BOOL;			(*  *)
+	bClientConnection 	: BOOL;			(*  *)
+	sFileDir			: STRING;		(*  *)
+	sFileName			: STRING;		(*  *)
+	bCreateFileAtStart	: BOOL;
+	bAddHeader			: BOOL;
+	bAddTimeStamp		: BOOL;	
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.sName := sFixtureName;
+THIS^.bUseLogger := bUseLogger;
+THIS^.bClientConnection := bClientConnection;
+
+IF THIS^.bClientConnection THEN 
+	(* Set fixture client initial parameters *)
+	THIS^.fbTcpClient.MR_FirstCycle(	sName 		:= CONCAT('TCP/IP client of ',sFixtureName),
+										sHost		:= sHost,
+										sAmsNetID	:= sAmsNetID,
+										iPort 		:= iPort,
+										tTimeout 	:= tTimeout);	
+ELSE
+	(* Set fixture server initial parameters *)
+	THIS^.fbTcpServer.MR_FirstCycle(	sName 		:= CONCAT('TCP/IP server of ',sFixtureName),
+										sHost		:= sHost,
+										sAmsNetID	:= sAmsNetID,
+										iPort 		:= iPort,
+										tTimeout 	:= tTimeout);
+END_IF								
+									
+IF THIS^.bUseLogger THEN
+	(* Set measurement logger initial parameters*)									
+	THIS^.fbMeasurementLogger.MR_FirstCycle(sName 	:= sName,
+											sFileDir 	:= sFileDir,
+											sFileName 	:= sFileName,
+											sAmsNetId 	:= '',
+											bCreateFileAtStart := bCreateFileAtStart,
+											bAddHeader 	:= bAddHeader,
+											bAddTimeStamp := bAddTimeStamp);	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_Init" Id="{7c351ee9-672b-4dd3-b865-53ec6bf38c04}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_Init : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eFixtureState = UNIVERSAL_FIXTURE_UNINITIALIZED THEN
+	bBusy := TRUE;
+	MR_Init := FALSE;
+	
+	IF bClientConnection THEN 
+		eConnnectionType := UNIVERSAL_FIXTURE_CLIENT_CONNECTION;
+		eFixtureStateInit := UNIVERSAL_FIXTURE_INIT_TCP_CLIENT;
+		
+	ELSE
+		eConnnectionType := UNIVERSAL_FIXTURE_SERVER_CONNECTION;	
+		eFixtureStateInit := UNIVERSAL_FIXTURE_INIT_TCP_SERVER;	
+		
+	END_IF
+	
+	eFixtureState := UNIVERSAL_FIXTURE_INITIALIZING;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : initialization requested'));	
+	
+ELSIF eFixtureState >= UNIVERSAL_FIXTURE_READY THEN
+	bBusy := FALSE;
+	MR_Init := TRUE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : initialization done'));
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_Measure" Id="{ac3d07ac-d5c3-42b3-9992-7300d79437ca}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_Measure : BOOL
+VAR_INPUT
+	iSampleID : UINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eFixtureState = UNIVERSAL_FIXTURE_IDLE THEN
+	bBusy := TRUE;
+	MR_Measure := FALSE;
+	THIS^.iSampleID := iSampleID;
+	THIS^.eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_UNKNOWN;
+	
+	IF eConnnectionType = UNIVERSAL_FIXTURE_SERVER_CONNECTION THEN
+		eFixtureStateMeasure := UNIVERSAL_FIXTURE_MEASURE_WAIT_FOR_CLIENT;
+		
+	ELSIF eConnnectionType = UNIVERSAL_FIXTURE_CLIENT_CONNECTION THEN
+		eFixtureStateMeasure := UNIVERSAL_FIXTURE_MEASURE_SEND_DATA;
+		
+	END_IF
+	
+	eFixtureState := UNIVERSAL_FIXTURE_MEASUREMENT;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : measurement requested'));	
+
+ELSIF eFixtureState = UNIVERSAL_FIXTURE_METHOD_DONE THEN
+	bBusy := FALSE;
+	MR_Measure := TRUE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : measurement done'));	
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_Open" Id="{604d37b9-b7ce-4ab0-94e2-2b3fe3f12c2a}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_Open : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eFixtureState = UNIVERSAL_FIXTURE_IDLE AND NOT THIS^.SocketOpen THEN
+	bBusy := TRUE;
+	MR_Open := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_OPEN;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : open requested'));		
+	
+ELSIF eFixtureState = UNIVERSAL_FIXTURE_METHOD_DONE THEN
+	bBusy := FALSE;
+	MR_Open := TRUE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : open done'));		
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_Reset" Id="{55354bfc-3c36-4a98-b13c-5b9230f8ad97}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_Reset : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eFixtureState >= UNIVERSAL_FIXTURE_IDLE AND bError THEN
+	bBusy := TRUE;
+	MR_Reset := FALSE;
+	eFixtureState := UNIVERSAL_FIXTURE_RESET;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : reset requested'));			
+	
+ELSIF eFixtureState = UNIVERSAL_FIXTURE_METHOD_DONE THEN
+	bBusy := FALSE;
+	MR_Reset := TRUE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : reset done'));			
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Aborting" Id="{c38cff8a-e0b9-4473-b0c9-97e41f0daae4}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Aborting
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eFixtureStateAbort OF
+	UNIVERSAL_FIXTURE_ABORT_FILE_LOGGER:
+		IF bUseLogger THEN
+			fbMeasurementLogger.MR_Abort();
+		
+			IF NOT fbMeasurementLogger.Busy THEN
+				IF eConnnectionType = UNIVERSAL_FIXTURE_SERVER_CONNECTION THEN
+					eFixtureStateAbort := UNIVERSAL_FIXTURE_ABORT_TCP_SERVER;
+					
+				ELSIF eConnnectionType = UNIVERSAL_FIXTURE_CLIENT_CONNECTION THEN
+					eFixtureStateAbort := UNIVERSAL_FIXTURE_ABORT_TCP_CLIENT;
+					
+				END_IF
+			END_IF
+		ELSE
+			IF eConnnectionType = UNIVERSAL_FIXTURE_SERVER_CONNECTION THEN
+				eFixtureStateAbort := UNIVERSAL_FIXTURE_ABORT_TCP_SERVER;
+				
+			ELSIF eConnnectionType = UNIVERSAL_FIXTURE_CLIENT_CONNECTION THEN
+				eFixtureStateAbort := UNIVERSAL_FIXTURE_ABORT_TCP_CLIENT;
+				
+			END_IF
+		END_IF
+		
+	UNIVERSAL_FIXTURE_ABORT_TCP_SERVER:
+		fbTcpServer.MR_Abort();
+		
+		IF NOT fbTcpServer.Active THEN
+			eFixtureStateAbort := UNIVERSAL_FIXTURE_ABORT_DONE;
+			
+		END_IF
+
+	UNIVERSAL_FIXTURE_ABORT_TCP_CLIENT:
+		fbTcpClient.MR_Abort();
+		
+		IF NOT fbTcpClient.Active THEN
+			eFixtureStateAbort := UNIVERSAL_FIXTURE_ABORT_DONE;
+			
+		END_IF
+		
+	UNIVERSAL_FIXTURE_ABORT_DONE:
+		eFixtureStateAbort := UNIVERSAL_FIXTURE_ABORT_FILE_LOGGER;
+		eFixtureState := UNIVERSAL_FIXTURE_UNINITIALIZED;
+	
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Close" Id="{a819e8dd-884b-4d3f-9df3-835929036c45}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED ABSTRACT MS_Close
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Extension" Id="{903d0d4f-1bfe-4c3e-acbc-58e4d09cdf8d}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Extension
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Idle" Id="{85566248-c2a8-4e79-99c4-2e8fe8a8a873}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Idle
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Initializing" Id="{a90277bb-d087-43a9-ba52-2ff6745bcac2}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Initializing
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eFixtureStateInit OF
+	UNIVERSAL_FIXTURE_INIT_TCP_SERVER:
+		fbTcpServer.MR_Init();
+		
+		IF fbTcpServer.Active THEN
+			eFixtureStateInit := UNIVERSAL_FIXTURE_INIT_FILE_LOGGER;
+			
+		END_IF
+
+	UNIVERSAL_FIXTURE_INIT_TCP_CLIENT:
+		fbTcpClient.MR_Init();
+		
+		IF fbTcpClient.Active THEN
+			eFixtureStateInit := UNIVERSAL_FIXTURE_INIT_FILE_LOGGER;
+			
+		END_IF
+		
+	UNIVERSAL_FIXTURE_INIT_FILE_LOGGER:
+		IF bUseLogger THEN
+			fbMeasurementLogger.MR_Init();
+		
+			IF fbMeasurementLogger.Busy THEN
+				eFixtureStateInit := UNIVERSAL_FIXTURE_INIT_DONE;
+				
+			END_IF
+		ELSE
+			eFixtureStateInit := UNIVERSAL_FIXTURE_INIT_DONE;
+			
+		END_IF
+		
+	UNIVERSAL_FIXTURE_INIT_DONE:
+		eFixtureStateInit := UNIVERSAL_FIXTURE_INIT_TCP_SERVER;
+		eFixtureState := UNIVERSAL_FIXTURE_READY;
+	
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Measurement" Id="{fb3bcf01-367f-4b90-9de9-fd0e26fc8ef2}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Measurement
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eConnnectionType = UNIVERSAL_FIXTURE_SERVER_CONNECTION THEN
+	M_MeasurementServer();
+	
+ELSIF eConnnectionType = UNIVERSAL_FIXTURE_CLIENT_CONNECTION THEN
+	M_MeasurementClient();
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_MethodDone" Id="{b0647aad-660b-4949-a3f6-1cf0162fdcc2}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_MethodDone
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT bBusy THEN
+	eFixtureState := UNIVERSAL_FIXTURE_IDLE;
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Open" Id="{3f120c87-457b-4875-8ad5-734001404a75}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED ABSTRACT MS_Open
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Ready" Id="{69c5e074-7e01-4447-a764-ed1f3d3ab3ee}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Ready
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eFixtureState := UNIVERSAL_FIXTURE_IDLE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Reset" Id="{bd357273-8fe0-4806-a7e3-4fc0e5007688}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eFixtureStateReset OF 
+	UNIVERSAL_FIXTURE_RESETING_FILE_LOGGER:
+		IF bUseLogger THEN
+			fbMeasurementLogger.MR_Reset();
+		
+			IF NOT fbMeasurementLogger.Busy THEN
+				IF eConnnectionType = UNIVERSAL_FIXTURE_SERVER_CONNECTION THEN
+					eFixtureStateReset := UNIVERSAL_FIXTURE_RESETING_TCP_SERVER_SHUT_DOWN;
+					
+				ELSIF eConnnectionType = UNIVERSAL_FIXTURE_CLIENT_CONNECTION THEN
+					eFixtureStateReset := UNIVERSAL_FIXTURE_RESETING_TCP_CLIENT_SHUT_DOWN;
+					
+				END_IF
+			END_IF
+		ELSE
+			IF eConnnectionType = UNIVERSAL_FIXTURE_SERVER_CONNECTION THEN
+				eFixtureStateReset := UNIVERSAL_FIXTURE_RESETING_TCP_SERVER_SHUT_DOWN;
+				
+			ELSIF eConnnectionType = UNIVERSAL_FIXTURE_CLIENT_CONNECTION THEN
+				eFixtureStateReset := UNIVERSAL_FIXTURE_RESETING_TCP_CLIENT_SHUT_DOWN;
+				
+			END_IF
+		END_IF
+		
+	UNIVERSAL_FIXTURE_RESETING_TCP_SERVER_SHUT_DOWN:
+		fbTcpServer.MR_Abort();
+		
+		IF NOT fbTcpServer.Active THEN
+			eFixtureStateReset := UNIVERSAL_FIXTURE_RESETING_TCP_SERVER_TURN_ON;
+			
+		END_IF
+		
+	UNIVERSAL_FIXTURE_RESETING_TCP_SERVER_TURN_ON:
+		fbTcpServer.MR_Init();
+		
+		IF fbTcpServer.Active THEN
+			eFixtureStateReset := UNIVERSAL_FIXTURE_RESETING_DONE;
+			
+		END_IF
+
+	UNIVERSAL_FIXTURE_RESETING_TCP_CLIENT_SHUT_DOWN:
+		fbTcpClient.MR_Abort();
+		
+		IF NOT fbTcpClient.Active THEN
+			eFixtureStateReset := UNIVERSAL_FIXTURE_RESETING_TCP_CLIENT_TURN_ON;
+			
+		END_IF
+		
+	UNIVERSAL_FIXTURE_RESETING_TCP_CLIENT_TURN_ON:
+		fbTcpClient.MR_Init();
+		
+		IF fbTcpClient.Active THEN
+			eFixtureStateReset := UNIVERSAL_FIXTURE_RESETING_DONE;
+			
+		END_IF
+		
+	UNIVERSAL_FIXTURE_RESETING_DONE:		
+		bError := FALSE;
+		
+		eFixtureStateReset := UNIVERSAL_FIXTURE_RESETING_FILE_LOGGER;
+		eFixtureState := UNIVERSAL_FIXTURE_METHOD_DONE;
+		
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Uninitialized" Id="{b9924a38-15e9-44b5-9438-f5e4ad2f8911}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Uninitialized
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[bBusy := FALSE;
+bError := FALSE;
+iErrorID := 0;
+iSampleID := 0;
+
+eSampleResult := UNIVERSAL_FIXTURE_SAMPLE_UNKNOWN;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="RecivedUtuData" Id="{d2625672-f7a5-46ef-b253-fa6f9f7e9b01}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY RecivedUtuData : REFERENCE TO STRING]]></Declaration>
+      <Get Name="Get" Id="{92b85f34-b721-4575-86a3-6017bffeae49}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[RecivedUtuData REF= sRecivedData;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ref_MeasurementLogger" Id="{63ca4ed3-2edd-4b48-992b-89b0d334d147}" FolderPath="Properties\References\">
+      <Declaration><![CDATA[PROPERTY ref_MeasurementLogger : REFERENCE TO FB_TXTDataExchanger]]></Declaration>
+      <Get Name="Get" Id="{eaf5792e-5228-44d2-9c06-90e147c3796d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ref_MeasurementLogger REF= fbMeasurementLogger;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ref_TcpClient" Id="{3d5c1726-81d4-4d46-bad0-37dcf914ec41}" FolderPath="Properties\References\">
+      <Declaration><![CDATA[PROPERTY ref_TcpClient : REFERENCE TO FB_TcpClient]]></Declaration>
+      <Get Name="Get" Id="{3c0fb401-f63d-4ee9-89d5-499c868c714c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ref_TcpClient REF= fbTcpClient;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ref_TcpServer" Id="{478b11d8-32dd-4213-acb6-849aeba91fbe}" FolderPath="Properties\References\">
+      <Declaration><![CDATA[PROPERTY ref_TcpServer : REFERENCE TO FB_TcpServer]]></Declaration>
+      <Get Name="Get" Id="{d4ac500e-8421-4aee-bd4d-073205767940}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ref_TcpServer REF= fbTcpServer;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="SampleID" Id="{0ede5fc3-f149-44c3-9a53-8c5142068224}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY SampleID : REFERENCE TO UDINT]]></Declaration>
+      <Get Name="Get" Id="{ca142f3e-13db-408a-bd82-862f6745fd7d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SampleID REF= iSampleID;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="SampleResult" Id="{9ad07b45-f2b4-4ec1-afdb-e91d00e44189}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY SampleResult : REFERENCE TO E_UniversalFixtureSampleResult]]></Declaration>
+      <Get Name="Get" Id="{c968e653-0bd4-4e1e-86fe-2d1ca8ac8ac0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SampleResult REF= eSampleResult;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="SocketOpen" Id="{9e548cf6-2ea3-47cf-ae0d-a35532f263a1}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY ABSTRACT SocketOpen : REFERENCE TO BOOL]]></Declaration>
+      <Get Name="Get" Id="{e663fbeb-cb4a-40bb-97b9-c70af3da3e95}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="State" Id="{ae000683-58a7-4d3e-93ab-0d2ff59bbf18}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY State : REFERENCE TO E_UniversalFixtureState]]></Declaration>
+      <Get Name="Get" Id="{40e2329a-65ee-453c-8d33-841d0fcf28fd}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[State REF= eFixtureState;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="StateMachine" Id="{5ac9923d-cd36-48db-8851-002b5c67d068}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED StateMachine
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eFixtureState OF
+	UNIVERSAL_FIXTURE_UNINITIALIZED:
+		MS_Uninitialized();
+		
+	UNIVERSAL_FIXTURE_INITIALIZING:
+		MS_Initializing();
+		
+	UNIVERSAL_FIXTURE_READY:
+		MS_Ready();
+		
+	UNIVERSAL_FIXTURE_IDLE:
+		MS_Idle();
+	
+	UNIVERSAL_FIXTURE_OPEN:
+		MS_Open();
+		
+	UNIVERSAL_FIXTURE_CLOSE:
+		MS_Close();
+	
+	UNIVERSAL_FIXTURE_MEASUREMENT:
+		MS_Measurement();
+	
+	UNIVERSAL_FIXTURE_RESET:
+		MS_Reset();
+		
+	UNIVERSAL_FIXTURE_METHOD_DONE:
+		MS_MethodDone();
+		
+	UNIVERSAL_FIXTURE_EXTENSION:
+		MS_Extension();
+	
+	UNIVERSAL_FIXTURE_ABORTING:
+		MS_Aborting();
+	
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_UniversalFixture">
+      <LineId Id="3" Count="4" />
+      <LineId Id="11" Count="2" />
+      <LineId Id="15" Count="4" />
+      <LineId Id="96" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="95" Count="0" />
+      <LineId Id="22" Count="6" />
+      <LineId Id="97" Count="0" />
+      <LineId Id="29" Count="4" />
+      <LineId Id="98" Count="0" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="93" Count="1" />
+      <LineId Id="92" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.Active.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.Busy.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.Error.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.M_MeasurementClient">
+      <LineId Id="3" Count="11" />
+      <LineId Id="53" Count="0" />
+      <LineId Id="15" Count="14" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="30" Count="8" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="39" Count="8" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="48" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.M_MeasurementServer">
+      <LineId Id="3" Count="48" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="52" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MR_Abort">
+      <LineId Id="3" Count="1" />
+      <LineId Id="6" Count="1" />
+      <LineId Id="9" Count="3" />
+      <LineId Id="14" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MR_Close">
+      <LineId Id="3" Count="1" />
+      <LineId Id="6" Count="5" />
+      <LineId Id="13" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MR_FirstCycle">
+      <LineId Id="3" Count="21" />
+      <LineId Id="43" Count="5" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MR_Init">
+      <LineId Id="3" Count="1" />
+      <LineId Id="6" Count="16" />
+      <LineId Id="24" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MR_Measure">
+      <LineId Id="3" Count="1" />
+      <LineId Id="6" Count="2" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="10" Count="12" />
+      <LineId Id="24" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MR_Open">
+      <LineId Id="3" Count="1" />
+      <LineId Id="6" Count="5" />
+      <LineId Id="13" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MR_Reset">
+      <LineId Id="3" Count="1" />
+      <LineId Id="6" Count="1" />
+      <LineId Id="9" Count="3" />
+      <LineId Id="14" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MS_Aborting">
+      <LineId Id="3" Count="13" />
+      <LineId Id="18" Count="14" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="33" Count="6" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="40" Count="2" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="43" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MS_Close">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MS_Extension">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MS_Idle">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MS_Initializing">
+      <LineId Id="3" Count="5" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="9" Count="6" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="16" Count="7" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="24" Count="2" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="27" Count="2" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="30" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MS_Measurement">
+      <LineId Id="3" Count="5" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MS_MethodDone">
+      <LineId Id="3" Count="1" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MS_Open">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MS_Ready">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MS_Reset">
+      <LineId Id="3" Count="13" />
+      <LineId Id="18" Count="7" />
+      <LineId Id="27" Count="6" />
+      <LineId Id="70" Count="0" />
+      <LineId Id="34" Count="6" />
+      <LineId Id="71" Count="0" />
+      <LineId Id="41" Count="6" />
+      <LineId Id="72" Count="0" />
+      <LineId Id="48" Count="6" />
+      <LineId Id="73" Count="0" />
+      <LineId Id="55" Count="2" />
+      <LineId Id="62" Count="0" />
+      <LineId Id="69" Count="0" />
+      <LineId Id="63" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.MS_Uninitialized">
+      <LineId Id="9" Count="3" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.RecivedUtuData.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.ref_MeasurementLogger.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.ref_TcpClient.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.ref_TcpServer.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.SampleID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.SampleResult.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.SocketOpen.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.State.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_UniversalFixture.StateMachine">
+      <LineId Id="3" Count="15" />
+      <LineId Id="22" Count="2" />
+      <LineId Id="28" Count="2" />
+      <LineId Id="34" Count="11" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

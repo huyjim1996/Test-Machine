@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <TextList Name="TL_HeaderMachineState" Id="{20719721-8fab-47e1-9421-902f9386afb1}">
+    <XmlArchive>
+      <Data>
+        <o xml:space="preserve" t="TextListObject">
+          <v n="UniqueIdGenerator">"0"</v>
+          <l n="TextList" t="ArrayList" cet="TextListRow">
+            <o>
+              <v n="TextID">"0"</v>
+              <v n="TextDefault">"Uninitialized"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"10"</v>
+              <v n="TextDefault">"Initializing"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"20"</v>
+              <v n="TextDefault">"Ready-Initialized"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"30"</v>
+              <v n="TextDefault">"Auto"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"40"</v>
+              <v n="TextDefault">"Auto to Manual"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"50"</v>
+              <v n="TextDefault">"Manual"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"60"</v>
+              <v n="TextDefault">"Manual to Auto"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"70"</v>
+              <v n="TextDefault">"Reset"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"80"</v>
+              <v n="TextDefault">"Reset done"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"-10"</v>
+              <v n="TextDefault">"Aborting"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"-20"</v>
+              <v n="TextDefault">"Emergency"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">""</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+          </l>
+          <l n="Languages" t="ArrayList" />
+          <v n="GuidInit">{29e4ad87-ad09-47e2-9b6a-8ac3989a30ed}</v>
+          <v n="GuidReInit">{28bd3ef2-6401-4655-8fb8-a2742cb137a5}</v>
+          <v n="GuidExitX">{87971128-c660-487f-91b9-57dc24b460f9}</v>
+        </o>
+      </Data>
+      <TypeList>
+        <Type n="ArrayList">System.Collections.ArrayList</Type>
+        <Type n="Guid">System.Guid</Type>
+        <Type n="String">System.String</Type>
+        <Type n="TextListObject">{2bef0454-1bd3-412a-ac2c-af0f31dbc40f}</Type>
+        <Type n="TextListRow">{53da1be7-ad25-47c3-b0e8-e26286dad2e0}</Type>
+      </TypeList>
+    </XmlArchive>
+  </TextList>
+</TcPlcObject>

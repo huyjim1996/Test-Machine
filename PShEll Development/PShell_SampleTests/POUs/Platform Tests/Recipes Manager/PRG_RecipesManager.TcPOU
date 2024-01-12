@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_RecipesManager" Id="{0785bf22-22d7-4fc5-b3db-57bb82dc40c5}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_RecipesManager
+VAR CONSTANT
+	sDEFAULT_STORAGE_PATH		: STRING(512) := 'C:\TwinCAT\Tests\Recipes\';	(* Default storage path for recipe files *)
+	sDEFAULT_RECIPE_DEFINITION	: STRING := 'Recipes';						(* Default definition of Recipe configuration from RecipesManager *)
+	sDEFAULT_RECIPE_NAME		: STRING := 'R1';							(* Default name of selected Recipe *)
+END_VAR
+VAR		
+	bFirstCycle 		: BOOL := TRUE;
+	sTest1 				: REFERENCE TO STRING;
+	fbRecipesControler	: FB_RecipesControler;	(* Recipes Controler *)
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle AND fbRecipesControler.RecipeValuesAdrAvailable THEN
+	bFirstCycle := FALSE;
+	fbRecipesControler.MR_FirstCycle(	sLocalStoragePath 	:= sDEFAULT_STORAGE_PATH,
+										sRecipesDefinition	:= sDEFAULT_RECIPE_DEFINITION,
+										sDefaultRecipeName	:= sDEFAULT_RECIPE_NAME);					
+	
+	(* Assign recipe parameters *)								
+	stShell.stRecipeData.rpVar1.MR_FirstCycle(	eType := VISU_CTRL_RECIPES_PARAMETER_TYPE_REAL, 
+												sName := 'Var1', 
+												pFileValueAdr := fbRecipesControler.RecipeValuesAdr[0]);
+										
+	stShell.stRecipeData.rpVar2.MR_FirstCycle(	eType := VISU_CTRL_RECIPES_PARAMETER_TYPE_REAL, 
+												sName := 'Var2', 
+												pFileValueAdr := fbRecipesControler.RecipeValuesAdr[1]);
+												
+	stShell.stRecipeData.rpVar3.MR_FirstCycle(	eType := VISU_CTRL_RECIPES_PARAMETER_TYPE_REAL, 
+												sName := 'Var3', 
+												pFileValueAdr := fbRecipesControler.RecipeValuesAdr[2]);
+												
+	stShell.stRecipeData.rpVar4.MR_FirstCycle(	eType := VISU_CTRL_RECIPES_PARAMETER_TYPE_INT, 
+												sName := 'Var4', 
+												pFileValueAdr := fbRecipesControler.RecipeValuesAdr[3]);			
+												
+	stShell.stRecipeData.rpVar5.MR_FirstCycle(	eType := VISU_CTRL_RECIPES_PARAMETER_TYPE_INT, 
+												sName := 'Var5', 
+												pFileValueAdr := fbRecipesControler.RecipeValuesAdr[4]);
+												
+	stShell.stRecipeData.rpVar6.MR_FirstCycle(	eType := VISU_CTRL_RECIPES_PARAMETER_TYPE_INT, 
+												sName := 'Var6', 
+												pFileValueAdr := fbRecipesControler.RecipeValuesAdr[5]);
+												
+	stShell.stRecipeData.rpVar7.MR_FirstCycle(	eType := VISU_CTRL_RECIPES_PARAMETER_TYPE_STRING, 
+												sName := 'Var7', 
+												pFileValueAdr := fbRecipesControler.RecipeValuesAdr[6]);
+												
+	stShell.stRecipeData.rpVar8.MR_FirstCycle(	eType := VISU_CTRL_RECIPES_PARAMETER_TYPE_STRING, 
+												sName := 'Var8', 
+												pFileValueAdr := fbRecipesControler.RecipeValuesAdr[7]);
+												
+	stShell.stRecipeData.rpVar9.MR_FirstCycle(	eType := VISU_CTRL_RECIPES_PARAMETER_TYPE_STRING, 
+												sName := 'Var9', 
+												pFileValueAdr := fbRecipesControler.RecipeValuesAdr[8]);
+												
+	stShell.stRecipeData.rpVar10.MR_FirstCycle(	eType := VISU_CTRL_RECIPES_PARAMETER_TYPE_BOOL, 
+												sName := 'Var10', 
+												pFileValueAdr := fbRecipesControler.RecipeValuesAdr[9]);
+	
+	(* Assign recipes controler reference to Shell API*)
+	stShell.stPlatform.ref_fbRecipesManager REF= fbRecipesControler;
+	
+	(* Set assignamnet done bit for visu controler *)
+	stShell.stFlags.bRecipesCtrlAssignamentsDone := TRUE;
+END_IF
+
+fbRecipesControler();]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

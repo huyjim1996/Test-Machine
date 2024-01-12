@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="ST_Shell" Id="{cf0d1b45-0bda-4ce4-9db2-5f6873174364}">
+    <Declaration><![CDATA[TYPE ST_Shell :
+STRUCT
+	stPlatform		: ST_ShellPlatform;		(*  *)
+	stFlags			: ST_ShellFlags;		(*  *)
+	stRecipeData	: ST_ShellRecipeData;	(*  *)
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

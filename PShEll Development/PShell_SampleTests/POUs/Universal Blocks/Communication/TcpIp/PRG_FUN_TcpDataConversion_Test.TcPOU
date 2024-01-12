@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FUN_TcpDataConversion_Test" Id="{d50f8679-7444-49f7-8c89-2bbc08dad115}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FUN_TcpDataConversion_Test
+VAR
+	bConvert 			: BOOL;
+	bRevert				: BOOL;
+	bConversionResult 	: BOOL;
+	bReversionResult	: BOOL;
+	sSendMessage		: STRING;
+	sRecivedMessage 	: STRING;
+	stSendData 			: ST_TcpBufferData;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bConvert THEN
+	bConversionResult := FUN_StringToTcpBufferData(ADR(sSendMessage),ADR(stSendData));
+	IF bConversionResult THEN
+		bConvert := FALSE;
+	END_IF
+	
+ELSIF bRevert THEN
+	bReversionResult := FUN_TcpBufferDataToString(ADR(sRecivedMessage),ADR(stSendData));
+	IF bReversionResult THEN
+		bRevert := FALSE;
+	END_IF
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,527 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_MachineControl" Id="{1bd260d7-05fe-41ba-a15a-413659f72f18}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_MachineControl EXTENDS FB_UniversalMachine IMPLEMENTS I_MachineControl
+VAR
+	iLoop : USINT;	(* for loop auxilary variable *)
+
+	(* --- Sample actuators - from shell template --- DELETE IF NOT NEEDED - *)
+	//arrDigitalInput		: ARRAY[0..19] OF FB_DigitalInput;			(* Array of sample digital inputs *)
+	//arrDigitalOutput	: ARRAY[0..19] OF FB_DigitalOutput;			(* Array of sample digital outputs *)
+	//arrCylinderDc		: ARRAY[0..9] OF FB_DoubleCoilCylinder;		(* Array of sample double coil cylinders *)
+	//arrCylinderSc		: ARRAY[0..9] OF FB_SingleCoilCylinder;		(* Array of sample single coil cylinders *)
+	//arrAxis				: ARRAY[0..19] OF FB_AxisServo;				(* Array of sample axis *)
+	arrRobot			: FB_CR800EtherCAT;			(* Array of sample robots *)
+	
+	tonTestDelay	: TON;	(* Delay which allows to see any page changes during tests *)
+	
+	(* --- Sample actuators - from shell template --- DELETE IF NOT NEEDED - *)	
+	bStart			: BOOL;
+	
+	(* CR800 - testing *)
+	lrPositionX1 : LREAL := 203.733;
+	lrPositionY1 : LREAL := 100.000;
+	lrRotation1  : LREAL := 216.699;
+	
+	lrPositionX2 : LREAL := -13.733;
+	lrPositionY2 : LREAL := 8.001;
+	lrRotation2  : LREAL := -2.889;
+	
+	
+	bUserDefinedArea1	: BOOL;
+	bTryIt1				: BOOL;
+	bTryIt2				: BOOL;
+	
+	(* State machines *)
+	
+	eMachineStateUninitialized						: E_MachineCtrlStateUninitialized;
+	
+	(* CR800 EtherCAT diagnostic *) 	                                                                
+	fbGetCR800EcState				:  FB_EcGetSlaveState;		
+	fbSetCR800CtrlState 			:  FB_EcReqSlaveState;		
+	stCR800GetEcState				:  ST_EcSlaveState;		
+	(* Robots EtherCAT communication *)                      		
+	sPLC_NET_ID 							: STRING:= '192.168.152.1.3.1';//'5.87.101.228.3.1'; hardware config							
+	iCR800_1_ADDRESS						: UINT	:= 1015; //hardware config										
+	iCR800_2_ADDRESS						: UINT	:= 1016; //hardware config
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	(* bFirstCycle bit reset by parent *)
+	(* --- Assign initial parameters for machine objects ---*)
+	(* ---- DELETE IF NOT NEEDED ---- *)
+	(* Assign sample digital inputs *)
+//	FOR iLoop := 0 TO 19 DO
+//		arrDigitalInput[iLoop].MR_FirstCycle(CONCAT('Digital_Input_',USINT_TO_STRING(iLoop)),CONCAT('EL1008-',USINT_TO_STRING(iLoop/8)),USINT_TO_STRING(iLoop MOD 8));
+//	END_FOR
+	
+//	(* Assign sample digital outputs *)
+//	FOR iLoop := 0 TO 19 DO
+//		arrDigitalOutput[iLoop].MR_FirstCycle(CONCAT('Digital_Output_',USINT_TO_STRING(iLoop)),CONCAT('EL2008-',USINT_TO_STRING(iLoop/8)),USINT_TO_STRING(iLoop MOD 8));
+//	END_FOR
+	
+//	(* Assign sample cylinders *)
+//	FOR iLoop := 0 TO 9 DO
+//		arrCylinderDc[iLoop].MR_FirstCycle(	sName					:= CONCAT('Double_Coil_Cylinder_',USINT_TO_STRING(iLoop)),
+//											sActiveSensorModuleType :=CONCAT('EL1008-',USINT_TO_STRING(iLoop/4)),
+//											sActiveSensorPortID 	:= USINT_TO_STRING(iLoop*2),
+//											sHomeSensorModuleType	:=CONCAT('EL1008-',USINT_TO_STRING(iLoop/4)),
+//											sHomeSensorPortID		:= USINT_TO_STRING(iLoop*2+1),
+//											tGoHomeTimeout			:= T#10S,
+//											tGoActiveTimeout		:= T#10S,
+//											tDelay 					:= T#1S);
+//		arrCylinderDc[iLoop].Simulation := TRUE;
+//		arrCylinderDc[iLoop].ref_poActiveValve.ModuleType := CONCAT('EL2008-',USINT_TO_STRING(iLoop/4));
+//		arrCylinderDc[iLoop].ref_poActiveValve.PortID := USINT_TO_STRING(iLoop*2);
+//		arrCylinderDc[iLoop].ref_poHomeValve.ModuleType := CONCAT('EL2008-',USINT_TO_STRING(iLoop/4));
+//		arrCylinderDc[iLoop].ref_poHomeValve.PortID := USINT_TO_STRING(iLoop*2+1);
+//	END_FOR
+	
+//	FOR iLoop := 0 TO 9 DO
+//		arrCylinderSc[iLoop].MR_FirstCycle(	sName				:= CONCAT('Single_Coil_Cylinder_', USINT_TO_STRING(iLoop)),
+//											sActiveSensorModuleType :=CONCAT('EL1008-',USINT_TO_STRING(iLoop/4)),
+//											sActiveSensorPortID :=USINT_TO_STRING(iLoop*2),
+//											sHomeSensorModuleType :=CONCAT('EL1008-',USINT_TO_STRING(iLoop/4)),
+//											sHomeSensorPortID	:=USINT_TO_STRING(iLoop*2+1),
+//											tGoHomeTimeout 		:= T#12S,
+//											tGoActiveTimeout 	:= T#12S,
+//											tDelay 				:= T#2S);
+//		arrCylinderSc[iLoop].Simulation := TRUE;
+//		arrCylinderSc[iLoop].ref_poActiveValve.ModuleType := CONCAT('EL2008-',USINT_TO_STRING(iLoop/8));
+//		arrCylinderSc[iLoop].ref_poActiveValve.PortID := USINT_TO_STRING(iLoop);
+//	END_FOR
+	
+//	(* Assign sample axes *)
+//	FOR iLoop := 0 TO 19 DO
+//		arrAxis[iLoop].MR_FirstCycle( 	sName 				:= CONCAT('Axis_',USINT_TO_STRING(iLoop)),
+//										sMeasurementUnits 	:= 'mm',
+//										bModulo				:= FALSE);
+//		arrAxis[iLoop].ref_HomeSwitch.ModuleType :=CONCAT('EL1008-',USINT_TO_STRING(iLoop/8));
+//		arrAxis[iLoop].ref_HomeSwitch.PortID :=USINT_TO_STRING(iLoop MOD 8);			
+//	END_FOR	
+	
+	(* Assign sample robots *)
+	//FOR iLoop := 0 TO 0 DO
+		arrRobot.MR_FirstCycle(	sName		:= 'Robot 1',
+								iOverride	:= 5);
+	//END_FOR
+	(* ---- DELETE IF NOT NEEDED ---- *)
+END_IF
+
+(* Execute parent implementation *)
+SUPER^();
+
+(* --- Cyclic run of internal objects ---*)
+(* ---- DELETE IF NOT NEEDED ---- *)
+//(* Cyclic run of sample inputs *)
+//FOR iLoop := 0 TO 19 DO
+//	arrDigitalInput[iLoop]();
+//END_FOR
+
+//(* Cyclic run of sample outputs *)
+//FOR iLoop := 0 TO 19 DO
+//	arrDigitalOutput[iLoop]();
+//END_FOR
+	
+//(* Cyclic run of sample double coil cylinders *)
+//FOR iLoop := 0 TO 9 DO
+//	arrCylinderDc[iLoop]();
+//END_FOR
+
+//(* Cyclic run of sample single coil cylinders *)
+//FOR iLoop := 0 TO 9 DO
+//	arrCylinderSc[iLoop]();
+//END_FOR
+
+//(* Cyclic run of sample axis *)
+//FOR iLoop := 0 TO 19 DO
+//	arrAxis[iLoop]();
+//END_FOR
+
+(* Cyclic run of sample robots *)
+//FOR iLoop := 0 TO 9 DO
+	arrRobot();
+//END_FOR
+
+IF bTryIt1 THEN
+	arrRobot.MR_SendPosition1( lrPositionX1 := lrPositionX1,
+								lrPositionY1 := lrPositionY1,
+								lrRotation1  := lrRotation1);
+	IF NOT arrRobot.SendingPosition1 THEN
+		bTryIt1 := FALSE;
+	END_IF
+END_IF
+
+IF bTryIt2 THEN
+	arrRobot.MR_SendPosition2( lrPositionX2 := lrPositionX2,
+								lrPositionY2 := lrPositionY2,
+								lrRotation2  := lrRotation2);
+	IF NOT arrRobot.SendingPosition2 THEN
+		bTryIt1 := FALSE;
+	END_IF
+END_IF
+
+bUserDefinedArea1 := arrRobot.UserDefinedArea1;
+
+tonTestDelay();
+(* ---- DELETE IF NOT NEEDED ---- *)]]></ST>
+    </Implementation>
+    <Folder Name="Properties" Id="{29045f01-2b67-43ea-acd9-915a07c376fa}" />
+    <Folder Name="Requests" Id="{51769c61-8807-4a83-b47d-198fbacbeb51}" />
+    <Folder Name="StateMachine" Id="{fcf2a465-15e6-47fd-a8c6-b9a7900c636c}" />
+    <Method Name="MR_Start" Id="{443146db-305a-4222-b20b-6401a2c51521}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_Start : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[bRunning := TRUE;
+
+IF NOT bStart THEN
+	fbMsgAutoStarted.Send(0);
+	bStart := TRUE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_Stop" Id="{45cc0441-f143-4822-b8f2-bcf21d8684b1}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_Stop : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[bRunning := FALSE;
+
+IF bStart THEN
+	fbMsgAutoStopped.Send(0);
+	bStart := FALSE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Aborting" Id="{7adc3704-59d9-4656-ad31-e25e008f0070}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Aborting
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* 
+Add here code to abort all machine objects's e.g robots, axes, cylinders. 
+At the end add "eMachineState := MACHINE_STATE_UNINITIALIZED;" to finish aborting.
+*)
+(* Aborting simulation - DELETE *)
+tonTestDelay(IN := TRUE, PT:= T#4S);
+IF tonTestDelay.Q THEN
+	tonTestDelay(IN := FALSE);
+	eMachineState := MACHINE_STATE_UNINITIALIZED;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Auto" Id="{9e955c8e-36bd-49e5-a90f-5a0d0edfdf23}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Auto
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* 
+Add here code to perform automatic process.
+*)
+;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_AutoToManual" Id="{02d651de-fd64-4bdf-b695-c41b74db33a4}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_AutoToManual
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* 
+Add here code to switch machine into manual mode. 
+At the end add "eMachineState := MACHINE_STATE_MANUAL;" to finish switching.
+*)
+(* Switching mode to manual simulation - DELETE *)
+tonTestDelay(IN := TRUE, PT:= T#4S);
+bRunning := FALSE;
+IF tonTestDelay.Q THEN
+	tonTestDelay(IN := FALSE);
+	eMachineState := MACHINE_STATE_MANUAL;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Emergency" Id="{c21af5de-909a-4da8-88d8-257151739074}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Emergency
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Initializing" Id="{99a096da-f0d2-4fb3-bcd1-503614bc69d3}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Initializing
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* 
+Add here code to initialize all machine objects's e.g robots, axes, cylinders. 
+At the end add "eMachineState := MACHINE_STATE_READY_INITIALIZED;" to finish initialization.
+*)
+(* Initialization simulation - DELETE  *)
+tonTestDelay(IN := TRUE, PT:= T#4S);
+IF tonTestDelay.Q THEN
+	tonTestDelay(IN := FALSE);
+	eMachineState := MACHINE_STATE_READY_INITIALIZED;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Manual" Id="{cfd995b2-d987-47aa-9bb0-1eb8959a8269}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Manual
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* 
+Leave empty - manual mode is provided by HMI controler and automatic frame generator.
+*)
+;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_ManualToAuto" Id="{bd4c4af3-faf6-45ca-bf78-e8f80721fb97}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_ManualToAuto
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* 
+Add here code to switch machine into auto mode. 
+At the end add "eMachineState := MACHINE_STATE_MANUAL;" to finish switching.
+*)
+(* Switching mode to auto simulation - DELETE *)
+tonTestDelay(IN := TRUE, PT:= T#4S);
+IF tonTestDelay.Q THEN
+	tonTestDelay(IN := FALSE);
+	eMachineState := MACHINE_STATE_AUTO;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_ReadyInitialized" Id="{b9fb0eda-7ebb-49ea-ace1-57e0fa237813}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_ReadyInitialized
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(*
+Add code here if some internal parameters are needed to set after initialization or leave it default.
+At the end add "eMachineState := MACHINE_STATE_AUTO;" to finish and go to IDLE state.
+*)
+(* Ready-Initialized simulation - DELETE  *)
+tonTestDelay(IN := TRUE, PT:= T#4S);
+IF tonTestDelay.Q THEN
+	tonTestDelay(IN := FALSE);
+	eMachineState := MACHINE_STATE_AUTO;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Reset" Id="{286f95b6-9876-40be-8c77-b17b043cf4d5}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* 
+Add here code to reset all machine objects's e.g robots, axes, cylinders. 
+At the end add "eMachineState := MACHINE_STATE_RESET_DONE;" to finish reseting.
+*)
+(* Reset simulation - DELETE  *)
+tonTestDelay(IN := TRUE, PT:= T#4S);
+IF tonTestDelay.Q THEN
+	tonTestDelay(IN := FALSE);
+	eMachineState := MACHINE_STATE_RESET_DONE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_ResetDone" Id="{a6caa836-92e0-4931-80a7-2c291a5ebdf0}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_ResetDone
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eMachineState := eMachineStateBeforeReset;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Uninitialized" Id="{e7564050-17cc-4cfd-9d7a-3500c05b04b7}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Uninitialized
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eMachineStateUninitialized OF
+	MACHINE_STATE_UNINITIALIZED_CR800_ETHERCAT_STATUS_CHECK:
+		fbGetCR800EcState(			sNetId 		:= sPLC_NET_ID,
+									nSlaveAddr	:= iCR800_1_ADDRESS,
+									bExecute	:= TRUE,
+									tTimeout 	:= DEFAULT_ADS_TIMEOUT,
+									state		=> stCR800GetEcState);
+		IF NOT fbGetCR800EcState.bBusy AND NOT fbGetCR800EcState.bError THEN
+			fbGetCR800EcState(bExecute := FALSE);
+			eMachineStateUninitialized := MACHINE_STATE_UNINITIALIZED_CR800_ETHERCAT_STATUS_CHECK_DONE;
+		END_IF
+	
+	MACHINE_STATE_UNINITIALIZED_CR800_ETHERCAT_STATUS_CHECK_DONE:
+		IF stCR800GetEcState.deviceState = EC_DEVICE_STATE_ERROR OR stCR800GetEcState.deviceState = 84 THEN
+			eMachineStateUninitialized := MACHINE_STATE_UNINITIALIZED_CR800_ETHERCAT_ERROR_RESET;
+			
+		ELSIF stCR800GetEcState.deviceState = EC_DEVICE_STATE_SAFEOP THEN
+			eMachineStateUninitialized := MACHINE_STATE_UNINITIALIZED_CR800_ETHERCAT_REQUEST_OP_STATE;
+			
+		ELSIF stCR800GetEcState.deviceState = EC_DEVICE_STATE_OP THEN
+			eMachineStateUninitialized := MACHINE_STATE_UNINITIALIZED_CR800_CHECK_POWER_REGISTER;		
+		ELSE
+			eMachineStateUninitialized := MACHINE_STATE_UNINITIALIZED_CR800_ETHERCAT_STATUS_CHECK;
+		END_IF
+		
+	MACHINE_STATE_UNINITIALIZED_CR800_ETHERCAT_ERROR_RESET:
+		fbSetCR800CtrlState( 		sNetId 		:= sPLC_NET_ID,
+									nSlaveAddr	:= iCR800_1_ADDRESS,
+									bExecute 	:= TRUE,
+									tTimeout 	:= DEFAULT_ADS_TIMEOUT,
+									state 		:= EC_DEVICE_STATE_ERROR);
+		IF NOT fbSetCR800CtrlState.bBusy AND NOT fbSetCR800CtrlState.bError THEN
+			fbSetCR800CtrlState(bExecute := FALSE);
+			eMachineStateUninitialized := MACHINE_STATE_UNINITIALIZED_CR800_ETHERCAT_STATUS_CHECK;
+		END_IF
+		
+	MACHINE_STATE_UNINITIALIZED_CR800_ETHERCAT_REQUEST_OP_STATE:
+		fbSetCR800CtrlState( 		sNetId 		:= sPLC_NET_ID,
+									nSlaveAddr	:= iCR800_1_ADDRESS,
+									bExecute 	:= TRUE,
+									tTimeout 	:= DEFAULT_ADS_TIMEOUT,
+									state 		:= EC_DEVICE_STATE_OP);
+		IF NOT fbSetCR800CtrlState.bBusy AND NOT fbSetCR800CtrlState.bError THEN
+			fbSetCR800CtrlState(bExecute := FALSE);
+			eMachineStateUninitialized := MACHINE_STATE_UNINITIALIZED_CR800_ETHERCAT_STATUS_CHECK;
+		END_IF
+		
+	MACHINE_STATE_UNINITIALIZED_CR800_CHECK_POWER_REGISTER:
+		IF arrRobot.CR800PoweredOn THEN
+			eMachineStateUninitialized := MACHINE_STATE_UNINITIALIZED_DONE;
+		END_IF
+		
+	MACHINE_STATE_UNINITIALIZED_DONE:
+		;
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Robots" Id="{7f945cab-fcf4-42ea-a55f-ae8887eca31e}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY Robots : REFERENCE TO FB_CR800EtherCAT]]></Declaration>
+      <Get Name="Get" Id="{da0b5682-da4c-45e1-aecb-4ccc22637b3c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Robots REF= arrRobot;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <LineIds Name="FB_MachineControl">
+      <LineId Id="3" Count="11" />
+      <LineId Id="140" Count="0" />
+      <LineId Id="16" Count="3" />
+      <LineId Id="141" Count="3" />
+      <LineId Id="20" Count="3" />
+      <LineId Id="149" Count="0" />
+      <LineId Id="152" Count="0" />
+      <LineId Id="151" Count="0" />
+      <LineId Id="154" Count="0" />
+      <LineId Id="24" Count="3" />
+      <LineId Id="146" Count="2" />
+      <LineId Id="145" Count="0" />
+      <LineId Id="28" Count="3" />
+      <LineId Id="156" Count="1" />
+      <LineId Id="32" Count="6" />
+      <LineId Id="159" Count="1" />
+      <LineId Id="39" Count="65" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MachineControl.MR_Start">
+      <LineId Id="3" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MachineControl.MR_Stop">
+      <LineId Id="3" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MachineControl.MS_Aborting">
+      <LineId Id="3" Count="8" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MachineControl.MS_Auto">
+      <LineId Id="3" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MachineControl.MS_AutoToManual">
+      <LineId Id="3" Count="9" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MachineControl.MS_Emergency">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MachineControl.MS_Initializing">
+      <LineId Id="3" Count="8" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MachineControl.MS_Manual">
+      <LineId Id="3" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MachineControl.MS_ManualToAuto">
+      <LineId Id="3" Count="8" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MachineControl.MS_ReadyInitialized">
+      <LineId Id="3" Count="8" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MachineControl.MS_Reset">
+      <LineId Id="3" Count="8" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MachineControl.MS_ResetDone">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MachineControl.MS_Uninitialized">
+      <LineId Id="2" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="9" Count="3" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="17" Count="2" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="23" Count="1" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="25" Count="1" />
+      <LineId Id="30" Count="1" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="32" Count="1" />
+      <LineId Id="35" Count="3" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="39" Count="1" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="43" Count="1" />
+      <LineId Id="46" Count="3" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="50" Count="1" />
+      <LineId Id="53" Count="0" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="54" Count="7" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MachineControl.Robots.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

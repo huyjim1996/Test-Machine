@@ -1,0 +1,343 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_XtsControlUnit_Test" Id="{8d61d49f-6144-4329-bcf3-f584a744187a}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_XtsControlUnit_Test
+VAR CONSTANT
+	iNUMBER_OF_MOVERS 		: USINT := 2;
+	iNUMBER_OF_STATIONS 	: USINT := 4;
+	lrSTATION_POSITION_1 	: LREAL := 1875.0;
+	lrSTATION_POSITION_2 	: LREAL := 1375.0;
+	lrSTATION_POSITION_3 	: LREAL := 625.0;
+	lrSTATION_POSITION_4 	: LREAL := 125.0;
+	lrHOME_POSITION			: LREAL := 2150.0;
+	lrRAIL_LENGTH			: LREAL := 2500.0;
+END_VAR
+VAR
+	bFirstCycle	: BOOL := TRUE;
+	iLoop		: USINT;
+	
+	bInit 	: BOOL;
+	bHome 	: BOOL;
+	bStart	: BOOL;
+	bStop	: BOOL;
+	bReset	: BOOL;
+	bAbort	: BOOL;
+	
+	arrMover 			: ARRAY [0..iNUMBER_OF_MOVERS - 1] OF FB_XtsMover;
+	arrStation			: ARRAY [0..iNUMBER_OF_STATIONS - 1] OF FB_XtsStation;
+	
+	fbXtsControlUnit 	: FB_XtsControlUnit;
+	
+	lrOverride			: LREAL;
+	lrVelocity			: LREAL;
+	lrAcceleration		: LREAL;
+	lrDeceleration		: LREAL;
+	lrJerk				: LREAL;
+	lrJogVelocity		: LREAL;
+	lrJogAcceleration	: LREAL;
+	lrJogDeceleration	: LREAL;
+	lrJogJerk			: LREAL;
+	lrStopDeceleration	: LREAL;
+	lrStopJerk			: LREAL;
+	
+	iState: INT;
+	
+	bFlag : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*  *)
+IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	
+	FOR iLoop := 0 TO iNUMBER_OF_MOVERS - 1 DO
+		arrMover[iLoop].MR_FirstCycle( 	sName 				:= CONCAT(STR1 := 'Mover_',STR2 := USINT_TO_STRING(iLoop)),
+										sMeasurementUnits 	:= 'mm',
+										bModulo				:= TRUE);
+	END_FOR
+	
+	arrStation[0].MR_FirstCycle(	sName 				:= 'Station 1',
+									iStationID 			:= 0,
+									ifNextStation 		:= arrStation[1],
+									lrProcesPosition	:= lrSTATION_POSITION_1,
+									lrWaitPosition		:= lrSTATION_POSITION_1 - 100.0,
+									bWaitAfterStation	:= FALSE);
+									
+	arrStation[1].MR_FirstCycle(	sName 				:= 'Station 2',
+									iStationID 			:= 1,
+									ifNextStation 		:= arrStation[2],
+									lrProcesPosition	:= lrSTATION_POSITION_2,
+									lrWaitPosition		:= lrSTATION_POSITION_2 - 100.0,
+									bWaitAfterStation	:= FALSE);
+									
+	arrStation[2].MR_FirstCycle(	sName 				:= 'Station 3',
+									iStationID 			:= 2,
+									ifNextStation 		:= arrStation[3],
+									lrProcesPosition	:= lrSTATION_POSITION_3,
+									lrWaitPosition		:= lrSTATION_POSITION_3 - 100.0,
+									bWaitAfterStation	:= FALSE);
+									
+	arrStation[3].MR_FirstCycle(	sName 				:= 'Station 4',
+									iStationID 			:= 3,
+									ifNextStation 		:= arrStation[0],
+									lrProcesPosition	:= lrSTATION_POSITION_4,
+									lrWaitPosition		:= lrSTATION_POSITION_4 - 100.0,
+									bWaitAfterStation	:= FALSE);
+									
+	fbXtsControlUnit.MR_FirstCycle( sName := 'XTS_Control_Unit:', lrRailLength := lrRAIL_LENGTH);
+	
+	FOR iLoop := 0 TO iNUMBER_OF_MOVERS - 1 DO
+		fbXtsControlUnit.MR_AppendMover( ifMover := arrMover[iLoop]);
+	END_FOR
+	
+	FOR iLoop := 0 TO iNUMBER_OF_STATIONS - 1 DO
+		fbXtsControlUnit.MR_AppendStation( ifStation := arrStation[iLoop]);
+	END_FOR
+	
+	lrOverride 			:= 100.0;
+	lrVelocity 			:= 2000.0;
+	lrAcceleration		:= 4000.0;
+	lrDeceleration		:= 4000.0;
+	lrJerk				:= 40000.0;
+	
+	lrJogVelocity 		:= 50.0;
+	lrJogAcceleration	:= 1000.0;
+	lrJogDeceleration	:= 1000.0;
+	lrJogJerk			:= 10000.0;
+	
+	lrStopDeceleration	:= 4000.0;
+	lrStopJerk			:= 40000.0;
+	
+	FOR iLoop := 0 TO iNUMBER_OF_MOVERS - 1 DO
+		arrMover[iLoop].Override 			:= lrOverride;
+		arrMover[iLoop].Velocity 			:= lrVelocity;
+		arrMover[iLoop].SortingVelocity		:= 250.0;
+		arrMover[iLoop].WorkVelocity		:= 2000.0;
+		arrMover[iLoop].Acceleration 		:= lrAcceleration;
+		arrMover[iLoop].Deceleration 		:= lrDeceleration;
+		arrMover[iLoop].Jerk 				:= lrJerk;
+		arrMover[iLoop].StopDeceleration	:= lrStopDeceleration;
+		arrMover[iLoop].StopJerk			:= lrStopJerk;
+	END_FOR
+	
+END_IF
+
+(*  *)
+IF bReset THEN
+	bReset := FALSE;
+	iState := 50;
+ELSIF bAbort THEN
+	bAbort := FALSE;
+	iState := 60;
+END_IF
+
+(*  *)
+CASE iState OF
+	0:
+		IF bInit THEN
+			bInit := FALSE;
+			iState := 10;
+			
+		ELSIF bHome THEN
+			bHome := FALSE;
+			iState := 20;
+			
+		ELSIF bStart THEN
+			bStart := FALSE;
+			iState := 30;
+		
+		ELSIF bStop THEN
+			bStop := FALSE;
+			iState := 40;
+
+		END_IF
+
+	10:
+		bFlag := TRUE;
+		
+		FOR iLoop := 0 TO 5 DO
+			arrStation[iLoop].MR_Init();
+			bFlag := bFlag AND arrStation[iLoop].Active;
+		END_FOR
+		
+		IF bFlag THEN
+			iState := 15;
+		END_IF
+		
+	15:
+		fbXtsControlUnit.MR_Init();
+		
+		IF fbXtsControlUnit.Active THEN
+			iState := 0;
+		END_IF
+	
+	20:
+		fbXtsControlUnit.MR_Home( lrHomePosition := lrHOME_POSITION);
+		
+		IF fbXtsControlUnit.IsHomed THEN
+			iState := 0;
+		END_IF
+		
+	30:
+		fbXtsControlUnit.MR_Start();
+		
+		IF fbXtsControlUnit.Running THEN
+			iState := 0;
+		END_IF
+		
+	40:
+		fbXtsControlUnit.MR_Stop();
+		
+		IF NOT fbXtsControlUnit.Running THEN
+			iState := 0;
+		END_IF
+		
+	50:
+		fbXtsControlUnit.MR_Reset();
+		
+		IF NOT fbXtsControlUnit.Error THEN
+			iState := 0;
+		END_IF
+		
+	60:
+		fbXtsControlUnit.MR_Abort();
+		
+		IF NOT fbXtsControlUnit.Active THEN
+			iState := 0;
+		END_IF
+		
+END_CASE
+
+fbXtsControlUnit();
+
+FOR iLoop := 0 TO iNUMBER_OF_STATIONS - 1 DO
+	arrStation[iLoop]();
+END_FOR
+
+FOR iLoop := 0 TO iNUMBER_OF_MOVERS - 1 DO
+	arrMover[iLoop]();
+END_FOR]]></ST>
+    </Implementation>
+    <Folder Name="StateMachine" Id="{f3ba2367-114d-4c2a-aac2-c21971c6e168}" />
+    <Method Name="MS_Aborting" Id="{42cca3bc-cb49-402b-8533-97992fe7b67e}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Aborting
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* 
+Add here code to abort all station objects's e.g robots, axes, cylinders. 
+At the end add "SUPER^.MS_Aborting();" to finish aborting.
+*)
+
+SUPER^.MS_Aborting();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Initializing" Id="{8e653622-2a85-4147-9e05-8dcbfaccfdeb}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Initializing
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* 
+Add here code to initialize all station objects's e.g robots, axes, cylinders. 
+At the end add "eStateMachine := XTS_UNIVERSAL_STATION_READY_INITIALZIED;" to finish initialization.
+*)
+
+eStateMachine := XTS_UNIVERSAL_STATION_READY_INITIALZIED;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_ReadyInitialized" Id="{1e1903e4-4bdd-4bc5-80ce-f981b4c94c4a}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_ReadyInitialized
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(*
+Add code here if some internal parameters are needed to set after initialization or leave it default.
+At the end add "eStateMachine := XTS_UNIVERSAL_STATION_IDLE;" to finish and go to IDLE state.
+*)
+
+eStateMachine := XTS_UNIVERSAL_STATION_IDLE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Reset" Id="{93404924-bed5-4789-be21-ee9dbcaeef47}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(*
+Add here code to reset all station element's e.g robots, axes, cylinders.
+*)
+
+eStateMachine := XTS_UNIVERSAL_STATION_RESET_DONE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Stop" Id="{66a0e00f-6879-4a1b-9941-cbebdd9fa19c}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Stop
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(*
+Add here code to stop all station element's e.g robots, axes, cylinders, vision.
+*)
+
+eStateMachine := XTS_UNIVERSAL_STATION_STOP_DONE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Uninitialized" Id="{b90ee5d6-7a92-44fd-86b6-1f7b439ce012}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Uninitialized
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* 
+Add here code
+At the end add "SUPER^.MS_Uninitialized();" to reset parent internal variables.
+*)
+
+SUPER^.MS_Uninitialized();]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="PRG_XtsControlUnit_Test">
+      <LineId Id="3" Count="14" />
+      <LineId Id="211" Count="0" />
+      <LineId Id="18" Count="5" />
+      <LineId Id="212" Count="0" />
+      <LineId Id="24" Count="5" />
+      <LineId Id="214" Count="0" />
+      <LineId Id="30" Count="5" />
+      <LineId Id="215" Count="0" />
+      <LineId Id="36" Count="27" />
+      <LineId Id="216" Count="1" />
+      <LineId Id="64" Count="102" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PRG_XtsControlUnit_Test.MS_Aborting">
+      <LineId Id="3" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PRG_XtsControlUnit_Test.MS_Initializing">
+      <LineId Id="3" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PRG_XtsControlUnit_Test.MS_ReadyInitialized">
+      <LineId Id="3" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PRG_XtsControlUnit_Test.MS_Reset">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PRG_XtsControlUnit_Test.MS_Stop">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PRG_XtsControlUnit_Test.MS_Uninitialized">
+      <LineId Id="3" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

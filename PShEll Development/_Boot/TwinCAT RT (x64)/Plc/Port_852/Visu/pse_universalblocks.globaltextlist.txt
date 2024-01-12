@@ -1,0 +1,172 @@
+Id;Default
+224;%2d
+1044;%3.0f
+21;%6.3f
+331;%d
+890;%f
+976;%s
+2051;/
+887;Abort
+494;Acceleration:
+3798;Action number:
+487;Active Alarms
+1711;Active alarms:
+649;Active critical
+1670;Active critical alarms:
+202;Active criticals:
+709;Active errors
+780;Active errors:
+700;Active warnings:
+582;Active warrnings
+706;Active warrnings:
+370;Actual Position:
+78;Actual Velocity
+1000;Admin
+431;Alarms
+813;All active alarms:
+427;Auto mode
+931;Axes
+913;Axis
+542;Back
+300;Backup
+2292;Backup and restore from external directory
+2272;Battery low
+662;Battery reset
+917;Change pass.
+1549;Clear all
+349;Clear All Alarms
+277;Close
+410;Close HMI
+1072;Commands
+1156;Controller
+2906;Controller reset
+1047;Create
+2909;Create new recipe:
+2120;Current value
+2043;Cycle pause
+3558;Cycle restore
+2070;Cycle stop
+424;Cylinders
+1092;Deceleration:
+362;Deinitialization in progress...
+1655;Digital Inputs
+1456;Digital inputs
+1692;Digital Outputs
+1445;Digital outputs
+1090;Digital outputs and valves
+538;Door Lock
+1643;Enable simulation
+1468;Error
+2782;Error reset
+537;Error: %d
+1738;Error: %s
+368;Event history
+1107;Event history:
+86;Event ID
+619;Event Text
+297;Event Type
+77;Export to file
+1073;Finishing initialization...
+1696;Force Input Value
+244;Go %s
+2687;Go auto
+66;Go home
+1163;Halt
+2141;Halted
+110;Home
+1505;Homed
+2548;In Position
+371;Initialize
+1488;Initialized
+312;Inputs
+2436;Jog
+18;Jog +
+19;Jog -
+2152;Jog mode:
+121;Lag error:
+715;Lights
+1263;Load from file
+1426;Loaded recipe
+332;Log In
+198;Log Out
+1506;Logged user
+921;Machine nearly ready to work...
+665;Machine state
+428;Manual
+485;Manual Axis Control
+1020;Manual Cylinders Control
+822;Manual mode
+3024;Manual Robots Control
+729;Mode switch
+417;Motors
+1606;Next
+1023;None
+1645;Number of:
+1015;Operator
+1972;Others
+613;Outputs
+639;Override:
+1319;Override: %2.0d
+407;Override: %2d
+1429;Override: %3.0f
+196;Parameter
+637;Parameters
+1146;Parameters:
+1309;Path:
+725;Paused
+1845;Position hold
+2517;Position:
+905;Position: %s
+731;Powered on
+1825;Previous
+316;Program
+1005;Read to file
+690;Recipe list:
+2365;Recipe name
+1499;Recipe name:
+247;Recipe parameters
+298;Recipes
+2656;Recipes Manager: %s
+1083;Release
+2097;Reload
+2954;Remove
+3075;Reset
+707;Reset in progress...
+861;Reset:
+1061;Reseting errors...
+561;Restore
+2648;Restore auto
+951;Robots
+2584;Safe Inputs
+958;Safe mode switch in progress...
+711;Safe mode switching...
+1087;Safe Outputs
+670;Safety I/O
+2626;Save in file
+550;Select
+1288;Selected recipe
+7;Selected recipe value
+1458;Selected recipe:
+1007;Service
+2402;Servo off
+772;Servo on
+2183;Set Position:
+511;Set Velocity:
+536;Severity
+50;Software version: v%s
+450;Start
+3789;Started
+1037;State: %s
+895;Status
+85;Statuses & parameters:
+442;Stop
+1093;Stopped
+848;Time Cleared
+730;Time Confirmed
+9;Time Raised
+1974;Time: %d [ms]
+10;Total active alarms
+1629;Update recipes
+1334;Velocity:
+322;[%s/s]
+374;[%s]

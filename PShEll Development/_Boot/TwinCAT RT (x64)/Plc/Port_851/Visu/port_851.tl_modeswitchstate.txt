@@ -1,0 +1,4 @@
+Id;Default
+0;Auto
+1;Manual
+;

@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <TextList Name="TL_SingleAxisJogMode" Id="{43de5411-e4ae-4e98-86f1-8b369d0cfe1b}">
+    <XmlArchive>
+      <Data>
+        <o xml:space="preserve" t="TextListObject">
+          <v n="UniqueIdGenerator">"0"</v>
+          <l n="TextList" t="ArrayList" cet="TextListRow">
+            <o>
+              <v n="TextID">"0"</v>
+              <v n="TextDefault">"Standard slow"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"1"</v>
+              <v n="TextDefault">"Standard fast"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"2"</v>
+              <v n="TextDefault">"Continous"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"3"</v>
+              <v n="TextDefault">"Inching"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"4"</v>
+              <v n="TextDefault">"Inching modulo"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">""</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+          </l>
+          <l n="Languages" t="ArrayList" />
+          <v n="GuidInit">{cd8d4eba-2e93-45a7-9a8d-6f1d0a5cd35d}</v>
+          <v n="GuidReInit">{831f06dc-ab1b-4eed-9dab-db06e32153c5}</v>
+          <v n="GuidExitX">{4c0f8b60-513a-48de-89f5-68a4fe5ee1e2}</v>
+        </o>
+      </Data>
+      <TypeList>
+        <Type n="ArrayList">System.Collections.ArrayList</Type>
+        <Type n="Guid">System.Guid</Type>
+        <Type n="String">System.String</Type>
+        <Type n="TextListObject">{2bef0454-1bd3-412a-ac2c-af0f31dbc40f}</Type>
+        <Type n="TextListRow">{53da1be7-ad25-47c3-b0e8-e26286dad2e0}</Type>
+      </TypeList>
+    </XmlArchive>
+  </TextList>
+</TcPlcObject>

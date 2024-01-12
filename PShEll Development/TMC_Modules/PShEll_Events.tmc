@@ -1,0 +1,402 @@
+<?xml version="1.0"?>
+<TcModuleClass>
+	<DataTypes>
+		<DataType>
+			<Name GUID="{F74B3C58-7DB8-41C8-83B8-DDDFF5C7CF2A}">ShellMachineEventClass</Name>
+			<DisplayName TxtId=""><![CDATA[ShellMachineEventClass_DisplayText]]></DisplayName>
+			<EventId>
+				<Name Id="1">InitStarted</Name>
+				<DisplayName TxtId=""><![CDATA[Machine initialization started]]></DisplayName>
+				<Severity>Info</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="2">InitDone</Name>
+				<DisplayName TxtId=""><![CDATA[Machine initialization done]]></DisplayName>
+				<Severity>Info</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="3">InAutoMode</Name>
+				<DisplayName TxtId=""><![CDATA[Machine in automatic mode]]></DisplayName>
+				<Severity>Info</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="4">SwitchingToManual</Name>
+				<DisplayName TxtId=""><![CDATA[Switching machine to manual mode]]></DisplayName>
+				<Severity>Info</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="5">InManualMode</Name>
+				<DisplayName TxtId=""><![CDATA[Machine in manual mode]]></DisplayName>
+				<Severity>Info</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="6">SwitchingToAuto</Name>
+				<DisplayName TxtId=""><![CDATA[Switching machine to automatic mode]]></DisplayName>
+				<Severity>Info</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="7">AutoStarted</Name>
+				<DisplayName TxtId=""><![CDATA[Automatic work started]]></DisplayName>
+				<Severity>Info</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="8">AutoStopped</Name>
+				<DisplayName TxtId=""><![CDATA[Automatic work stopped]]></DisplayName>
+				<Severity>Info</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="9">Reset</Name>
+				<DisplayName TxtId=""><![CDATA[Machine reset started]]></DisplayName>
+				<Severity>Info</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="10">ResetDone</Name>
+				<DisplayName TxtId=""><![CDATA[Machine reset done]]></DisplayName>
+				<Severity>Info</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="11">Abort</Name>
+				<DisplayName TxtId=""><![CDATA[Machine abort started]]></DisplayName>
+				<Severity>Info</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="12">AbortDone</Name>
+				<DisplayName TxtId=""><![CDATA[Machine abort done]]></DisplayName>
+				<Severity>Info</Severity>
+			</EventId>
+			<Hides>
+				<Hide GUID="{65A6EF56-DBD3-4D57-A1CF-48B4ECF9143C}"/>
+				<Hide GUID="{D0A723BC-CEC9-4F57-AB5A-F62901F0FD73}"/>
+				<Hide GUID="{A396C590-CCA5-466B-ADEF-1FB719F27EE3}"/>
+				<Hide GUID="{1154DF16-18F4-4907-A4CC-F643D8B23F7E}"/>
+				<Hide GUID="{A5DF9F9B-BDBD-4B29-8A32-9D9CED913243}"/>
+				<Hide GUID="{95408A82-0FB0-4AA0-A265-00F16C792B26}"/>
+				<Hide GUID="{514B95BE-9316-4C52-8897-0ABF1C6081AD}"/>
+				<Hide GUID="{0DFF07CD-76DA-41EA-99EA-8D6387688232}"/>
+				<Hide GUID="{12F58FC5-8A78-4CCE-8CCA-06D77E3A4BA7}"/>
+				<Hide GUID="{9B5ADCB6-8148-4C9A-8DC0-F6178CD7486C}"/>
+				<Hide GUID="{3C02118C-0D3E-4B14-9B85-B53F83D71CB1}"/>
+			</Hides>
+		</DataType>
+		<DataType>
+			<Name GUID="{7E6EECEF-856D-475A-9609-51D5AD15D09B}">ShellTcpIpEventClass</Name>
+			<DisplayName TxtId=""><![CDATA[ShellTcpIpEventClass]]></DisplayName>
+			<BitSize>0</BitSize>
+			<BaseType GUID="{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}"/>
+			<Hides>
+				<Hide GUID="{A82BCE1B-7E3D-4378-9570-563814602642}"/>
+				<Hide GUID="{8A6331B4-E683-4BA0-90A5-B0083190F42D}"/>
+				<Hide GUID="{35CCE1D1-DFD7-4E90-B9FA-A71BA07F6104}"/>
+				<Hide GUID="{978FCD8B-A5F4-410A-9E00-27CD837EDBA9}"/>
+				<Hide GUID="{FA393C8C-E4BB-4ECE-9E59-9F895339B193}"/>
+				<Hide GUID="{A47A14CF-DC73-4729-9780-7D2EA92D978A}"/>
+				<Hide GUID="{DE628518-F8B7-4558-8FA5-D7AC7F4A50C3}"/>
+				<Hide GUID="{365A03D2-10F5-406E-8A08-CA9B6DAF3F27}"/>
+				<Hide GUID="{D4A3254E-7FCA-42B1-B14D-2165EF25CDD7}"/>
+				<Hide GUID="{27D55B9B-5867-4B83-BDAA-1844FB7099AB}"/>
+			</Hides>
+		</DataType>
+		<DataType>
+			<Name GUID="{089F1142-E333-4920-A5FA-085F24A7922A}">ShellADSEventClass</Name>
+			<DisplayName TxtId=""><![CDATA[ShellADSEventClass]]></DisplayName>
+			<EventId>
+				<Name Id="1">Reading</Name>
+				<DisplayName TxtId=""><![CDATA[Reading failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="2">Writting</Name>
+				<DisplayName TxtId=""><![CDATA[Writting failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<Hides>
+				<Hide GUID="{508296AA-1D0D-4C79-92F8-DC00E714E75E}"/>
+				<Hide GUID="{042DE46D-B1CE-4C50-B451-B886DECA63BC}"/>
+			</Hides>
+		</DataType>
+		<DataType>
+			<Name GUID="{E764C1AD-7A58-4AAC-905C-35BD333A21B4}">ShellAxisEventClass</Name>
+			<DisplayName TxtId=""><![CDATA[ShellAxisEventClass]]></DisplayName>
+			<EventId>
+				<Name Id="1">Halt</Name>
+				<DisplayName TxtId=""><![CDATA[Halting axis failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="2">InitReset</Name>
+				<DisplayName TxtId=""><![CDATA[Resetting during axis initialization failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="3">InitPowerOn</Name>
+				<DisplayName TxtId=""><![CDATA[Powering on during axis initialization failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="4">MoveAbsolute</Name>
+				<DisplayName TxtId=""><![CDATA[Moving absolute axis failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="5">MoveAdditive</Name>
+				<DisplayName TxtId=""><![CDATA[Moving additive axis failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="6">MoveJog</Name>
+				<DisplayName TxtId=""><![CDATA[Moving jog axis failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="7">MoveRelative</Name>
+				<DisplayName TxtId=""><![CDATA[Moving relative axis failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="8">MoveVelocity</Name>
+				<DisplayName TxtId=""><![CDATA[Moving velocity axis failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="9">Stop</Name>
+				<DisplayName TxtId=""><![CDATA[Stopping axis failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="10">HaltCA</Name>
+				<DisplayName TxtId=""><![CDATA[Halting axis with collision avoidance failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="11">MoveAbsoluteCA</Name>
+				<DisplayName TxtId=""><![CDATA[Moving absolute axis with collision avoidance failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="12">MoveRelativeCA</Name>
+				<DisplayName TxtId=""><![CDATA[Moving relative axis with collision avoidance failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="13">Home</Name>
+				<DisplayName TxtId=""><![CDATA[Homing axis failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="14">Coupling</Name>
+				<DisplayName TxtId=""><![CDATA[Coupling axes failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="15">Decoupling</Name>
+				<DisplayName TxtId=""><![CDATA[Decoupling axes failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<Hides>
+				<Hide GUID="{16C46B24-F9E0-48B0-951F-F478BFD8D161}"/>
+				<Hide GUID="{B4130D2C-EBD3-47D9-80FC-5ACB9B6A563E}"/>
+				<Hide GUID="{AEAFC35C-A8D7-4E4C-9B0C-4643CC495E24}"/>
+				<Hide GUID="{24DDCBB7-44A0-4DF1-9E86-3295E9F30AE9}"/>
+				<Hide GUID="{1634B621-D933-4158-937D-171366E461F6}"/>
+				<Hide GUID="{DFC5BEA2-032E-48A5-B13B-53D03C1D21AD}"/>
+				<Hide GUID="{07B228A6-7638-45CA-A84F-61B14D0C7AF6}"/>
+			</Hides>
+		</DataType>
+		<DataType>
+			<Name GUID="{76544162-D4F0-4999-A188-86C85828811B}">ShellRecipesEventClass</Name>
+			<DisplayName TxtId=""><![CDATA[ShellRecipesEventClass]]></DisplayName>
+			<EventId>
+				<Name Id="1">Failed</Name>
+				<DisplayName TxtId=""><![CDATA[Recipes manager failed error]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="2">Parameter</Name>
+				<DisplayName TxtId=""><![CDATA[Recipes manager parameter error]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="3">NotInitialized</Name>
+				<DisplayName TxtId=""><![CDATA[Recipes manager not initialized]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="4">NotImplemented</Name>
+				<DisplayName TxtId=""><![CDATA[Recipes manager not implemented]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="5">NoObject</Name>
+				<DisplayName TxtId=""><![CDATA[Recipes manager no object error]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="6">FileNoMemory</Name>
+				<DisplayName TxtId=""><![CDATA[Recipes manager file has no memory]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="7">FileNotFound</Name>
+				<DisplayName TxtId=""><![CDATA[Recipes manager file not found]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="8">RecipeMismatch</Name>
+				<DisplayName TxtId=""><![CDATA[Recipe mismatch error]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="9">RecipeSave</Name>
+				<DisplayName TxtId=""><![CDATA[Recipe save error]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="10">RecipeNotFound</Name>
+				<DisplayName TxtId=""><![CDATA[Recipe not found]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="11">DefNotFound</Name>
+				<DisplayName TxtId=""><![CDATA[Recipe definition not found]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="12">AlreadyExist</Name>
+				<DisplayName TxtId=""><![CDATA[Recipe already exist]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="13">NoManagerSet</Name>
+				<DisplayName TxtId=""><![CDATA[No recipe manager set]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="14">NotAllVariable</Name>
+				<DisplayName TxtId=""><![CDATA[Not all recipe variables were loaded]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="15">RecipeNoMemory</Name>
+				<DisplayName TxtId=""><![CDATA[Recipe has no memory]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="16">ManagerLocked</Name>
+				<DisplayName TxtId=""><![CDATA[Recipe manager locked during online change]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="17">SourceExhausted</Name>
+				<DisplayName TxtId=""><![CDATA[Recipe manager source exhausted]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="18">TargetExhausted</Name>
+				<DisplayName TxtId=""><![CDATA[Recipe manager target exhausted]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="19">SourceIllegal</Name>
+				<DisplayName TxtId=""><![CDATA[Recipe manager source illegal]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<Hides>
+				<Hide GUID="{7E6BA95B-5445-4C1F-A3AD-DBA0050A8C90}"/>
+				<Hide GUID="{1A0158BC-3D50-4177-A615-601831291FD7}"/>
+				<Hide GUID="{1CCDE23C-6F18-44A3-B34B-2743770B4C3E}"/>
+				<Hide GUID="{3744ED20-9988-454A-AE2C-97213E8BFFA0}"/>
+			</Hides>
+		</DataType>
+		<DataType>
+			<Name GUID="{E75A14BF-7947-4CCD-9338-D8DA62175788}">ShellTcpIpDeviceEventClass</Name>
+			<DisplayName TxtId=""><![CDATA[ShellTcpIpDeviceEventClass]]></DisplayName>
+			<EventId>
+				<Name Id="1">ConnectionLost</Name>
+				<DisplayName TxtId=""><![CDATA[Connection lost (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="2">ClosingSocket</Name>
+				<DisplayName TxtId=""><![CDATA[Closing socket failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="3">CreatingListener</Name>
+				<DisplayName TxtId=""><![CDATA[Creating listener socket failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="4">CreatingClient</Name>
+				<DisplayName TxtId=""><![CDATA[Creating client socket failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="5">ClosingConnection</Name>
+				<DisplayName TxtId=""><![CDATA[Closing connection with client failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="6">WaitingForClient</Name>
+				<DisplayName TxtId=""><![CDATA[Waiting for connection with client failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<Hides>
+				<Hide GUID="{A82BCE1B-7E3D-4378-9570-563814602642}"/>
+				<Hide GUID="{8A6331B4-E683-4BA0-90A5-B0083190F42D}"/>
+				<Hide GUID="{35CCE1D1-DFD7-4E90-B9FA-A71BA07F6104}"/>
+				<Hide GUID="{978FCD8B-A5F4-410A-9E00-27CD837EDBA9}"/>
+				<Hide GUID="{FA393C8C-E4BB-4ECE-9E59-9F895339B193}"/>
+				<Hide GUID="{A47A14CF-DC73-4729-9780-7D2EA92D978A}"/>
+				<Hide GUID="{DE628518-F8B7-4558-8FA5-D7AC7F4A50C3}"/>
+				<Hide GUID="{365A03D2-10F5-406E-8A08-CA9B6DAF3F27}"/>
+				<Hide GUID="{2335FA4B-ACE2-47C4-8855-0DC52908C39D}"/>
+				<Hide GUID="{7AD690E0-F727-4F6D-ACC0-A02E37A0EFEC}"/>
+				<Hide GUID="{E0723B0F-86B5-4CF8-B61B-6D911B8B0AC5}"/>
+				<Hide GUID="{00380CCC-38A4-4E47-AFB3-1C959E2BCB89}"/>
+				<Hide GUID="{3A1123E4-04B6-4599-B054-0E8D97AA0AC5}"/>
+				<Hide GUID="{48CFB0B0-C55A-4468-84E7-B46E18C18955}"/>
+				<Hide GUID="{C0FBC489-D5AD-48CC-AC8C-5CCDCD0B9F50}"/>
+				<Hide GUID="{12F82E34-F8BD-42F3-8CBF-CBFEFD2A592B}"/>
+				<Hide GUID="{73159B40-3CFD-40BA-A468-BC71DE7EB77B}"/>
+			</Hides>
+		</DataType>
+		<DataType>
+			<Name GUID="{B77D553D-9F7D-4FB7-A176-5958C1873102}">ShellAxesGroupEventClass</Name>
+			<DisplayName TxtId=""><![CDATA[ShellAxesGroupEventClass]]></DisplayName>
+			<EventId>
+				<Name Id="1">GroupReset</Name>
+				<DisplayName TxtId=""><![CDATA[Resetting all internal errors of a group and all axes belonging to the group failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="2">UngroupAll</Name>
+				<DisplayName TxtId=""><![CDATA[Removing all axes and disabling the group failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="3">GroupDisable</Name>
+				<DisplayName TxtId=""><![CDATA[Disabling the group failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="4">AddAxisToGroup</Name>
+				<DisplayName TxtId=""><![CDATA[Adding an axis to the group failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="5">GroupEnable</Name>
+				<DisplayName TxtId=""><![CDATA[Enabling the group failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="6">RemoveFromGroup</Name>
+				<DisplayName TxtId=""><![CDATA[Removing an axis from the axis group failed (error ID: {0})]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<Hides>
+				<Hide GUID="{BDDEAC2B-798D-4BBC-83C5-60AF0AE37AA8}"/>
+				<Hide GUID="{59FC6D67-5CA1-4C03-A6DC-1E4975320B3F}"/>
+			</Hides>
+		</DataType>
+	</DataTypes>
+</TcModuleClass>

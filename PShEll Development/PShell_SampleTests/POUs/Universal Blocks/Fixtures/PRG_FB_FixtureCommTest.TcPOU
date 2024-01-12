@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_FixtureCommTest" Id="{665346c7-a705-4106-9033-ff9a282df180}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_FixtureCommTest
+VAR
+	bFirstCycle			: BOOL := TRUE;
+	
+	(* Commands *)
+	bInit				: BOOL;
+	bMeasure 			: BOOL;
+	bAbort				: BOOL;
+	bReset				: BOOL;
+	bOpen				: BOOL;
+	bClose				: BOOL;
+	
+	(* Parameters *)
+	iSampleID			: UINT;
+	iState				: INT;
+	
+	(* Status *)
+	bActive				: REFERENCE TO BOOL;
+	bSocketOpen			: REFERENCE TO BOOL;
+	iCurrentSampleID	: REFERENCE TO UDINT;
+	bError				: REFERENCE TO BOOL;
+	eFixtureState		: REFERENCE TO E_UniversalFixtureState;
+	eResult				: REFERENCE TO E_UniversalFixtureSampleResult;
+	
+	(* FB's*)
+	fbFixtureCommTest	: FB_Fixture;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	fbFixtureCommTest.MR_FirstCycle( 	sFixtureName 		:= 'PShEll Test Fixture',
+										sHost 				:= '192.168.1.1',
+										sAmsNetID 			:= '',
+										iPort 				:= 12000,
+										tTimeout 			:= DEFAULT_ADS_TIMEOUT,
+										bUseLogger			:= TRUE,
+										bClientConnection 	:= TRUE,
+										sLoggerName 		:= 'PShEll Test Fixture',
+										sFileDir 			:= 'C:\TwinCAT\Tests\',
+										sFileName 			:= 'FixtureCommTest',
+										bCreateFileAtStart 	:= TRUE,
+										bAddHeader			:= TRUE,
+										bAddTimeStamp 		:= TRUE);
+	
+	(* Update auxilary status variables *)									
+	bActive 			REF= fbFixtureCommTest.Active;
+	eResult				REF= fbFixtureCommTest.SampleResult;
+	bError 				REF= fbFixtureCommTest.Error;
+	eFixtureState		REF= fbFixtureCommTest.State;
+	iCurrentSampleID	REF= fbFixtureCommTest.SampleID;
+	bSocketOpen			REF= fbFixtureCommTest.SocketOpen;
+END_IF
+
+IF bReset THEN
+	bReset := FALSE;
+	iState := 50;
+	
+ELSIF bAbort THEN
+	bAbort := FALSE;
+	iState := 60;
+	
+END_IF
+
+CASE iState OF
+	0:
+		IF bInit THEN
+			bInit := FALSE;
+			iState := 10;
+			
+		ELSIF bMeasure THEN
+			bMeasure := FALSE;
+			iState := 20;
+			
+		ELSIF bOpen THEN
+			bOpen := FALSE;
+			iState := 30;
+		
+		ELSIF bClose THEN
+			bClose := FALSE;
+			iState := 40;
+			
+		END_IF
+	10:
+		fbFixtureCommTest.MR_Init();
+		
+		IF fbFixtureCommTest.Active THEN
+			iState := 0;
+		END_IF
+	20:
+		fbFixtureCommTest.MR_Measure(iSampleID);
+		
+		IF NOT fbFixtureCommTest.Busy THEN
+			iSampleID := 0;
+			iState := 0;
+		END_IF
+		
+	30:
+		fbFixtureCommTest.MR_Open();
+		
+		IF fbFixtureCommTest.SocketOpen THEN
+			iState := 0;
+		END_IF
+		
+	40:
+		fbFixtureCommTest.MR_Close();
+		
+		IF NOT fbFixtureCommTest.SocketOpen THEN
+			iState := 0;
+		END_IF
+		
+	50:
+		fbFixtureCommTest.MR_Reset();
+		
+		IF NOT fbFixtureCommTest.Error THEN
+			iState := 0;
+		END_IF
+	
+	60:
+		fbFixtureCommTest.MR_Abort();
+		
+		IF NOT fbFixtureCommTest.Active THEN
+			iState := 0;
+		END_IF
+	
+END_CASE
+
+fbMachineTime(bEnable := TRUE);
+fbFixtureCommTest();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_FixtureCommTest">
+      <LineId Id="3" Count="10" />
+      <LineId Id="125" Count="3" />
+      <LineId Id="14" Count="83" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

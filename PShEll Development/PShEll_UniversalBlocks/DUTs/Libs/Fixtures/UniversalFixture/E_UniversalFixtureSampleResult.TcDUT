@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_UniversalFixtureSampleResult" Id="{286b7597-6a90-4e07-bdbf-add9c33d1671}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_UniversalFixtureSampleResult :
+(
+	UNIVERSAL_FIXTURE_SAMPLE_REJECTED 	:= 0,	(* Sample didn't meet the requierments *)
+	UNIVERSAL_FIXTURE_SAMPLE_ACCEPTED 	:= 10,	(*  *)
+	UNIVERSAL_FIXTURE_SAMPLE_UNKNOWN	:= 20	(*  *)
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

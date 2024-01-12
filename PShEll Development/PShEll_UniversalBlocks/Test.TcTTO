@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <Task Name="Test" Id="{b691f970-729a-491a-aedd-d84b25bbb5ab}">
+    <!--CycleTime in micro seconds.-->
+    <CycleTime>10000</CycleTime>
+    <Priority>23</Priority>
+    <PouCall>
+      <Name>PRG_AlarmControl</Name>
+    </PouCall>
+    <PouCall>
+      <Name>PRG_MachineControl</Name>
+    </PouCall>
+    <PouCall>
+      <Name>PRG_RecipesManager</Name>
+    </PouCall>
+    <PouCall>
+      <Name>PRG_VisuControl</Name>
+    </PouCall>
+    <TaskFBGuid>{3b7e510d-d39b-475f-9ca1-b0653d1992af}</TaskFBGuid>
+    <Fb_init>{18d67535-79bd-41c1-b699-253af1c87a75}</Fb_init>
+    <Fb_exit>{52abd52e-0c5d-4525-a203-88d7f6a4413e}</Fb_exit>
+    <CycleUpdate>{dbd848aa-80f4-4564-8839-301c9b37bd98}</CycleUpdate>
+    <PostCycleUpdate>{4fb91a91-3550-4d71-81b3-cdb604465bcc}</PostCycleUpdate>
+  </Task>
+</TcPlcObject>

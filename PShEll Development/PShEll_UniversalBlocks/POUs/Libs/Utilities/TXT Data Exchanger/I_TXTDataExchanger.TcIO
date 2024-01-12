@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <Itf Name="I_TXTDataExchanger" Id="{cc63be76-4c77-41ed-b599-05e5c4d3c908}">
+    <Declaration><![CDATA[INTERFACE I_TXTDataExchanger
+]]></Declaration>
+    <Property Name="Active" Id="{916f1107-cd3f-4f75-8f05-839c8d81b7a8}">
+      <Declaration><![CDATA[PROPERTY Active : REFERENCE TO BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{dfd2e2f0-605f-4528-bd00-e45ae1c21ac9}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="AmsNetId" Id="{05cbfd4a-3b85-4102-af03-4a7b32e28153}">
+      <Declaration><![CDATA[PROPERTY AmsNetId : STRING]]></Declaration>
+      <Get Name="Get" Id="{63786d4a-2018-43bf-a1e9-d7cae1d99042}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{7f7dcfa3-93ea-4f47-a75e-dde70b6bd496}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="Busy" Id="{27c82b83-1da2-46aa-8c10-3e7d98ef3c82}">
+      <Declaration><![CDATA[PROPERTY Busy : REFERENCE TO BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{61a1687e-36a1-4f7e-94d7-c34e5daba583}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{4d99b251-f8f9-4c18-b3b7-a0b9370bd389}">
+      <Declaration><![CDATA[PROPERTY Error : REFERENCE TO BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{8aab9ce4-6ee7-454f-bcd7-43e705483e4a}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="ErrorID" Id="{350b2ecd-aa25-40f4-8707-3c015f89069f}">
+      <Declaration><![CDATA[PROPERTY ErrorID : REFERENCE TO UDINT
+]]></Declaration>
+      <Get Name="Get" Id="{a815a143-5b3f-45d1-abf0-86c235a63fe4}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="FileDir" Id="{65c71048-ddf3-4404-9572-9173ee283968}">
+      <Declaration><![CDATA[PROPERTY FileDir : STRING]]></Declaration>
+      <Get Name="Get" Id="{b1d3a31d-2dad-4a5d-8f95-9d3b598d5970}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{9e2cc943-8b05-4a05-b969-1100212672d4}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="FileName" Id="{6cfc5e60-1d7f-490b-975c-2a3d4e3a1533}">
+      <Declaration><![CDATA[PROPERTY FileName : STRING]]></Declaration>
+      <Get Name="Get" Id="{d660b20d-3e7b-4a59-9fa5-654e7e6b7e03}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{9009c8ba-86fd-46a4-90a3-3c2963d14869}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Method Name="MR_Abort" Id="{574d9434-914e-4714-ab26-3e58d53d10f8}">
+      <Declaration><![CDATA[METHOD MR_Abort : BOOL
+]]></Declaration>
+    </Method>
+    <Method Name="MR_AddMESCommand" Id="{f7f1865c-2e00-4351-bac2-1260ec5a7469}">
+      <Declaration><![CDATA[METHOD MR_AddMESCommand : BOOL
+VAR_INPUT
+	sMachineID		: STRING;
+	sOperatorID		: STRING;
+	sPO				: STRING;
+	sProductItem	: STRING;
+	bLogOn			: BOOL;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="MR_Init" Id="{702a7912-0483-4faf-bfc1-cceaae951d77}">
+      <Declaration><![CDATA[METHOD MR_Init : BOOL
+VAR_INPUT
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="MR_Reset" Id="{326d4a88-4319-4729-9c74-4946f3a6596f}">
+      <Declaration><![CDATA[METHOD MR_Reset : BOOL
+]]></Declaration>
+    </Method>
+    <Method Name="MR_SearchForFile" Id="{1754118f-214b-4084-b588-46880e96b704}">
+      <Declaration><![CDATA[METHOD MR_SearchForFile : BOOL
+VAR_INPUT
+	sSearchFileName		: STRING;			(* Whole name of the search file (e.g.: "DemoFile.txt" *)
+END_VAR
+
+VAR_OUTPUT
+	bFileFound	: BOOL;
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="MR_SelectPath" Id="{eb33f0aa-7a55-4a59-aa7b-60b20a5c240a}">
+      <Declaration><![CDATA[METHOD MR_SelectPath : BOOL
+VAR_INPUT
+	sFileDir								: STRING; 			(* CSV source file directory name *)
+	sFileName 								: STRING; 			(* CSV source file name *)
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Name" Id="{d84f5194-8d84-4861-9770-7e986240b630}">
+      <Declaration><![CDATA[PROPERTY Name : STRING]]></Declaration>
+      <Get Name="Get" Id="{01bd6913-86f2-4e4d-b490-cd0bd2813c0b}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{1de3d104-9c85-443e-98cc-b4890352627e}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+  </Itf>
+</TcPlcObject>

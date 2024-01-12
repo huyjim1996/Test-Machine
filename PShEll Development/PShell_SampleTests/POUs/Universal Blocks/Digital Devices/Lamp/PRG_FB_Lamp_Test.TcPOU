@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_Lamp_Test" Id="{e16ea202-c305-49e2-bc6e-f9f75d7db209}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_Lamp_Test
+VAR
+	bFirstCycle 	: BOOL := TRUE;
+	bTurnOn			: BOOL;				(* Command turn on *)
+	bTurnOff		: BOOL;				(* Command turn off *)
+	bStartFlashing	: BOOL;				(* Command start flashing *)
+	tBlinkTime		: TIME := T#500MS;	(* Blink time *)
+	fbLamp 			: FB_Lamp;			(* Lamp object *)
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	fbLamp.MR_FirstCycle('My test lamp');
+END_IF
+
+IF bTurnOn THEN
+	IF fbLamp.MR_LampOn() THEN
+		bTurnOn := FALSE;
+	END_IF
+	
+ELSIF bTurnOff THEN
+	IF fbLamp.MR_LampOff() THEN
+		bTurnOff := FALSE;
+	END_IF
+	
+ELSIF bStartFlashing THEN
+	IF fbLamp.MR_LampBlink(tBlinkTime) THEN
+		bStartFlashing := FALSE;
+	END_IF
+	
+END_IF
+
+fbLamp();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_Lamp_Test">
+      <LineId Id="83" Count="0" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="87" Count="0" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="57" Count="16" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

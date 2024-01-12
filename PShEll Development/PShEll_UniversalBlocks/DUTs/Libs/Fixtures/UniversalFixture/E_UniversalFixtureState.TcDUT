@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_UniversalFixtureState" Id="{dcdb827d-a39f-45bb-8979-b01a062098c7}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_UniversalFixtureState :
+(
+	UNIVERSAL_FIXTURE_UNINITIALIZED 	:= 0,	(*  *)
+	UNIVERSAL_FIXTURE_INITIALIZING 		:= 10,	(*  *)
+	UNIVERSAL_FIXTURE_READY 			:= 20,	(*  *)
+	UNIVERSAL_FIXTURE_IDLE				:= 30,	(*  *)
+	UNIVERSAL_FIXTURE_OPEN				:= 40,	(*  *)
+	UNIVERSAL_FIXTURE_CLOSE				:= 50,	(*  *)
+	UNIVERSAL_FIXTURE_MEASUREMENT		:= 60,	(*  *)
+	UNIVERSAL_FIXTURE_RESET				:= 70,	(*  *)
+	UNIVERSAL_FIXTURE_METHOD_DONE		:= 80,
+	UNIVERSAL_FIXTURE_EXTENSION			:= 999,	(*  *)
+	UNIVERSAL_FIXTURE_ABORTING			:= -10	(*  *)
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

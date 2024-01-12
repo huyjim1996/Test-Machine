@@ -1,0 +1,15 @@
+Id;Default
+0;Uninitialized
+10;Initializing
+20;Ready initialized
+30;Idle
+40;Go active
+50;Go active done
+60;Go home
+70;Go home done
+80;Release
+90;Release done
+100;Reset
+110;Reset done
+-10;Aborting
+;

@@ -1,0 +1,11 @@
+Id;Default
+0;Idle
+10;Initialization
+20;Create
+30;Load
+40;Read
+50;Reload
+60;Backup
+70;Restore
+-10;Abort
+;

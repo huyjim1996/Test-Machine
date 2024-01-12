@@ -1,0 +1,5 @@
+Id;Default
+0;
+1;Alarm
+2;Message
+;

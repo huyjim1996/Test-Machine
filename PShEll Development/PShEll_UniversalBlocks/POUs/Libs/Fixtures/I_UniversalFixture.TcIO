@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <Itf Name="I_UniversalFixture" Id="{6f9fbbc0-a142-4521-90b1-67ad8ba4ec4f}">
+    <Declaration><![CDATA[INTERFACE I_UniversalFixture
+]]></Declaration>
+    <Property Name="Active" Id="{30b97795-91e7-4eb2-8fb2-8c3abf22e6e6}">
+      <Declaration><![CDATA[PROPERTY Active : REFERENCE TO BOOL]]></Declaration>
+      <Get Name="Get" Id="{01b36e5d-a3c9-4427-99fd-b7cf001a47cd}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Busy" Id="{72c46732-4b9f-4761-b5d6-f856864146ba}">
+      <Declaration><![CDATA[PROPERTY Busy : REFERENCE TO BOOL]]></Declaration>
+      <Get Name="Get" Id="{d64a8de0-f343-4895-b135-524a2092056d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{730a8e85-436f-4c71-8858-eef6b6afcdc7}">
+      <Declaration><![CDATA[PROPERTY Error : REFERENCE TO BOOL]]></Declaration>
+      <Get Name="Get" Id="{397d134f-d938-4645-baa9-80b391db87af}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="MR_Abort" Id="{83ede245-bd3e-4d41-884e-709e0a21de9a}">
+      <Declaration><![CDATA[METHOD MR_Abort : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="MR_Close" Id="{16b90aab-8bef-47fa-933f-b20ba077a82b}">
+      <Declaration><![CDATA[METHOD MR_Close : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="MR_FirstCycle" Id="{63142096-c91b-4783-a1f8-dc118fa5bed3}">
+      <Declaration><![CDATA[METHOD MR_FirstCycle : BOOL
+VAR_INPUT
+	sFixtureName 		: STRING;		(*  *)
+	sHost				: T_IPv4Addr;	(*  *)
+	sAmsNetID 			: T_AmsNetID;	(*  *)
+	iPort				: UINT;			(*  *)
+	tTimeout			: TIME;			(*  *)
+	bUseLogger			: BOOL;			(*  *)
+	bClientConnection 	: BOOL;			(*  *)
+	sFileDir			: STRING;		(*  *)
+	sFileName			: STRING;		(*  *)
+	bCreateFileAtStart	: BOOL;
+	bAddHeader			: BOOL;
+	bAddTimeStamp		: BOOL;	
+END_VAR]]></Declaration>
+    </Method>
+    <Method Name="MR_Init" Id="{29c36dfc-7346-48f7-b3c7-53bc37853360}">
+      <Declaration><![CDATA[METHOD MR_Init : BOOL
+]]></Declaration>
+    </Method>
+    <Method Name="MR_Measure" Id="{915d18a3-2ca2-407b-8eac-2fddb8b79584}">
+      <Declaration><![CDATA[METHOD MR_Measure : BOOL
+VAR_INPUT
+	iSampleID : UINT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="MR_Open" Id="{55064d6b-02f0-4b75-a8e9-f292b62f7eea}">
+      <Declaration><![CDATA[METHOD MR_Open : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="MR_Reset" Id="{9fc8288e-bd1f-4fa4-988d-6f6b3fecee7b}">
+      <Declaration><![CDATA[METHOD MR_Reset : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="RecivedUtuData" Id="{96b0c0cc-b848-4d39-9e77-1e53e6fc2c79}">
+      <Declaration><![CDATA[PROPERTY RecivedUtuData : REFERENCE TO STRING]]></Declaration>
+      <Get Name="Get" Id="{7a1d8309-1c02-4c4a-8bcc-b74c5c0b3c9b}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="ref_MeasurementLogger" Id="{0bd7e261-5df5-4883-bc99-5c5754902a9e}">
+      <Declaration><![CDATA[PROPERTY ref_MeasurementLogger : REFERENCE TO FB_TXTDataExchanger]]></Declaration>
+      <Get Name="Get" Id="{478a11ce-bbc0-4019-b7dc-1748df9594b1}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="ref_TcpClient" Id="{6025437a-61a7-4f05-9a07-4e633fe99b6a}">
+      <Declaration><![CDATA[PROPERTY ref_TcpClient : REFERENCE TO FB_TcpClient]]></Declaration>
+      <Get Name="Get" Id="{f5271413-ab91-4105-b522-a5bb5837913e}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="ref_TcpServer" Id="{3d77bec1-c652-4f38-9a76-52608145a9da}">
+      <Declaration><![CDATA[PROPERTY ref_TcpServer : REFERENCE TO FB_TcpServer]]></Declaration>
+      <Get Name="Get" Id="{2636ce14-5712-46d2-91d7-a3d3db7fee61}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="SampleID" Id="{5b188a3a-9f2d-4a27-ae17-1368f5db7f25}">
+      <Declaration><![CDATA[PROPERTY SampleID : REFERENCE TO UDINT]]></Declaration>
+      <Get Name="Get" Id="{c9798983-b55c-40bc-b72b-2e551d8741c0}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="SampleResult" Id="{2dcb9df1-c7f6-407f-8f4b-e2d1f76c3bf0}">
+      <Declaration><![CDATA[PROPERTY SampleResult : REFERENCE TO E_UniversalFixtureSampleResult]]></Declaration>
+      <Get Name="Get" Id="{c7547f62-616e-44ed-87a7-1617e6898bdb}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="SocketOpen" Id="{a9257aba-e0a8-4361-8280-f82b1f64e0db}">
+      <Declaration><![CDATA[PROPERTY ABSTRACT SocketOpen : REFERENCE TO BOOL]]></Declaration>
+      <Get Name="Get" Id="{ff6384c9-c418-4b33-9b2c-2cafce78c0a3}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="State" Id="{b5564da8-ccd3-4b06-9c6a-341da508bc71}">
+      <Declaration><![CDATA[PROPERTY State : REFERENCE TO E_UniversalFixtureState]]></Declaration>
+      <Get Name="Get" Id="{7d294c7f-f4a1-4adc-88dc-ad51f1419a7d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

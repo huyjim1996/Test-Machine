@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_MachineCtrlStateInit" Id="{031139da-8b48-4370-b379-8522fc5c6f57}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_MachineCtrlStateInit :
+(	
+	(* Robot init *)                                          		
+	MACHINE_STATE_INITIALIZING_ROBOT_ABORT						:= 0,	(*  *)
+	MACHINE_STATE_INITIALIZING_ROBOT_INIT						:= 10,	(*  *)
+	MACHINE_STATE_INITIALIZING_ROBOT_HOME						:= 20,	(*  *)
+	MACHINE_STATE_INITIALIZING_ROBOT_AUTOMATIC_MODE				:= 30,	(*  *)
+                       	
+	MACHINE_STATE_INITIALIZING_DONE								:= 40	(*  *)
+)UINT;
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

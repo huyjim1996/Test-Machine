@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_FcqFixture_Development_Test" Id="{f63d3d4a-e4d7-44c2-8fff-4f366f74ec76}" SpecialFunc="None">
+    <Declaration><![CDATA[(*
+Copyrights	: Precision Systems Engineering
+Author		: ADBO
+Date		: 07/2022
+Description: This program is used only for software development test of fixture FB only.
+*)
+PROGRAM PRG_FB_FcqFixture_Development_Test
+VAR
+	(* Generic flags *)
+	bFirstCycle : BOOL := TRUE;
+	
+	(* Auxilary control buttons *)
+	bInit					: BOOL;												(* Start initialization of fixture *)
+	bAbort					: BOOL;												(* Start aborting of fixture *)
+	bOpen					: BOOL;												(* Open fixture cover *)
+	bClose					: BOOL;												(* Close fixture cover *)
+	bReset					: BOOL;												(* Reset fixture *)
+	bMeasure 				: BOOL;												(* Start measurement process *)
+	bCoverHome				: BOOL;												(* Move fixture platform to home postion *)
+	bCoverActive			: BOOL;												(* Move fixture platform to active postion *)
+	bClampHold				: BOOL;												(* Hold product inside socket *)
+	bClampRelease			: BOOL;												(* Realease product inside socket *)
+	bCoverActiveAndJigOpen	: BOOL;												(* Opens fixture cover and moves platform to active position *)
+	bCoverHomeAndJigClose	: BOOL;												(* Closes fixture cover and moves platform to home position *)
+	bLoadNorm				: BOOL;												(* Send's trigger to UTU station to load product norm file *)
+	                                                                			
+	(* Parameters *)                                                			
+	iSampleID				: UINT;												(*  *)
+	bJigSimulation			: BOOL := FALSE;									(*  *)
+	bCoverSimulation		: BOOL := FALSE;									(*  *)
+	bClampSimulation 		: BOOL := FALSE;									(*  *)
+	                                                                			
+	(* Status *)                                                    			
+	bActive					: REFERENCE TO BOOL;								(*  *)
+	bBusy					: REFERENCE TO BOOL;								(*  *)
+	bSocketOpen				: REFERENCE TO BOOL;								(*  *)
+	iCurrentSampleID		: REFERENCE TO UDINT;								(*  *)
+	bError					: REFERENCE TO BOOL;								(*  *)
+	bCoverPositionActive 	: REFERENCE TO BOOL;								(*  *)
+	bCoverPositionHome		: REFERENCE TO BOOL;								(*  *)
+	bClampPositionHold		: REFERENCE TO BOOL;								(*  *)
+	bNormLoaded				: REFERENCE TO BOOL;								(*  *)
+	eMeasurementResult		: REFERENCE TO E_UniversalFixtureSampleResult;		(*  *)
+	eMeasurementResultExt	: REFERENCE TO E_FixtureMeasurementResultExt;		(*  *)
+	eState					: REFERENCE TO E_UniversalFixtureState;				(*  *)
+	eStateExt				: REFERENCE TO E_FixtureState;						(*  *)
+	
+	(* Enums *)
+	eFixtureTestState		: E_FixtureStateTest;								(*  *)
+	
+	(* Function blocks *)
+	fbFixture 				: FB_Fixture;										(*  *)
+
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	
+	(* Assign initial parameters of fixture instance *)	
+	fbFixture.MR_FirstCycle( 	sFixtureName		:= CONCAT(STR1 := sFIXTURE_NAME, STR2:= USINT_TO_STRING(1)),
+											sHost 				:= '192.168.0.10',//CONCAT(STR1 := sFIXTURE_HOST, STR2:= '200'),//CONCAT(STR1 := sFIXTURE_HOST, STR2:= USINT_TO_STRING(iLoop)),
+											sAmsNetID 			:= sFIXTURE_AMS_NET_ID,
+											iPort 				:= iFIXTURE_PORT,
+											tTimeout 			:= tFIXTURE_TIMEOUT,
+											bUseLogger 			:= bFIXTURE_USE_LOGGER,
+											bClientConnection	:= TRUE,//bFIXTURE_USE_CLIENT,
+											sFileDir 			:= CONCAT(STR1:=sFIXTURE_FILE_DIR, STR2:= '\'),
+											sFileName 			:= sFIXTURE_LOGGER_NAME,
+											bCreateFileAtStart	:= TRUE,
+											bAddHeader			:= TRUE,
+											bAddTimeStamp		:= TRUE);
+										
+	(* Auxilary status flags references for watch*)
+	bActive 				REF= fbFixture.Active;
+	bBusy					REF= fbFixture.Busy;
+	bSocketOpen 			REF= fbFixture.SocketOpen;
+	iCurrentSampleID 		REF= fbFixture.SampleID;
+	bError 					REF= fbFixture.Error;				
+	bCoverPositionActive	REF= fbFixture.CoverPositionActive;
+	bCoverPositionHome		REF= fbFixture.CoverPositionHome;
+	bClampPositionHold		REF= fbFixture.ClampHold;
+	eState					REF= fbFixture.State;
+	eStateExt				REF= fbFixture.StateExt;
+	bNormLoaded				REF= fbFixture.NormLoaded;
+	eMeasurementResult		REF= fbFixture.SampleResult;
+	eMeasurementResultExt	REF= fbFixture.MeasurementResultExt;
+			
+END_IF
+
+(* Enable simulation of fixture pneumatic cylinders *)
+fbFixture.JigSimulation := bJigSimulation;
+fbFixture.CoverSimulation := bCoverSimulation;
+fbFixture.ClampSimulation := bClampSimulation;
+	
+(* Generic control commands *)
+IF bReset THEN
+	bReset := FALSE;
+	eFixtureTestState := FIXTURE_TEST_RESET;
+			
+ELSIF bAbort THEN
+	fbFixture.MR_Abort();
+	bAbort := FALSE;
+	//eFixtureTestState := FIXTURE_TEST_ABORT;
+	
+END_IF
+
+//IF fbFixture.State = UNIVERSAL_FIXTURE_UNINITIALIZED THEN
+//	eFixtureTestState := FIXTURE_TEST_WAIT_FOR_COMMAND;
+//END_IF
+
+(* Manual tests state machine *)
+CASE eFixtureTestState OF
+	FIXTURE_TEST_WAIT_FOR_COMMAND:
+		IF bInit THEN
+			bInit := FALSE;
+			eFixtureTestState := FIXTURE_TEST_INIT;
+			
+		ELSIF bOpen THEN
+			bOpen := FALSE;
+			eFixtureTestState := FIXTURE_TEST_OPEN;
+			
+		ELSIF bClose THEN
+			bClose := FALSE;
+			eFixtureTestState := FIXTURE_TEST_CLOSE;
+			
+		ELSIF bMeasure THEN
+			bMeasure := FALSE;
+			eFixtureTestState := FIXTURE_TEST_MEASURE;
+			
+		ELSIF bCoverHome THEN
+			bCoverHome := FALSE;
+			eFixtureTestState := FIXTURE_TEST_PLATFORM_HOME;
+			
+		ELSIF bCoverActive THEN
+			bCoverActive := FALSE;
+			eFixtureTestState := FIXTURE_TEST_PLATFORM_ACTIVE;
+		
+		ELSIF bClampHold THEN
+			bClampHold := FALSE;
+			eFixtureTestState := FIXTURE_TEST_PRODUCT_HOLD;
+			
+		ELSIF bClampRelease THEN
+			bClampRelease := FALSE;
+			eFixtureTestState := FIXTURE_TEST_PRODUCT_RELEASE;
+			
+		ELSIF bCoverActiveAndJigOpen THEN
+			bCoverActiveAndJigOpen := FALSE;
+			eFixtureTestState := FIXTURE_TEST_PLATFORM_ACTIVE_AND_OPEN;
+			
+		ELSIF bCoverHomeAndJigClose THEN
+			bCoverHomeAndJigClose := FALSE;
+			eFixtureTestState := FIXTURE_TEST_PLATFORM_HOME_AND_CLOSE;
+			
+		ELSIF bLoadNorm THEN
+			bLoadNorm := FALSE;
+			eFixtureTestState := FIXTURE_TEST_LOAD_NORM;
+			
+		END_IF
+		
+	FIXTURE_TEST_INIT:
+		fbFixture.MR_Init();
+		
+		IF fbFixture.Active AND fbFixture.ref_Jig.Active AND fbFixture.ref_Clamp.Active AND fbFixture.ref_Cover.Active THEN
+			eFixtureTestState := FIXTURE_TEST_WAIT_FOR_COMMAND;
+		END_IF
+	
+	FIXTURE_TEST_OPEN:
+		fbFixture.MR_Open();
+		
+		IF fbFixture.SocketOpen AND NOT fbFixture.Busy THEN
+			eFixtureTestState := FIXTURE_TEST_WAIT_FOR_COMMAND;
+		END_IF
+	
+	FIXTURE_TEST_CLOSE:
+		fbFixture.MR_Close();
+		
+		IF NOT fbFixture.SocketOpen AND NOT fbFixture.Busy THEN
+			eFixtureTestState := FIXTURE_TEST_WAIT_FOR_COMMAND;
+		END_IF
+	
+	FIXTURE_TEST_MEASURE:
+		fbFixture.MR_Measure(iSampleID := 0);
+		
+		IF NOT fbFixture.Busy THEN
+			eFixtureTestState := FIXTURE_TEST_WAIT_FOR_COMMAND;
+		END_IF
+	
+	FIXTURE_TEST_RESET:
+		fbFixture.MR_Reset();
+		
+		IF NOT fbFixture.Error THEN
+			eFixtureTestState := FIXTURE_TEST_WAIT_FOR_COMMAND;
+		END_IF
+	
+	FIXTURE_TEST_ABORT:
+		fbFixture.MR_Abort();
+		
+		IF NOT fbFixture.Active THEN
+			eFixtureTestState := FIXTURE_TEST_WAIT_FOR_COMMAND;
+		END_IF
+	
+	FIXTURE_TEST_PLATFORM_HOME:
+		fbFixture.MR_CoverHome();
+		
+		IF fbFixture.CoverPositionHome AND NOT fbFixture.Busy THEN
+			eFixtureTestState := FIXTURE_TEST_WAIT_FOR_COMMAND;
+		END_IF
+	
+	FIXTURE_TEST_PLATFORM_ACTIVE:
+		fbFixture.MR_CoverActive();
+		
+		IF fbFixture.CoverPositionActive AND NOT fbFixture.Busy THEN
+			eFixtureTestState := FIXTURE_TEST_WAIT_FOR_COMMAND;
+		END_IF
+		
+	FIXTURE_TEST_PRODUCT_HOLD:
+		fbFixture.MR_ClampHold();
+		
+		IF fbFixture.ClampHold AND NOT fbFixture.Busy THEN
+			eFixtureTestState := FIXTURE_TEST_WAIT_FOR_COMMAND;
+		END_IF
+	
+	FIXTURE_TEST_PRODUCT_RELEASE:
+		fbFixture.MR_ClampRelease();	
+	
+		IF NOT fbFixture.ClampHold AND NOT fbFixture.Busy THEN
+			eFixtureTestState := FIXTURE_TEST_WAIT_FOR_COMMAND;
+		END_IF
+		
+	FIXTURE_TEST_PLATFORM_ACTIVE_AND_OPEN:
+		fbFixture.MR_CoverActiveAndJigOpen();
+		
+		IF fbFixture.CoverPositionActive AND fbFixture.SocketOpen AND NOT fbFixture.Busy THEN
+			eFixtureTestState := FIXTURE_TEST_WAIT_FOR_COMMAND;
+		END_IF
+	
+	FIXTURE_TEST_PLATFORM_HOME_AND_CLOSE:
+		fbFixture.MR_CoverHomeAndJigClose();
+		
+		IF fbFixture.CoverPositionHome AND NOT fbFixture.SocketOpen AND NOT fbFixture.Busy THEN
+			eFixtureTestState := FIXTURE_TEST_WAIT_FOR_COMMAND;
+		END_IF
+		
+	FIXTURE_TEST_LOAD_NORM:
+		//fbFixture.MR_LoadNorm( sProductType := 'E50', iProductQuantity := 100);
+		
+		IF fbFixture.NormLoaded THEN
+			eFixtureTestState := FIXTURE_TEST_WAIT_FOR_COMMAND;
+		END_IF
+		
+END_CASE
+
+fbFixture();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_FcqFixture_Development_Test">
+      <LineId Id="4130" Count="3" />
+      <LineId Id="4432" Count="6" />
+      <LineId Id="4440" Count="3" />
+      <LineId Id="4142" Count="9" />
+      <LineId Id="4378" Count="0" />
+      <LineId Id="4153" Count="2" />
+      <LineId Id="4319" Count="1" />
+      <LineId Id="4156" Count="0" />
+      <LineId Id="4376" Count="0" />
+      <LineId Id="4158" Count="11" />
+      <LineId Id="4444" Count="0" />
+      <LineId Id="4170" Count="3" />
+      <LineId Id="4501" Count="0" />
+      <LineId Id="4174" Count="0" />
+      <LineId Id="4498" Count="2" />
+      <LineId Id="4175" Count="141" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

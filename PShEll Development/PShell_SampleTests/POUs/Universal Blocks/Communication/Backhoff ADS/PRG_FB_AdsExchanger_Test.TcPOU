@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_AdsExchanger_Test" Id="{c932cfdb-7b14-48bb-83b4-0f37165b0038}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_AdsExchanger_Test
+VAR
+	bFirstCycle 	: BOOL := TRUE;
+	bInit 			: BOOL;
+	bDeinit 		: BOOL;
+	bRead 			: BOOL;
+	bWritte 		: BOOL;
+	bReset 			: BOOL;
+	
+	sAmsNetID		: STRING	:= '5.68.97.76.1.1';
+	iAmsPort 		: UINT 		:= 851;
+	iIndexGroup 	: UDINT 	:= 16#4020;
+	iIndexOffset	: UDINT 	:= 0;
+	
+	bActive			: BOOL;
+	bBusy			: BOOL;
+	bError			: BOOL;
+	iErrorID		: UDINT;
+	iAdsErrorID 	: UDINT;
+	State 			: E_AdsExchangerState;
+	
+	sReadMessage 	: STRING;
+	sWritteMessage 	: STRING;
+	
+	fbAdsExchanger	: FB_AdsExchanger;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	fbAdsExchanger.MR_FirstCycle('My test ADS exchanger', sAmsNetID, iAmsPort);
+END_IF
+
+bActive := fbAdsExchanger.Active;
+bBusy := fbAdsExchanger.Busy;
+bError := fbAdsExchanger.Error;
+iErrorID := fbAdsExchanger.ErrorID;
+State := fbAdsExchanger.State;
+
+IF bInit THEN
+	IF fbAdsExchanger.MR_Init() THEN
+		bInit := FALSE;
+	END_IF
+	
+ELSIF bDeinit THEN
+	IF fbAdsExchanger.MR_Abort() THEN
+		bDeinit := FALSE;
+	END_IF
+	
+ELSIF bRead THEN
+	IF fbAdsExchanger.MR_Read(ADR(sReadMessage)) THEN
+		bRead := FALSE;
+	END_IF
+	
+ELSIF bWritte THEN
+	IF fbAdsExchanger.MR_Writte(ADR(sWritteMessage)) THEN
+		bWritte := FALSE;
+	END_IF
+	
+ELSIF bReset THEN
+	IF fbAdsExchanger.MR_Reset() THEN
+		bReset := FALSE;
+	END_IF
+	
+END_IF
+
+fbAdsExchanger.AmsNetID		:= sAmsNetID;
+fbAdsExchanger.AmsPort 		:= iAmsPort;
+fbAdsExchanger.IndexGroup 	:= iIndexGroup;
+fbAdsExchanger.IndexOffset 	:= iIndexOffset;
+
+fbAdsExchanger();
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_AdsExchanger_Test">
+      <LineId Id="372" Count="20" />
+      <LineId Id="443" Count="3" />
+      <LineId Id="397" Count="19" />
+      <LineId Id="23" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

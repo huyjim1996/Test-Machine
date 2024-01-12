@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_FixtureLoadNormResult" Id="{6752d772-e1a3-45c4-a26f-d4d1df630cd3}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_FixtureLoadNormResult :
+(
+	FIXTURE_NORM_LOAD_UNKNOWN				:= 0,	(*  *)
+	FIXTURE_NORM_LOAD_SUCCESS				:= 10,	(*  *)
+	FIXTURE_NORM_LOAD_FAIL					:= 20,	(*  *)
+	FIXTURE_NORM_LOAD_GOLDEN_SAMPLE_NEEDED 	:= 30	(*	*)
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

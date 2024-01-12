@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<TcEventSources Version="2">
+	<Source>
+		<GUID>{F74B3C58-7DB8-41C8-83B8-DDDFF5C7CF2A}</GUID>
+		<Name LcId="1033">ShellMachineEventClass_DisplayText</Name>
+		<Event>
+			<Id>1</Id>
+			<Message LcId="1033">Machine initialization started</Message>
+		</Event>
+		<Event>
+			<Id>2</Id>
+			<Message LcId="1033">Machine initialization done</Message>
+		</Event>
+		<Event>
+			<Id>3</Id>
+			<Message LcId="1033">Machine in automatic mode</Message>
+		</Event>
+		<Event>
+			<Id>4</Id>
+			<Message LcId="1033">Switching machine to manual mode</Message>
+		</Event>
+		<Event>
+			<Id>5</Id>
+			<Message LcId="1033">Machine in manual mode</Message>
+		</Event>
+		<Event>
+			<Id>6</Id>
+			<Message LcId="1033">Switching machine to automatic mode</Message>
+		</Event>
+		<Event>
+			<Id>7</Id>
+			<Message LcId="1033">Automatic work started</Message>
+		</Event>
+		<Event>
+			<Id>8</Id>
+			<Message LcId="1033">Automatic work stopped</Message>
+		</Event>
+		<Event>
+			<Id>9</Id>
+			<Message LcId="1033">Machine reset started</Message>
+		</Event>
+		<Event>
+			<Id>10</Id>
+			<Message LcId="1033">Machine reset done</Message>
+		</Event>
+		<Event>
+			<Id>11</Id>
+			<Message LcId="1033">Machine abort started</Message>
+		</Event>
+		<Event>
+			<Id>12</Id>
+			<Message LcId="1033">Machine abort done</Message>
+		</Event>
+	</Source>
+	<Source>
+		<GUID>{76544162-D4F0-4999-A188-86C85828811B}</GUID>
+		<Name LcId="1033">ShellRecipesEventClass</Name>
+		<Event>
+			<Id>1</Id>
+			<Message LcId="1033">Recipes manager failed error</Message>
+		</Event>
+		<Event>
+			<Id>2</Id>
+			<Message LcId="1033">Recipes manager parameter error</Message>
+		</Event>
+		<Event>
+			<Id>3</Id>
+			<Message LcId="1033">Recipes manager not initialized</Message>
+		</Event>
+		<Event>
+			<Id>4</Id>
+			<Message LcId="1033">Recipes manager not implemented</Message>
+		</Event>
+		<Event>
+			<Id>5</Id>
+			<Message LcId="1033">Recipes manager no object error</Message>
+		</Event>
+		<Event>
+			<Id>6</Id>
+			<Message LcId="1033">Recipes manager file has no memory</Message>
+		</Event>
+		<Event>
+			<Id>7</Id>
+			<Message LcId="1033">Recipes manager file not found</Message>
+		</Event>
+		<Event>
+			<Id>8</Id>
+			<Message LcId="1033">Recipe mismatch error</Message>
+		</Event>
+		<Event>
+			<Id>9</Id>
+			<Message LcId="1033">Recipe save error</Message>
+		</Event>
+		<Event>
+			<Id>10</Id>
+			<Message LcId="1033">Recipe not found</Message>
+		</Event>
+		<Event>
+			<Id>11</Id>
+			<Message LcId="1033">Recipe definition not found</Message>
+		</Event>
+		<Event>
+			<Id>12</Id>
+			<Message LcId="1033">Recipe already exist</Message>
+		</Event>
+		<Event>
+			<Id>13</Id>
+			<Message LcId="1033">No recipe manager set</Message>
+		</Event>
+		<Event>
+			<Id>14</Id>
+			<Message LcId="1033">Not all recipe variables were loaded</Message>
+		</Event>
+		<Event>
+			<Id>15</Id>
+			<Message LcId="1033">Recipe has no memory</Message>
+		</Event>
+		<Event>
+			<Id>16</Id>
+			<Message LcId="1033">Recipe manager locked during online change</Message>
+		</Event>
+		<Event>
+			<Id>17</Id>
+			<Message LcId="1033">Recipe manager source exhausted</Message>
+		</Event>
+		<Event>
+			<Id>18</Id>
+			<Message LcId="1033">Recipe manager target exhausted</Message>
+		</Event>
+		<Event>
+			<Id>19</Id>
+			<Message LcId="1033">Recipe manager source illegal</Message>
+		</Event>
+	</Source>
+</TcEventSources>

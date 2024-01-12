@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_FixtureStateTest" Id="{5e824dfa-e871-4d13-8c74-7379916327bc}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_FixtureStateTest :
+(
+	FIXTURE_TEST_WAIT_FOR_COMMAND 			:= 0,	(*  *)
+	FIXTURE_TEST_INIT						:= 10,	(*  *)
+	FIXTURE_TEST_OPEN						:= 20,	(*  *)
+	FIXTURE_TEST_CLOSE						:= 30,	(*  *)
+	FIXTURE_TEST_MEASURE					:= 40,	(*  *)
+	FIXTURE_TEST_RESET						:= 50,	(*  *)
+	FIXTURE_TEST_PLATFORM_HOME				:= 60,	(*  *)
+	FIXTURE_TEST_PLATFORM_ACTIVE			:= 70,	(*  *)
+	FIXTURE_TEST_PRODUCT_HOLD				:= 80,	(*  *)
+	FIXTURE_TEST_PRODUCT_RELEASE			:= 90,	(*  *)
+	FIXTURE_TEST_PLATFORM_ACTIVE_AND_OPEN	:= 100,	(*  *)
+	FIXTURE_TEST_PLATFORM_HOME_AND_CLOSE	:= 110,	(*  *)
+	FIXTURE_TEST_LOAD_NORM					:= 120,	(*  *)
+	FIXTURE_TEST_MEASUREMENT				:= 130,	(*  *)
+	FIXTURE_START_POS						:= 210,
+	FIXTURE_TEST_HOME						:= 220,
+	FIXTURE_TEST_ERROR						:= 999,
+	FIXTURE_TEST_ABORT						:= -10	(*  *)
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

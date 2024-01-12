@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_FcqFixtureStateGSampleMeas" Id="{f7f326db-b0da-4daa-a3a9-1353673f0779}">
+    <Declaration><![CDATA[
+{attribute 'strict'}
+TYPE E_FcqFixtureStateGSampleMeas :
+(
+	FIXTURE_GOLDEN_SAMPLE_CLOSE								:= 0,
+	FIXTURE_GOLDEN_SAMPLE_SEND_MEASURE_COMMAND				:= 10,
+	FIXTURE_GOLDEN_SAMPLE_WAIT_FOR_RESPONSE 				:= 20,
+	FIXTURE_GOLDEN_SAMPLE_OPEN								:= 30,
+	FIXTURE_GOLDEN_SAMPLE_MEASUREMENT_DONE					:= 40,
+	FIXTURE_GOLDEN_SAMPLE_WAIT_FOR_UTU						:= 50
+	
+	
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

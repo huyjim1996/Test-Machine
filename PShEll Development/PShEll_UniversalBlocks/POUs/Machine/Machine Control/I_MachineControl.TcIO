@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <Itf Name="I_MachineControl" Id="{575cfd35-d864-4f94-b2bb-e1e7c6df6ebc}">
+    <Declaration><![CDATA[INTERFACE I_MachineControl EXTENDS I_UniversalMachine
+]]></Declaration>
+    <Property Name="Robots" Id="{508a7188-8eec-4c0a-b26d-0bdcd24ff2fb}">
+      <Declaration><![CDATA[PROPERTY Robots : REFERENCE TO FB_CR800EtherCAT]]></Declaration>
+      <Get Name="Get" Id="{eed6073b-58a6-4232-ab65-7b3da114e4ea}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

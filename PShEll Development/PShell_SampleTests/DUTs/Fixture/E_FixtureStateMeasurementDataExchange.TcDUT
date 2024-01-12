@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_FixtureStateMeasurementDataExchange" Id="{81decc9f-867d-4363-b28d-f0b680c02d8d}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_FixtureStateMeasurementDataExchange :
+(
+	FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_BUSY 		:= 0,
+	FIXTURE_MEASURE_DATA_EXCHANGING_WAIT_FOR_FISNISH 	:= 10,
+	FIXTURE_MEASURE_DATA_EXCHANGING_PROCCESS_RESULTS 	:= 20,
+	FIXTURE_MEASURE_DATA_EXCHANGING_DONE				:= 30
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

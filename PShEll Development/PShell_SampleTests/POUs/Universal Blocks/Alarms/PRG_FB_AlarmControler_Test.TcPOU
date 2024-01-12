@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_AlarmControler_Test" Id="{3aaba8a3-39aa-4070-802d-825e4a109492}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_AlarmControler_Test
+VAR
+	bFirstCycle			: BOOL := TRUE;
+	sName				: STRING := 'Alarm Controler Test';	
+
+	(* Function blocks *)
+	fbAlarmControler	: FB_AlarmControler;
+	fbTestMessage		: FB_TcMessage;
+	fbTestAlarm			: FB_TcAlarm;
+	fbTestAlarm2		: FB_TcAlarm;
+	
+	(* Auxilary test commands *)
+	bInit 				: BOOL;
+	bAbort 				: BOOL;
+	bClear				: BOOL;
+	bClearAll 			: BOOL;
+	bConfirm 			: BOOL;
+	bConfirmAll 		: BOOL;
+	bExport 			: BOOL;
+	
+	bRaiseAlarm			: BOOL;
+	bAddMessage 		: BOOL;
+	bRaiseAlarm2		: BOOL;
+	
+	(* Auxilary test parameters *)
+	bResetConfirmation 	: BOOL := TRUE;
+	sFileName			: STRING := 'C:\TwinCAT\Tests\EventLogger\events.csv';
+	
+	(* Auxilary test status *)
+	bActive 			: BOOL;
+	bBusy				: BOOL;
+	bError				: BOOL;
+	iErrorID 			: UDINT;
+	eState				: E_AlarmControlerState;
+	
+	iState : USINT;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	fbAlarmControler.MR_FirstCycle( sName := sName,
+									sFileName := sFileName);
+									
+	//fbTestMessage.CreateEx(TC_EVENTS.TestEventClass.TestMessage,0);
+	//fbTestAlarm.CreateEx(TC_EVENTS.TestEventClass.TestAlarm1,TRUE,0);
+	//fbTestAlarm2.CreateEx(TC_EVENTS.TestEventClass.TestAlarm2,FALSE,0);
+END_IF
+
+IF bAddMessage THEN
+	bAddMessage := FALSE;
+	fbTestMessage.Send(0);
+	
+ELSIF bRaiseAlarm THEN
+	bRaiseAlarm := FALSE;
+	fbTestAlarm.Raise(0);
+
+ELSIF bRaiseAlarm2 THEN
+	bRaiseAlarm2 := FALSE;
+	fbTestAlarm2.Raise(0);
+	
+END_IF
+
+bActive := fbAlarmControler.Active;
+bBusy := fbAlarmControler.Busy;
+bError := fbAlarmControler.Error;
+eState := fbAlarmControler.State;
+
+CASE iState OF
+	0:
+		IF bInit THEN
+			bInit := FALSE;
+			iState := 10;
+			
+		ELSIF bAbort THEN
+			bAbort := FALSE;
+			iState := 20;
+			
+		ELSIF bClear THEN
+			bClear := FALSE;
+			iState := 30;
+			
+		ELSIF bClearAll THEN
+			bClearAll := FALSE;
+			iState := 40;
+			
+		ELSIF bConfirm THEN
+			bConfirm := FALSE;
+			iState := 50;
+			
+		ELSIF bConfirmAll THEN
+			bConfirmAll := FALSE;
+			iState := 60;
+			
+		ELSIF bExport THEN
+			bExport := FALSE;
+			iState := 70;
+			
+		END_IF
+	10:
+		fbAlarmControler.MR_Init();
+		
+		IF fbAlarmControler.Active THEN
+			iState := 0;
+		END_IF
+	20:
+		fbAlarmControler.MR_Abort();
+		
+		IF NOT fbAlarmControler.Active THEN
+			iState := 0;
+		END_IF
+	30:
+		fbAlarmControler.MR_Clear(0,bResetConfirmation);
+		
+		IF NOT fbAlarmControler.Busy THEN
+			iState := 0;
+		END_IF
+	40:
+		fbAlarmControler.MR_ClearAll(bResetConfirmation);
+		
+		IF NOT fbAlarmControler.Busy THEN
+			iState := 0;
+		END_IF
+	50:
+		fbAlarmControler.MR_Confirm(0);
+		
+		IF NOT fbAlarmControler.Busy THEN
+			iState := 0;
+		END_IF
+	60:
+		fbAlarmControler.MR_ConfirmAll(bResetConfirmation);
+		
+		IF NOT fbAlarmControler.Busy THEN
+			iState := 0;
+		END_IF
+	70:
+		fbAlarmControler.MR_Export();
+		
+		IF NOT fbAlarmControler.Busy THEN
+			iState := 0;
+		END_IF
+		
+END_CASE
+
+fbAlarmControler();]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

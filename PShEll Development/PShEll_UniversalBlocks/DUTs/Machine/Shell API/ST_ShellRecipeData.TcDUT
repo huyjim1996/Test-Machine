@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="ST_ShellRecipeData" Id="{0c8de577-bcb7-4c43-95ba-615d9db41a4f}">
+    <Declaration><![CDATA[TYPE ST_ShellRecipeData :
+STRUCT
+	(* Add recipe variables here and link them with RecipeManager in Tc3 XAE Shell *)
+	rpVar1 : FB_RecipeParameter;
+	rpVar2 : FB_RecipeParameter;
+	rpVar3 : FB_RecipeParameter;
+	rpVar4 : FB_RecipeParameter;
+	rpVar5 : FB_RecipeParameter;
+	rpVar6 : FB_RecipeParameter;
+	rpVar7 : FB_RecipeParameter;
+	rpVar8 : FB_RecipeParameter;
+	rpVar9 : FB_RecipeParameter;
+    rpVar10 : FB_RecipeParameter;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

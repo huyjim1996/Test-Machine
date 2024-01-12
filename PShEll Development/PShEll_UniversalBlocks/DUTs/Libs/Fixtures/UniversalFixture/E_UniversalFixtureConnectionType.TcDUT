@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_UniversalFixtureConnectionType" Id="{3380747e-255e-48d7-9068-4e7d7d209bdb}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_UniversalFixtureConnectionType :
+(
+	UNIVERSAL_FIXTURE_CLIENT_CONNECTION		:= 0,	(* Fixture will connect as a client *)
+	UNIVERSAL_FIXTURE_SERVER_CONNECTION 	:= 10	(* Fixture will connect as a server  *)
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

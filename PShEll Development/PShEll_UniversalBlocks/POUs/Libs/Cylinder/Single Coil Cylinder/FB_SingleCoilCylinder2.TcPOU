@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_SingleCoilCylinder2" Id="{87e9b1e8-1d0e-4fe5-af4c-5c7aec32bcba}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SingleCoilCylinder2 EXTENDS FB_UniversalCylinder
+VAR_INPUT
+	
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	(* Coils *)
+	poActiveValve	: FB_DigitalOutput;	(* Active position valve function block *)
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	poActiveValve.MR_FirstCycle( sName := CONCAT(sName,':Active_Valve'),sModuleType := ref_poActiveValve.ModuleType, sPortID:= ref_poActiveValve.PortID);
+END_IF
+
+SUPER^();
+
+bPositionHold := poActiveValve.Out;
+
+poActiveValve();]]></ST>
+    </Implementation>
+    <Folder Name="Internal" Id="{90060da8-6092-4740-aadb-0012173148cc}" />
+    <Folder Name="Properties" Id="{0c0e9112-4ad8-4ce8-86aa-3d33b9ced516}">
+      <Folder Name="References" Id="{9f0e2691-ee5a-4ae2-9914-400b578cf599}" />
+    </Folder>
+    <Folder Name="Requests" Id="{a309b68b-c4eb-4f49-b661-d9a46afac2f0}" />
+    <Folder Name="State Machine" Id="{373e02d9-f7ef-4e38-969d-7bd2c5bb3519}" />
+    <Method Name="M_SimulationLogic" Id="{303b1cfd-cea3-4ea8-a89e-528d59fd8912}" FolderPath="Internal\">
+      <Declaration><![CDATA[METHOD PROTECTED M_SimulationLogic
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF poActiveValve.Out THEN
+	piActiveSensor.MR_SetForceValue();
+	piHomeSensor.MR_ResetForceValue();
+	
+ELSIF NOT poActiveValve.Out THEN
+	piActiveSensor.MR_ResetForceValue();
+	piHomeSensor.MR_SetForceValue();
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_GoActive" Id="{3575ff6f-bc64-439b-9d93-4bf55d84cdf9}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_GoActive : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eCylinderState = CYLINDER_IDLE AND NOT poActiveValve.Out THEN
+	bBusy := TRUE;
+	bGoActive := TRUE;
+	MR_GoActive := FALSE;
+	eCylinderState := CYLINDER_GO_ACTIVE;
+	eCylinderGoActiveState := CYLINDER_MOVE_START_TRACKING;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : active position requested'));	
+	
+	
+ELSIF eCylinderState = CYLINDER_GO_ACTIVE_DONE THEN
+	bGoActive := FALSE;
+	MR_GoActive := TRUE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : active position done'));		
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_GoHome" Id="{f9a57cd2-08ce-41da-97af-6e2191495a41}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_GoHome : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eCylinderState = CYLINDER_IDLE AND poActiveValve.Out THEN
+	bBusy := TRUE;
+	bGoHome := TRUE;
+	MR_GoHome := FALSE;
+	eCylinderState := CYLINDER_GO_HOME;
+	eCylinderGoHomeState := CYLINDER_MOVE_START_TRACKING;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : home position requested'));	
+	
+ELSIF eCylinderState = CYLINDER_GO_HOME_DONE THEN
+	bGoHome := FALSE;
+	MR_GoHome := TRUE;
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : home position done'));	
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_GoActive" Id="{da4cb698-1b22-478b-97f0-6628b26af4b6}" FolderPath="State Machine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_GoActive
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[poActiveValve.Out := TRUE;
+
+CASE eCylinderGoActiveState OF
+	CYLINDER_MOVE_START_TRACKING:
+		piActiveSensor.MR_StartTracking();
+		
+		IF piActiveSensor.In THEN
+			IF TIME_TO_INT(tDelay) = 0 THEN
+				eCylinderGoActiveState := CYLINDER_MOVE_DONE;
+			ELSE
+				eCylinderGoActiveState := CYLINDER_MOVE_DELAY;
+			END_IF
+		END_IF
+		
+	CYLINDER_MOVE_DELAY:
+		tonGoActiveDelay( IN := TRUE, PT := tDelay);
+		
+		IF tonGoActiveDelay.Q THEN
+			tonGoActiveDelay( IN := FALSE );
+			eCylinderGoActiveState := CYLINDER_MOVE_DONE;
+		END_IF
+		
+	CYLINDER_MOVE_DONE:
+		eCylinderState := CYLINDER_GO_ACTIVE_DONE;
+		
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_GoHome" Id="{cd3192c0-fd35-42a4-b70f-9e50fd639def}" FolderPath="State Machine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_GoHome
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[poActiveValve.Out := FALSE;
+
+CASE eCylinderGoHomeState OF
+	CYLINDER_MOVE_START_TRACKING:
+		piHomeSensor.MR_StartTracking();
+		
+		IF piHomeSensor.In THEN
+			IF TIME_TO_INT(tDelay) = 0 THEN
+				eCylinderGoHomeState := CYLINDER_MOVE_DONE;
+			ELSE
+				eCylinderGoHomeState := CYLINDER_MOVE_DELAY;
+			END_IF
+		END_IF
+		
+	CYLINDER_MOVE_DELAY:
+		tonGoHomeDelay( IN := TRUE, PT := tDelay);
+		
+		IF tonGoHomeDelay.Q THEN
+			tonGoHomeDelay( IN := FALSE);
+			eCylinderGoHomeState := CYLINDER_MOVE_DONE;
+		END_IF
+		
+	CYLINDER_MOVE_DONE:
+		eCylinderState := CYLINDER_GO_HOME_DONE;
+	
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Release" Id="{08fe64ed-81a3-4337-8476-d4636eab01f3}" FolderPath="State Machine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Release
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[poActiveValve.Out := FALSE;
+eCylinderState := CYLINDER_RELEASE_DONE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Reset" Id="{6d6e3006-ddda-41d4-b5c1-8c45cba1a8cb}" FolderPath="State Machine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[poActiveValve.Out := FALSE;
+
+SUPER^.MS_Reset();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Uninitialized" Id="{cbf81456-4ac9-45fa-8818-518451d07fdc}" FolderPath="State Machine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Uninitialized
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[poActiveValve.Out := FALSE;
+SUPER^.MS_Uninitialized();]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="ref_poActiveValve" Id="{035f44fc-49e6-46bf-a6a6-525ba569fdc7}" FolderPath="Properties\References\">
+      <Declaration><![CDATA[PROPERTY ref_poActiveValve : REFERENCE TO FB_DigitalOutput]]></Declaration>
+      <Get Name="Get" Id="{812455f3-75b1-46a0-a422-ab44c2da8c1b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ref_poActiveValve REF= poActiveValve;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <LineIds Name="FB_SingleCoilCylinder2">
+      <LineId Id="3" Count="1" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="6" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SingleCoilCylinder2.M_SimulationLogic">
+      <LineId Id="3" Count="7" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SingleCoilCylinder2.MR_GoActive">
+      <LineId Id="3" Count="13" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SingleCoilCylinder2.MR_GoHome">
+      <LineId Id="3" Count="12" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SingleCoilCylinder2.MS_GoActive">
+      <LineId Id="3" Count="24" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SingleCoilCylinder2.MS_GoHome">
+      <LineId Id="3" Count="24" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SingleCoilCylinder2.MS_Release">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SingleCoilCylinder2.MS_Reset">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SingleCoilCylinder2.MS_Uninitialized">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SingleCoilCylinder2.ref_poActiveValve.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

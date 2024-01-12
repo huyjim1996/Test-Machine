@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_UniversalFixtureStateInit" Id="{ef43f28b-4514-4db7-8719-ce9f258d6366}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_UniversalFixtureStateInit :
+(
+	UNIVERSAL_FIXTURE_INIT_TCP_SERVER	:= 0,	(*  *)
+	UNIVERSAL_FIXTURE_INIT_TCP_CLIENT	:= 10,	(*  *)
+	UNIVERSAL_FIXTURE_INIT_FILE_LOGGER	:= 20,	(*  *)
+	UNIVERSAL_FIXTURE_INIT_DONE			:= 30	(*  *)
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

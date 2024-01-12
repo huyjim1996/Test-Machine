@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_FixtureJig" Id="{e5636c51-e4b0-4835-a982-085f2d727f41}" SpecialFunc="None">
+    <Declaration><![CDATA[(*
+Copyrights	: Precision Systems Engineering
+Author		: ADBO
+Date		: 07/2022
+Description	: This function block implements basic feature of Automatic FCQ fixture based on FB_UniversalFixture from PSE Shell library.
+*)
+FUNCTION_BLOCK FB_FixtureJig EXTENDS FB_UniversalFixture
+VAR CONSTANT
+	(* Fixture cover cylinder default setup *)
+	sCOVER_NAME						: STRING := ':Jig';
+	tCOVER_OPEN_TIMEOUT				: TIME	 := T#5S;
+	tCOVER_CLOSE_TIMEOUT			: TIME	 := T#5S;
+	tCOVER_MOVE_DELAY 				: TIME	 := T#0MS; //200MS
+	sCOVER_HOME_SENSOR_MODULE		: STRING := 'Mainfold IO1';
+	sCOVER_HOME_SENSOR_PORT_ID		: STRING := '1';
+	sCOVER_ACTIVE_SENSOR_MODULE		: STRING := 'Mainfold IO1';
+	sCOVER_ACTIVE_SENSOR_PORT_ID	: STRING := '2';
+END_VAR
+VAR
+	eJigStateInit			: E_FixtureJigStateInit;	(*  *)
+	eJigStateAbort			: E_FixtureJigStateAbort;	(*  *)
+	eJigStateReset			: E_FixtureJigStateReset;	(*  *)
+	
+	(* Function blocks *)
+	fbJig					: FB_DoubleCoilCylinder;	(*  *)
+	
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	fbJig.MR_FirstCycle( 	sName 					:= CONCAT(STR1 := THIS^.sName, STR2 := sCOVER_NAME),
+							sHomeSensorModuleType	:= sCOVER_HOME_SENSOR_MODULE,
+							sHomeSensorPortID		:= sCOVER_HOME_SENSOR_PORT_ID,
+							sActiveSensorModuleType	:= sCOVER_ACTIVE_SENSOR_MODULE,
+							sActiveSensorPortID		:= sCOVER_ACTIVE_SENSOR_PORT_ID,
+							tGoHomeTimeout 			:= tCOVER_CLOSE_TIMEOUT ,
+							tGoActiveTimeout		:= tCOVER_OPEN_TIMEOUT,
+							tDelay 					:= tCOVER_MOVE_DELAY);				
+END_IF
+
+(* Run parent main implementation *)
+SUPER^();
+
+(* Update status flags*)
+bError := bError OR fbJig.Error;
+
+(* Run product cover cylinder instance *)
+fbJig();]]></ST>
+    </Implementation>
+    <Folder Name="Properties" Id="{680eb5e8-378f-482d-a481-1757425abc37}">
+      <Folder Name="Parameters" Id="{5315b572-e117-488c-8635-af6caf8fcb8b}" />
+      <Folder Name="References" Id="{4f81a769-5b79-460b-9f9f-8983b96dbf0d}" />
+      <Folder Name="Status" Id="{99588dd3-dd7c-45cd-a8f4-ee175008288b}" />
+    </Folder>
+    <Folder Name="StateMachine" Id="{519be3b1-b70c-47a4-9678-b3dfeeabcfdf}" />
+    <Property Name="JigSimulation" Id="{ee2167d3-6201-4f92-919c-60e2bb182dca}" FolderPath="Properties\Parameters\">
+      <Declaration><![CDATA[PROPERTY JigSimulation : BOOL]]></Declaration>
+      <Get Name="Get" Id="{96484929-2eec-44df-b3b6-654b596ecf0d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[JigSimulation := fbJig.Simulation;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{7f590b6a-1630-4a03-9493-7a12960a6ec2}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[fbJig.Simulation := JigSimulation;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="MS_Aborting" Id="{ea696868-4ba7-4222-ada9-9a743042bed4}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Aborting
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eJigStateAbort OF	
+	(* Abort fixture product cover pusher *)
+	FIXTURE_JIG_ABORT_JIG_PUSHER:
+		fbJig.MR_Abort();
+		IF NOT fbJig.Active THEN
+			eFixtureStateAbort := UNIVERSAL_FIXTURE_ABORT_FILE_LOGGER;
+			eJigStateAbort := FIXTURE_JIG_ABORT_DONE;
+		END_IF
+	
+	(* Aborting done - run parent initialization *)
+	FIXTURE_JIG_ABORT_DONE:
+		SUPER^.MS_Aborting();
+		
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Close" Id="{1d9cec89-1e6d-4577-9b78-dd8dc95dc815}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Close
+VAR_INPUT
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbJig.MR_GoHome();
+IF fbJig.PositionHome AND NOT fbJig.Busy THEN
+	eFixtureState := UNIVERSAL_FIXTURE_METHOD_DONE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Initializing" Id="{d0514c4c-97bd-4e3a-8bac-d55ec1889c4e}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Initializing
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eJigStateInit OF
+	(* Initialize fixture product cover pusher *)
+	FIXTURE_JIG_INIT_JIG_PUSHER:
+		fbJig.MR_Init();
+		
+		IF fbJig.Active THEN
+			IF eConnnectionType = UNIVERSAL_FIXTURE_CLIENT_CONNECTION THEN
+				eFixtureStateInit := UNIVERSAL_FIXTURE_INIT_TCP_CLIENT;
+			ELSIF eConnnectionType = UNIVERSAL_FIXTURE_SERVER_CONNECTION THEN
+				eFixtureStateInit := UNIVERSAL_FIXTURE_INIT_TCP_SERVER;
+			END_IF
+			eJigStateInit := FIXTURE_JIG_INIT_DONE;
+			
+		END_IF
+	
+	(* Initializing done - run parent initialization*)
+	FIXTURE_JIG_INIT_DONE:
+		SUPER^.MS_Initializing();
+		
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Open" Id="{82b9bb02-384f-44d0-97a2-43c4b3694269}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Open
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbJig.MR_GoActive();
+IF fbJig.PositionActive AND NOT fbJig.Busy THEN
+	eFixtureState := UNIVERSAL_FIXTURE_METHOD_DONE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Ready" Id="{339ac300-1730-47fa-8089-addc695d8886}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Ready
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eFixtureState := UNIVERSAL_FIXTURE_IDLE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_ReadyInitialized" Id="{0d42e4fa-0517-439c-bdf0-2bffe52984c8}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED  MS_ReadyInitialized
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[bBusy := FALSE;
+eFixtureState := UNIVERSAL_FIXTURE_IDLE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Reset" Id="{38aa9986-58da-43ba-8748-62bea4386ad4}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eJigStateReset OF
+	FIXTURE_JIG_RESET_JIG_PUSHER:
+		fbJig.MR_Reset();
+		IF NOT fbJig.Error THEN
+			eFixtureStateReset := UNIVERSAL_FIXTURE_RESETING_FILE_LOGGER;
+			eJigStateReset := FIXTURE_JIG_RESET_DONE;
+		END_IF
+		
+	FIXTURE_JIG_RESET_DONE:
+		SUPER^.MS_Reset();
+		
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="ref_Jig" Id="{ea8a89f7-b80c-4dc9-a1f7-b45baae08044}" FolderPath="Properties\References\">
+      <Declaration><![CDATA[PROPERTY ref_Jig : REFERENCE TO FB_DoubleCoilCylinder]]></Declaration>
+      <Get Name="Get" Id="{bca8ac45-ea9b-4211-bcef-cc70cb06bf3f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ref_Jig REF= fbJig;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="SocketOpen" Id="{44e874ef-c209-481d-b916-ae262e3ed7a9}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY SocketOpen : REFERENCE TO BOOL]]></Declaration>
+      <Get Name="Get" Id="{7a8aef18-9341-4481-a1a2-b9df69ce42c8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SocketOpen REF= fbJig.PositionActive;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <LineIds Name="FB_FixtureJig">
+      <LineId Id="3" Count="1" />
+      <LineId Id="39" Count="3" />
+      <LineId Id="5" Count="11" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FixtureJig.JigSimulation.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FixtureJig.JigSimulation.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FixtureJig.MS_Aborting">
+      <LineId Id="3" Count="3" />
+      <LineId Id="8" Count="8" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FixtureJig.MS_Close">
+      <LineId Id="3" Count="0" />
+      <LineId Id="5" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FixtureJig.MS_Initializing">
+      <LineId Id="3" Count="18" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FixtureJig.MS_Open">
+      <LineId Id="3" Count="0" />
+      <LineId Id="5" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FixtureJig.MS_Ready">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FixtureJig.MS_ReadyInitialized">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FixtureJig.MS_Reset">
+      <LineId Id="3" Count="2" />
+      <LineId Id="7" Count="7" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FixtureJig.ref_Jig.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FixtureJig.SocketOpen.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

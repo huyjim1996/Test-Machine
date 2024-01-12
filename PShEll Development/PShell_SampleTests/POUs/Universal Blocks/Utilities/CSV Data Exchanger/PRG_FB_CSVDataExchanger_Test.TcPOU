@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_CSVDataExchanger_Test" Id="{2f876af1-9d65-4ca4-80a8-394db43dc702}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_CSVDataExchanger_Test
+VAR
+	fbCSVDataExchanger	 		: FB_CSVDataExchanger;
+	bFirstCycle 				: BOOL 		:= TRUE;
+	
+	sFileDir 					: STRING 	:= 'C:\TwinCAT\Tests\CSV_Reader\';
+	sFileName 					: STRING 	:= 'Demo_Excel_File_FQC_Inputs_Test_2';
+	sAmsNetId  					: STRING 	:= '';
+	bAddHeader					: BOOL		:= FALSE;
+	bCreateFile					: BOOL 		:= FALSE;
+	bChangeSeparatorToComma		: BOOL 		:= FALSE;
+	iMaxRowsNumber				: UDINT;
+	iMaxColumnsNumber			: UDINT;
+	
+	bInit						: BOOL;
+	bAbort						: BOOL;
+	bReset						: BOOL;
+	bSelectAll					: BOOL;
+	bSelectRow					: BOOL;
+	bSelectPath					: BOOL;
+	bParseString				: BOOL;
+			
+	arrDatabase					: ARRAY[0..iMAX_CSV_ROWS - 1, 0..iMAX_CSV_COLUMNS - 1] OF STRING(iMAX_CSV_FIELD_LENGTH); (* Target PLC database *)	
+	
+	arrParsedString				: ARRAY[0..iMAX_CSV_COLUMNS - 1] OF STRING(iMAX_CSV_FIELD_LENGTH);	(* Target PLC database *)
+
+	iColumnToSearch				: UDINT := 3;
+	sValueToSearch			 	: WSTRING := "2";
+	sRowResult				 	: STRING;
+	
+	
+	iStateMachine				: USINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	fbCSVDataExchanger.MR_FirstCycle(sFileDir 	:= sFileDir,
+									sFileName 	:= sFileName,
+									sAmsNetId 	:= '',
+									bChangeSeparatorToComma := bChangeSeparatorToComma);									
+	bFirstCycle := FALSE;
+	
+END_IF
+
+IF bReset THEN
+	bReset := FALSE;
+	iStateMachine := 50;
+	
+ELSIF bAbort THEN
+	bAbort := FALSE;
+	iStateMachine := 60;
+
+END_IF	
+
+CASE iStateMachine OF
+	0: 
+		IF bInit THEN
+			fbCSVDataExchanger.MR_Init();
+			
+			IF NOT fbCSVDataExchanger.Busy THEN
+				bInit := FALSE;
+				iStateMachine := 10;
+				
+			END_IF
+		END_IF
+		
+	10: 
+		IF bSelectAll THEN
+			bSelectAll := FALSE;
+			iStateMachine := 20;
+		
+		ELSIF bSelectRow THEN
+			bSelectRow := FALSE;
+			iStateMachine := 30;	
+
+		ELSIF bSelectPath THEN
+			bSelectPath := FALSE;
+			iStateMachine := 40;	
+
+		END_IF		
+		
+	20: 
+		fbCSVDataExchanger.MR_SelectAll(iArrDataBaseAdr := ADR(arrDatabase));
+		
+		IF NOT fbCSVDataExchanger.Busy THEN
+			iStateMachine := 10;
+			
+		END_IF
+	
+	30: 
+		fbCSVDataExchanger.MR_SelectRow(iColumnToSearch := iColumnToSearch,
+										sValueToSearch := WSTRING_TO_STRING(sValueToSearch),
+										iArrParsedStringAdr := ADR(arrParsedString),
+										sRowResult => sRowResult);
+		
+		IF NOT fbCSVDataExchanger.Busy THEN
+			iStateMachine := 10;
+			
+		END_IF
+	
+	40:
+		fbCSVDataExchanger.MR_SelectPath(sFileDir := sFileDir,
+										sFileName := sFileName);
+		
+		IF NOT fbCSVDataExchanger.Busy THEN
+			iStateMachine := 10;
+			
+		END_IF	
+
+	50: 
+		fbCSVDataExchanger.MR_Reset();
+		
+		IF NOT fbCSVDataExchanger.Busy THEN
+			IF fbCSVDataExchanger.Active THEN
+				iStateMachine := 10;
+				
+			ELSE
+				iStateMachine := 0;
+			
+			END_IF
+		END_IF
+		
+	60:
+		fbCSVDataExchanger.MR_Abort();
+	
+		IF NOT fbCSVDataExchanger.Busy THEN
+			iStateMachine := 0;
+			
+		END_IF
+		
+END_CASE
+
+fbCSVDataExchanger();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_CSVDataExchanger_Test">
+      <LineId Id="2" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="62" Count="0" />
+      <LineId Id="74" Count="0" />
+      <LineId Id="415" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="241" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="133" Count="0" />
+      <LineId Id="136" Count="0" />
+      <LineId Id="297" Count="0" />
+      <LineId Id="274" Count="0" />
+      <LineId Id="141" Count="1" />
+      <LineId Id="145" Count="0" />
+      <LineId Id="164" Count="0" />
+      <LineId Id="146" Count="0" />
+      <LineId Id="134" Count="0" />
+      <LineId Id="147" Count="0" />
+      <LineId Id="135" Count="0" />
+      <LineId Id="150" Count="0" />
+      <LineId Id="153" Count="1" />
+      <LineId Id="163" Count="0" />
+      <LineId Id="155" Count="1" />
+      <LineId Id="161" Count="1" />
+      <LineId Id="157" Count="0" />
+      <LineId Id="152" Count="0" />
+      <LineId Id="158" Count="0" />
+      <LineId Id="171" Count="0" />
+      <LineId Id="197" Count="1" />
+      <LineId Id="174" Count="0" />
+      <LineId Id="194" Count="1" />
+      <LineId Id="200" Count="0" />
+      <LineId Id="196" Count="0" />
+      <LineId Id="201" Count="2" />
+      <LineId Id="175" Count="0" />
+      <LineId Id="205" Count="0" />
+      <LineId Id="204" Count="0" />
+      <LineId Id="186" Count="0" />
+      <LineId Id="315" Count="0" />
+      <LineId Id="208" Count="2" />
+      <LineId Id="212" Count="1" />
+      <LineId Id="207" Count="0" />
+      <LineId Id="188" Count="1" />
+      <LineId Id="214" Count="0" />
+      <LineId Id="227" Count="0" />
+      <LineId Id="375" Count="1" />
+      <LineId Id="215" Count="1" />
+      <LineId Id="218" Count="1" />
+      <LineId Id="190" Count="0" />
+      <LineId Id="220" Count="0" />
+      <LineId Id="191" Count="0" />
+      <LineId Id="221" Count="0" />
+      <LineId Id="236" Count="0" />
+      <LineId Id="222" Count="1" />
+      <LineId Id="225" Count="1" />
+      <LineId Id="169" Count="0" />
+      <LineId Id="280" Count="1" />
+      <LineId Id="284" Count="2" />
+      <LineId Id="289" Count="6" />
+      <LineId Id="283" Count="0" />
+      <LineId Id="298" Count="0" />
+      <LineId Id="282" Count="0" />
+      <LineId Id="300" Count="2" />
+      <LineId Id="304" Count="1" />
+      <LineId Id="299" Count="0" />
+      <LineId Id="306" Count="0" />
+      <LineId Id="151" Count="0" />
+      <LineId Id="125" Count="1" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

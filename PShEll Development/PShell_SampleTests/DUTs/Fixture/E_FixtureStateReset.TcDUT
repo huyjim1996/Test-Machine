@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_FixtureStateReset" Id="{fc37700b-b54a-4ec7-9467-fdc89b8e2c5f}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_FixtureStateReset :
+(
+	FIXTURE_RESET_CLAMP	:= 0,	(*  *)
+	FIXTURE_RESET_COVER	:= 10,	(*  *)
+	FIXTURE_RESET_DONE	:= 20	(*  *)
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

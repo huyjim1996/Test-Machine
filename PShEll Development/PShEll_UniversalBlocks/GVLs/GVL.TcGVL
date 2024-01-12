@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <GVL Name="GVL" Id="{ec24bbbf-91ba-405c-b81b-1f3d353a3d30}">
+    <Declaration><![CDATA[VAR_GLOBAL CONSTANT	
+	(* --- Alarm controler --- *)
+	iMAX_DEFINITION_EVENTS					: UDINT := 512; 													(* Maximum size of active alarms table *)
+	iMAX_EVENTS								: UDINT	:= 512; 													(* Maximum size of events table *) 
+	
+	(* --- Recipes manager --- *)
+	iMAX_NUMBER_OF_RECIPES					: USINT 		:= 128;												(* Defines maximum number of recipes stored in recipe manager *)
+	iMAX_NUMBER_OF_VARIABLES_IN_RECIPES		: USINT			:= 128;												(* Defines maximum number of parameters stored inside the recipe *)
+	iMAX_RECIPE_NAME_LENGTH					: INT			:= 80;												(* Defines maximum length of the recipe name *)
+	iMAX_RECIPE_DESCRIPTION_LENGTH			: INT			:= 1024;											(* Defines maximum length of the recipe description on HMI screen *)
+	iMAX_RECIPE_RESTOR_BACKUP_PATH_LENGTH	: INT			:= 1024;											(* Defines maximum lenght of the path where recipes are backuped/restored *)
+	sDEFAULT_RECIPE_DEFINITON				: STRING		:= 'Recipes';										(* Defines default name of recipe definition inside recipe manager *)
+	sDEFAULT_LOCAL_STORAGE_PATH				: STRING(512)	:= 'C:\TwinCAT\Tests\Recipes\';						(* Defines defaul path of recipe storage *)
+	
+	(* --- Visu controler --- *)
+	iMAX_AXIS_FRAMES						: USINT := 20;														(* Maximum frames of displayed axis in manual mode *)
+	iMAX_CYLINDER_FRAMES					: USINT := 42;														(* Maximum frames of displayed cylinders in manual mode *)
+	iMAX_OUTPUT_FRAMES						: USINT := 144;														(* Maximum frames of displayed outputs in manual mode *)
+	iMAX_INPUT_FRAMES						: USINT := 144;														(* Maximum frames of displayed inputs in manual mode *)
+	iMAX_SAFE_INPUT_FRAMES					: USINT := 36;														(* Maximum frames of displayed safe inputs in manual mode *)
+	iMAX_SAFE_OUTPUT_FRAMES					: USINT := 36;														(* Maximum frames of displayed safe outputs in manual mode *)
+	iMAX_ROBOT_FRAMES						: USINT := 10;														(* Maximum frames of displayed safe outputs in manual mode *)
+	                                                        													
+	iAXIS_PER_PAGE							: USINT := 2;														(* Number of axis displayed on single page *)
+	iCYLINDERS_PER_PAGE						: USINT := 3;														(* Number of cylinders dislayed on single page *)
+	iOUTPUTS_PER_PAGE						: USINT := 12;														(* Number of outputs displayed on single page *)
+	iINPUTS_PER_PAGE						: USINT := 12;														(* Number of inputs displayed on single page *)
+	iSAFE_INPUTS_PER_PAGE					: USINT := 6;														(* Number of safe inputs displayed on single page*)
+	iSAFE_OUTPUTS_PER_PAGE					: USINT := 6;														(* Number of safe outputs displayed on single page *)
+	iRECIPE_PARAMETERS_PER_PAGE				: USINT := 8;														(* Number of recipes parameters displayed on single page *)
+	iROBOTS_PER_PAGE						: USINT := 1;														(* Number of recipes parameters displayed on single page *)
+	
+	iMAX_AXIS_PAGES							: USINT := iMAX_AXIS_FRAMES / iAXIS_PER_PAGE;						(* Defines maximum pages of axis HMI frames in manual mode *)
+	iMAX_CYLINDER_PAGES						: USINT := iMAX_CYLINDER_FRAMES / iCYLINDERS_PER_PAGE;				(* Defines maximum pages of cylinders HMI frames in manual mode *)
+	iMAX_OUTPUT_PAGES						: USINT := iMAX_OUTPUT_FRAMES / iOUTPUTS_PER_PAGE;					(* Defines maximum pages of digital outputs HMI frames in manual mode *)
+	iMAX_INPUT_PAGES						: USINT := iMAX_INPUT_FRAMES / iINPUTS_PER_PAGE;					(* Defines maximum pages of digital inputs HMI frames in manual mode *)
+	iMAX_SAFE_INPUT_PAGES					: USINT := iMAX_SAFE_INPUT_FRAMES / iSAFE_INPUTS_PER_PAGE;			(* Defines maximum pages of safe inputs HMI frames in manual mode *)
+	iMAX_SAFE_OUTPUT_PAGES					: USINT := iMAX_SAFE_OUTPUT_FRAMES / iSAFE_OUTPUTS_PER_PAGE;		(* Defines maximum pages of safe outputs HMI frames in manual mode *)
+	iMAX_RECIPES_PAGES						: USINT := iMAX_NUMBER_OF_RECIPES / iRECIPE_PARAMETERS_PER_PAGE;	(* Defines maximum pages of recipes parameter HMI frames in manual mode *)
+	iMAX_ROBOT_PAGES						: USINT := iMAX_ROBOT_FRAMES / iROBOTS_PER_PAGE;					(* Defines maximum pages of robots HMI frames *)
+
+	(* --- CSV Data Exchanger --- *)
+	iMAX_CSV_ROWS 							: UDINT := 100;
+	iMAX_CSV_COLUMNS 						: UDINT := 8;
+	iMAX_CSV_FIELD_LENGTH					: UDINT := 100;
+END_VAR
+VAR_GLOBAL
+	(* --- Machine data ---*)
+	sMACHINE_NAME							: STRING := 'PSE Shell Test Machine';								(* Full machine project name *)
+	sSOFTWARE_VERSION						: STRING := '1.0.1.0';												(* Last taged version of control software *)
+	
+	(* --- Shell common features ---*)
+	fbMachineTime							: FB_LocalSystemTime; 												(* Main machine clock - used by implementation of other utilites like Logger and Alarm Controler *)
+	fbMachineLogger 						: FB_FileLogger; 													(* Main machine logger - registers everything that happens on machine *)
+
+	(* --- Shell Machine ---*)
+	stShell : ST_Shell;	(* This structure contains references to Shell modules, recipe parameters and auxilary bit flags *)
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

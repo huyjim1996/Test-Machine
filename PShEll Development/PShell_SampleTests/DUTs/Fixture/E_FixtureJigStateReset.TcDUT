@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_FixtureJigStateReset" Id="{62af540f-5cc2-4c5f-a06b-8c45028370d8}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_FixtureJigStateReset :
+(
+	FIXTURE_JIG_RESET_JIG_PUSHER	:= 10,	(*  *)
+	FIXTURE_JIG_RESET_DONE			:= 0	(*  *)
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

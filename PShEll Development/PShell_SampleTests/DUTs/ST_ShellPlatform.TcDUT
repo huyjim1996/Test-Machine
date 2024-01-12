@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="ST_ShellPlatform" Id="{d19cbd12-dbd6-4bce-af1a-e65d479ffe71}">
+    <Declaration><![CDATA[TYPE ST_ShellPlatform EXTENDS ST_UniversalPlatform :
+STRUCT
+	ref_fbMachineControler : REFERENCE TO FB_MachineControl;	(*  *)
+	//refFbMachineSafety	: REFERENCE TO FB_MachineSafety;	(*  *)
+	ref_fbVisuControler	: REFERENCE TO FB_VisuControl;			(*  *)
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

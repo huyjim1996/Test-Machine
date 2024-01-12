@@ -1,0 +1,489 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <GlobalTextList Name="GlobalTextList" Id="{c9e37845-623f-499e-a18a-5351c3c1b24d}">
+    <XmlArchive>
+      <Data>
+        <o xml:space="preserve" t="GlobalTextListObject">
+          <l n="TextList" t="ArrayList" cet="TextListRow">
+            <o>
+              <v n="TextID">"331"</v>
+              <v n="TextDefault">"%d"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"617"</v>
+              <v n="TextDefault">"%f"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"976"</v>
+              <v n="TextDefault">"%s"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"937"</v>
+              <v n="TextDefault">"(* Add fields for process parameters according to machine specs*)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"396"</v>
+              <v n="TextDefault">"(* Add process parameters here *)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"487"</v>
+              <v n="TextDefault">"Active Alarms"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"960"</v>
+              <v n="TextDefault">"Active alarms"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"649"</v>
+              <v n="TextDefault">"Active critical"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"488"</v>
+              <v n="TextDefault">"Active errors"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"582"</v>
+              <v n="TextDefault">"Active warrnings"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"755"</v>
+              <v n="TextDefault">"Add new recipe with current Values"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"518"</v>
+              <v n="TextDefault">"Admin"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"431"</v>
+              <v n="TextDefault">"Alarms"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"50"</v>
+              <v n="TextDefault">"All"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"917"</v>
+              <v n="TextDefault">"Change pass."</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"902"</v>
+              <v n="TextDefault">"Clear Alarm"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"349"</v>
+              <v n="TextDefault">"Clear All Alarms"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"277"</v>
+              <v n="TextDefault">"Close"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"410"</v>
+              <v n="TextDefault">"Close HMI"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"852"</v>
+              <v n="TextDefault">"Confirm Alarm"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"351"</v>
+              <v n="TextDefault">"Confirm All Alarms"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"197"</v>
+              <v n="TextDefault">"Current value:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"507"</v>
+              <v n="TextDefault">"Errors"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"368"</v>
+              <v n="TextDefault">"Event history"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"86"</v>
+              <v n="TextDefault">"Event ID"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"606"</v>
+              <v n="TextDefault">"Event JSON Attribute"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"619"</v>
+              <v n="TextDefault">"Event Text"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"297"</v>
+              <v n="TextDefault">"Event Type"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"232"</v>
+              <v n="TextDefault">"Events history"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"231"</v>
+              <v n="TextDefault">"Export"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"77"</v>
+              <v n="TextDefault">"Export to file"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"464"</v>
+              <v n="TextDefault">"Label"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"715"</v>
+              <v n="TextDefault">"Lights"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"332"</v>
+              <v n="TextDefault">"Log In"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"198"</v>
+              <v n="TextDefault">"Log Out"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"372"</v>
+              <v n="TextDefault">"Maintenance"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"947"</v>
+              <v n="TextDefault">"Mechine running"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"417"</v>
+              <v n="TextDefault">"None"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"104"</v>
+              <v n="TextDefault">"Operator"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"615"</v>
+              <v n="TextDefault">"Page Auto"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"750"</v>
+              <v n="TextDefault">"Page Init"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"478"</v>
+              <v n="TextDefault">"Page Manual"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"20"</v>
+              <v n="TextDefault">"Page Manual Cylinders"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"5"</v>
+              <v n="TextDefault">"Page Manual Inputs"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"216"</v>
+              <v n="TextDefault">"Page Manual Motors"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"1674"</v>
+              <v n="TextDefault">"Page Manual Other"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"226"</v>
+              <v n="TextDefault">"Page Manual Outputs"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"946"</v>
+              <v n="TextDefault">"Page Manual Safety"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"554"</v>
+              <v n="TextDefault">"Page Recipes"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"979"</v>
+              <v n="TextDefault">"Page Uninitialized"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"495"</v>
+              <v n="TextDefault">"PageAuto"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"847"</v>
+              <v n="TextDefault">"Process"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"108"</v>
+              <v n="TextDefault">"Raise Alarm"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"156"</v>
+              <v n="TextDefault">"Raise Alarm 2"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"910"</v>
+              <v n="TextDefault">"Recipe variable 10:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"311"</v>
+              <v n="TextDefault">"Recipe variable 11:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"455"</v>
+              <v n="TextDefault">"Recipe variable 12:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"766"</v>
+              <v n="TextDefault">"Recipe variable 13:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"596"</v>
+              <v n="TextDefault">"Recipe variable 14:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"883"</v>
+              <v n="TextDefault">"Recipe variable 15:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"978"</v>
+              <v n="TextDefault">"Recipe variable 16:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"334"</v>
+              <v n="TextDefault">"Recipe variable 17:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"918"</v>
+              <v n="TextDefault">"Recipe variable 18:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"273"</v>
+              <v n="TextDefault">"Recipe variable 19:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"271"</v>
+              <v n="TextDefault">"Recipe variable 1:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"567"</v>
+              <v n="TextDefault">"Recipe variable 20:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"540"</v>
+              <v n="TextDefault">"Recipe variable 21:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"977"</v>
+              <v n="TextDefault">"Recipe variable 22:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"572"</v>
+              <v n="TextDefault">"Recipe variable 23:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"324"</v>
+              <v n="TextDefault">"Recipe variable 24:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"256"</v>
+              <v n="TextDefault">"Recipe variable 2:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"323"</v>
+              <v n="TextDefault">"Recipe variable 3:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"683"</v>
+              <v n="TextDefault">"Recipe variable 4:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"342"</v>
+              <v n="TextDefault">"Recipe variable 5:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"545"</v>
+              <v n="TextDefault">"Recipe variable 6:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"718"</v>
+              <v n="TextDefault">"Recipe variable 7:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"305"</v>
+              <v n="TextDefault">"Recipe variable 8:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"51"</v>
+              <v n="TextDefault">"Recipe variable 9:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"538"</v>
+              <v n="TextDefault">"Recipe1:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"575"</v>
+              <v n="TextDefault">"Recipes"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"112"</v>
+              <v n="TextDefault">"Selected recipe value:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"858"</v>
+              <v n="TextDefault">"Selected recipe:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"289"</v>
+              <v n="TextDefault">"Send Alarm"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"698"</v>
+              <v n="TextDefault">"Send Message"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"909"</v>
+              <v n="TextDefault">"Service"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"853"</v>
+              <v n="TextDefault">"Set JSON"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"536"</v>
+              <v n="TextDefault">"Severity"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"586"</v>
+              <v n="TextDefault">"Step mode on"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"848"</v>
+              <v n="TextDefault">"Time Cleared"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"730"</v>
+              <v n="TextDefault">"Time Confirmed"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"9"</v>
+              <v n="TextDefault">"Time Raised"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"10"</v>
+              <v n="TextDefault">"Total active alarms"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"951"</v>
+              <v n="TextDefault">"Warnings"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+          </l>
+          <l n="Languages" t="ArrayList" />
+          <v n="GuidInit">{3a62a7b5-f367-4c65-80ff-af67245abdda}</v>
+          <v n="GuidReInit">{c57a7f6e-2072-480e-903c-7ce77864de25}</v>
+          <v n="GuidExitX">{67065758-ef47-4b93-ae3e-a4dd4dfc5055}</v>
+        </o>
+      </Data>
+      <TypeList>
+        <Type n="ArrayList">System.Collections.ArrayList</Type>
+        <Type n="GlobalTextListObject">{63784cbb-9ba0-45e6-9d69-babf3f040511}</Type>
+        <Type n="Guid">System.Guid</Type>
+        <Type n="String">System.String</Type>
+        <Type n="TextListRow">{53da1be7-ad25-47c3-b0e8-e26286dad2e0}</Type>
+      </TypeList>
+    </XmlArchive>
+  </GlobalTextList>
+</TcPlcObject>

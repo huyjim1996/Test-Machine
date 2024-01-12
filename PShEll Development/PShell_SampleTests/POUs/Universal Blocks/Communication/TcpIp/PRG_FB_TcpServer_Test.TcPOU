@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_TcpServer_Test" Id="{415f38f2-7e42-4187-b668-86c31c07cec7}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_TcpServer_Test
+VAR
+	iAdr			: PVOID;
+	bFristCycle 	: BOOL := TRUE;			(*  *)
+	fbTcpServer		: FB_TcpServer;			(*  *)
+	fbFileLogger	: FB_FileLogger; 
+	
+	iServerState 	: USINT;				(*  *)
+	
+	bInit 			: BOOL;					(*  *)
+	bAbort 			: BOOL;					(*  *)
+	bDisconnect		: BOOL;					(*  *)
+	
+	sSendMessage 	: STRING;				(*  *)
+	sReciveMessage	: STRING;				(*  *)
+	
+	bError			: BOOL;					(*  *)
+	iErrorID		: UDINT;				(*  *)
+	eState			: E_TcpIpDeviceState; 	(*  *)
+	eServerState	: E_TcpIpServerStateRunning;	(*  *)
+	iState			: USINT;
+	
+	stSendData		: ST_TcpBufferData;		(*  *)
+	stReciveData 	: ST_TcpBufferData;		(*  *)
+	
+	sDirectoryForSimulation : STRING := 'C:\TwinCAT\Tests\';
+	
+	tAddLogg : TON;
+	
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* Setting initial parameters *)
+IF bFristCycle THEN
+	bFristCycle := FALSE;
+	fbTcpServer.MR_FirstCycle(	sName		:= 'TCP/IP test server',
+								sHost		:= '',
+								sAmsNetID	:= '',
+								iPort		:= 12000,
+								tTimeout	:= T#10S);
+								
+	fbFileLogger.MR_FirstCycle( sName		:= 'File Logger',
+								sFileDir 	:= sDirectoryForSimulation,
+								sFileName 	:= 'LoggerVisionTest',
+								sAmsNetId 	:= '',
+								bAddTimeStamp := TRUE,
+								bAddHeader := TRUE);							
+	
+END_IF
+
+bError 			:= fbTcpServer.Error;
+iErrorID 		:= fbTcpServer.ErrorID;
+eState 			:= fbTcpServer.State;
+eServerState 	:= fbTcpServer.ServerState;
+
+(* Closing the server *)
+IF bAbort THEN
+	bAbort := FALSE;
+	iState := 40;
+END_IF
+
+CASE iState OF
+	(* Server not ready waiting for init command *)
+	0:
+		IF bInit THEN
+			bInit := FALSE;
+			fbFileLogger.MR_Init();
+			IF fbFileLogger.Active THEN
+				iState := 10;
+			END_IF
+		END_IF
+	
+	(* Server initialization*)	
+	10:
+		fbTcpServer.MR_Init();
+		IF fbTcpServer.Active THEN
+			bInit := FALSE;
+			iState := 20;
+		END_IF
+		
+	(* Server is running - waiting for client and data exchange *)	
+	20:
+		IF fbTcpServer.ServerState = TCPIP_SERVER_RUNNING_DATA_EXCHANGE THEN
+			stReciveData := fbTcpServer.LastRecivedMessage;	
+		
+			IF bDisconnect THEN
+				bDisconnect := FALSE;
+				iState := 30;
+			
+			ELSIF stReciveData.iLength > 0 THEN
+				FUN_TcpBufferDataToString(ADR(sReciveMessage),ADR(stReciveData));
+				iState := 22;
+			END_IF
+		END_IF
+		
+	22:
+		FUN_StringToTcpBufferData(ADR(sReciveMessage),ADR(stSendData));
+		fbTcpServer.MR_AppendToSendBuffer(stReciveData);
+		iState := 25;	
+	25:
+		fbTcpServer.MR_ClearAllBuffers();
+		iState := 20;
+	
+	(* Disconnecting from current connection*)
+	30:
+		fbTcpServer.MR_Disconnect();
+		
+		IF fbTcpServer.ServerState = TCPIP_SERVER_RUNNING_CLOSE_CONNECTION_DONE THEN
+			iState := 20;
+		END_IF
+	(* Server deinitialization *)
+	40:
+		fbTcpServer.MR_Abort();
+		
+		IF NOT fbTcpServer.Active THEN
+			iState := 0;
+		END_IF
+	
+END_CASE
+
+fbTcpServer();
+fbTcpServer();
+fbFileLogger();
+fbFileLogger();
+tAddLogg();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_TcpServer_Test">
+      <LineId Id="3" Count="12" />
+      <LineId Id="122" Count="1" />
+      <LineId Id="16" Count="76" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

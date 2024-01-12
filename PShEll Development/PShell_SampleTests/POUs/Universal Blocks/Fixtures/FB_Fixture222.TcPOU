@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_Fixture222" Id="{bf130327-fb73-4e0f-a2a5-8f36b7838545}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Fixture222 EXTENDS FB_UniversalFixture
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	(*
+		Add fixture sensors and actuators
+	*)
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^();
+
+(*
+	Add FB instances
+*)]]></ST>
+    </Implementation>
+    <Method Name="MS_Close" Id="{c4fae21c-7515-4366-9c31-95e21cfd07b3}">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Close
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eFixtureState := UNIVERSAL_FIXTURE_CLOSE_DONE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Open" Id="{6b0f9600-504b-4b29-844f-b9e27450c2c0}">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Open
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eFixtureState := UNIVERSAL_FIXTURE_OPEN_DONE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_ReadyInitialized" Id="{669ad9b1-e38b-40bd-b030-a833d680838e}">
+      <Declaration><![CDATA[METHOD PROTECTED MS_ReadyInitialized
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eFixtureState := UNIVERSAL_FIXTURE_IDLE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Reset" Id="{15b0e0ae-5769-4b30-8683-4a429256e2bc}">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eFixtureState := UNIVERSAL_FIXTURE_RESET_DONE;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="SocketOpen" Id="{91cf3a16-c367-498a-ac19-7a1da53003c2}">
+      <Declaration><![CDATA[PROPERTY SocketOpen : REFERENCE TO BOOL]]></Declaration>
+      <Get Name="Get" Id="{e67ddd63-a741-4b80-a0bc-23a1d907c23c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SocketOpen REF= bSocketOpen;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <LineIds Name="FB_Fixture222">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture222.MS_Close">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture222.MS_Open">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture222.MS_ReadyInitialized">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture222.MS_Reset">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Fixture222.SocketOpen.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,29 @@
+Id;Default
+0;Uninitialized$T
+10;Initializing
+20;Ready initialized
+30;Idle
+40;Home
+50;Home done
+60;Move velocity
+70;Move velocity done
+80;Move absolute
+90;Move absolute done
+100;Move additive
+110;Move additive done
+120;Move relative
+130;Move relative done
+140;Move jog
+150;Move jog done
+160;Stop
+170;Stop done
+180;Halt
+190;Halt done
+200;Reset
+210;Reset done
+220;Coupling
+230;Coupling done
+240;Decoupling
+250;Decoupling done
+-10;Aborting
+;

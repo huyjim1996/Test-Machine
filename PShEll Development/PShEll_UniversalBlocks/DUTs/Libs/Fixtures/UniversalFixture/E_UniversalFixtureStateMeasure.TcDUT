@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_UniversalFixtureStateMeasure" Id="{4ae1cbe6-8c13-437e-9688-e95df85a2ecd}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_UniversalFixtureStateMeasure :
+(
+	UNIVERSAL_FIXTURE_MEASURE_WAIT_FOR_CLIENT	:= 0,	(* Measurement fixture server is waiting for client connection *)
+	UNIVERSAL_FIXTURE_MEASURE_SEND_DATA			:= 10,	(* Measurement fixture server is sending data to measurement device *)
+	UNIVERSAL_FIXTURE_MEASURE_RECIVE_DATA		:= 20,	(* Measurement fixture server is waiting for data from measurement device*)
+	UNIVERSAL_FIXTURE_MEASURE_DONE				:= 30	(* Measurement sequence finished *)
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

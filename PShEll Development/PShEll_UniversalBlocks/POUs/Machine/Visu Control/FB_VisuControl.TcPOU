@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_VisuControl" Id="{0bfae5f4-05f6-4ba2-8d1c-2f6d5de3971a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_VisuControl EXTENDS FB_UniversalVisu
+VAR
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[bBackupRestoreDisabled := TRUE;
+SUPER^();]]></ST>
+    </Implementation>
+    <Method Name="MS_Emergency" Id="{2a34c643-f64a-4582-8b3a-6c75d3cb4aac}">
+      <Declaration><![CDATA[METHOD PROTECTED  MS_Emergency]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_VisuControl">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_VisuControl.MS_Emergency">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

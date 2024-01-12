@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_FixtureStateLoadNorm" Id="{6f340ca9-58b5-4631-9b80-95ee7d137cae}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_FixtureStateLoadNorm :
+(
+	FIXTURE_LOADING_NORM_SEND_NORM_DATA 				:= 0,	(*  *)
+	FIXTURE_LOADING_NORM_WAIT_FOR_RESPONSE				:= 10,	(*  *)
+	FIXTURE_LOADING_NORM_DONE							:= 20,	(*  *)
+	FIXTURE_LOADING_NORM_GOLDEN_SAMPLE_TEST 			:= 30,	(*	*)
+	FIXTURE_LOADING_NORM_GOLDEN_SAMPLE_WAIT_FOR_END		:= 40	(*	*)
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

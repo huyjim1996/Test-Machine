@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_TXTDataExchanger_Test" Id="{2b296019-c6a8-4104-add1-ada729a5572b}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_TXTDataExchanger_Test
+VAR
+	fbTXTDataExchanger	 		: FB_TXTDataExchanger;
+	bFirstCycle 				: BOOL 		:= TRUE;
+	
+	sName						: STRING 	:= 'Txt data exchanger';
+	sFileDir 					: STRING 	:= 'C:\TwinCAT\Tests\Recipes\';
+	sFileName 					: STRING 	:= 'Infile';
+	sAmsNetId  					: STRING 	:= '';
+	bAddHeader					: BOOL		:= FALSE;
+	bAddTimeStamp				: BOOL		:= FALSE;
+	bCreateFileAtStart			: BOOL		:= FALSE;  
+	
+	bInit						: BOOL;
+	bAbort						: BOOL;
+	bReset						: BOOL;
+	bAddMESCommand				: BOOL;
+	bSearchForFile				: BOOL;
+	bSelectPath					: BOOL;	
+	
+	sMachineID					: STRING	:= '32678';
+	sOperatorID					: STRING	:= '0000025441';
+	sPO							: STRING	:= '64822848';
+	sProductItem				: STRING	:= '2159-3217599';
+	bLogOn						: BOOL		:= TRUE;
+	
+	sSearchFileName				: STRING	:= 'R3.Recipes';
+	bFileFound					: BOOL;
+	
+	iStateMachine				: USINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	fbTXTDataExchanger.MR_FirstCycle(sName 	:= sName,
+									sFileDir 	:= sFileDir,
+									sFileName 	:= sFileName,
+									sAmsNetId 	:= '',
+									bCreateFileAtStart := bCreateFileAtStart,
+									bAddHeader := bAddHeader,
+									bAddTimeStamp := bAddTimeStamp);									
+	bFirstCycle := FALSE;
+	
+END_IF
+
+IF bReset THEN
+	bReset := FALSE;
+	iStateMachine := 50;
+	
+ELSIF bAbort THEN
+	bAbort := FALSE;
+	iStateMachine := 60;
+
+END_IF	
+
+CASE iStateMachine OF
+	0: 
+		IF bInit THEN
+			fbTXTDataExchanger.MR_Init();
+			
+			IF NOT fbTXTDataExchanger.Busy THEN
+				bInit := FALSE;
+				iStateMachine := 10;
+				
+			END_IF
+		END_IF
+		
+	10: 
+		IF bAddMESCommand THEN
+			bAddMESCommand := FALSE;
+			iStateMachine := 20;
+		
+		ELSIF bSearchForFile THEN
+			bSearchForFile := FALSE;
+			iStateMachine := 30;	
+
+		ELSIF bSelectPath THEN
+			bSelectPath := FALSE;
+			iStateMachine := 40;	
+
+		END_IF		
+		
+	20: 
+		fbTXTDataExchanger.MR_AddMESCommand(sMachineID := sMachineID,
+											sOperatorID := sOperatorID,
+											sPO := sPO,
+											sProductItem := sProductItem,
+											bLogOn := bLogOn);
+		
+		IF NOT fbTXTDataExchanger.Busy THEN
+			iStateMachine := 10;
+			
+		END_IF
+	
+	30: 
+		fbTXTDataExchanger.MR_SearchForFile(sSearchFileName := sSearchFileName, // Search in set path also
+											bFileFound => bFileFound);
+		
+		IF NOT fbTXTDataExchanger.Busy THEN
+			iStateMachine := 10;
+			
+		END_IF
+	
+	40:
+		fbTXTDataExchanger.MR_SelectPath(sFileDir := sFileDir,
+										sFileName := sFileName);
+		
+		IF NOT fbTXTDataExchanger.Busy THEN
+			iStateMachine := 10;
+			
+		END_IF	
+
+	50: 
+		fbTXTDataExchanger.MR_Reset();
+		
+		IF NOT fbTXTDataExchanger.Busy THEN
+			IF fbTXTDataExchanger.Active THEN
+				iStateMachine := 10;
+				
+			ELSE
+				iStateMachine := 0;
+			
+			END_IF
+		END_IF
+		
+	60:
+		fbTXTDataExchanger.MR_Abort();
+	
+		IF NOT fbTXTDataExchanger.Busy THEN
+			iStateMachine := 0;
+			
+		END_IF
+		
+END_CASE
+
+fbTXTDataExchanger();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_TXTDataExchanger_Test">
+      <LineId Id="479" Count="62" />
+      <LineId Id="543" Count="38" />
+      <LineId Id="126" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

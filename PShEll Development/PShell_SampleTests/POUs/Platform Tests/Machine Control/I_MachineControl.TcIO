@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <Itf Name="I_MachineControl" Id="{b6619ab0-c56b-4d7c-83a7-ca3211c58559}">
+    <Declaration><![CDATA[INTERFACE I_MachineControl EXTENDS I_UniversalMachine
+]]></Declaration>
+    <Property Name="Axes" Id="{cbc62bc7-ee38-41de-b861-de08ef7a80e9}">
+      <Declaration><![CDATA[PROPERTY Axes : REFERENCE TO ARRAY[0..19] OF FB_AxisServo]]></Declaration>
+      <Get Name="Get" Id="{7a61fbd5-8ed3-4524-842a-1319db281bb6}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="DoubleCoilCylinders" Id="{843017c1-6066-46f8-b4ca-e77a358d0ed0}">
+      <Declaration><![CDATA[PROPERTY DoubleCoilCylinders : REFERENCE TO ARRAY[0..9] OF FB_DoubleCoilCylinder]]></Declaration>
+      <Get Name="Get" Id="{5325d3a6-b32e-4c7d-96cb-93ee7d1d4be9}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Inputs" Id="{6a9c01f9-b02e-499a-944c-a04d4fe5b59f}">
+      <Declaration><![CDATA[PROPERTY Inputs : REFERENCE TO ARRAY[0..19] OF FB_DigitalInput]]></Declaration>
+      <Get Name="Get" Id="{a59f93da-9155-4c94-9da2-a2b5e4aee20f}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Outputs" Id="{a741b9da-8585-4660-a071-710ddf1c5ef2}">
+      <Declaration><![CDATA[PROPERTY Outputs : REFERENCE TO ARRAY[0..19] OF FB_DigitalOutput]]></Declaration>
+      <Get Name="Get" Id="{f17d41c0-2eee-48a4-8082-90c81b20f206}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Robots" Id="{e320d7d5-dcea-4b4d-ac7e-db6dabc2d1e6}">
+      <Declaration><![CDATA[PROPERTY Robots : REFERENCE TO ARRAY[0..9] OF  FB_CR800EtherCAT]]></Declaration>
+      <Get Name="Get" Id="{791a3789-4749-41f2-8eda-33ebe506eaae}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="SafeInputs" Id="{b2ad352e-f995-4592-a2cf-1b56406fbbd0}">
+      <Declaration><![CDATA[PROPERTY SafeInputs : REFERENCE TO ARRAY[0..19] OF FB_DigitalInput]]></Declaration>
+      <Get Name="Get" Id="{fcbb7162-85b2-4930-b0e5-4f0f289f34a6}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="SafeOutputs" Id="{2001c0aa-3d33-41da-b4d7-3782d761d195}">
+      <Declaration><![CDATA[PROPERTY SafeOutputs : REFERENCE TO ARRAY[0..19] OF FB_DigitalOutput]]></Declaration>
+      <Get Name="Get" Id="{bf543d53-e74e-4372-ab84-e2cffcbdd60a}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="SingleCoilCylinders" Id="{00deb403-bcc2-4e6e-b71f-1737b3662390}">
+      <Declaration><![CDATA[PROPERTY SingleCoilCylinders : REFERENCE TO ARRAY[0..9] OF FB_SingleCoilCylinder]]></Declaration>
+      <Get Name="Get" Id="{66093c6a-30bf-47a7-a2f3-60f4c34cd01a}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

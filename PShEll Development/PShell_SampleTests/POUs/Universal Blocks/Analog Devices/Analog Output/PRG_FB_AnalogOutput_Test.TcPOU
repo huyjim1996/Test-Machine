@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_AnalogOutput_Test" Id="{4a2c79c5-ff77-4eb8-8ed2-f0a08b6d6ada}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_AnalogOutput_Test
+VAR
+	bFirsCycle		: BOOL := TRUE;		(* First cycle flag *)
+	rValue			: REAL;				(* Scaled value that is send to channel *)
+	
+	rValueMin 		: REAL := 0.0;		(*  *)
+	rValueMax		: REAL := 10.0;		(*  *)
+	rChannelMin		: REAL := 0.0;		(*  *)
+	rChannelMax		: REAL := 32767.0;	(*  *)
+	
+	fbAnalogOutput	: FB_AnalogOutput;	(* Analog input object *)
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* Set properties *)
+IF bFirsCycle THEN
+	bFirsCycle := FALSE;
+	fbAnalogOutput.MR_FirstCycle( 	sName 			:= 'My test analog output',
+									rValueScaledMin := rValueMin,
+									rValueScaledMax := rValueMax,
+									rChannelMin 	:= rChannelMin,
+									rChannelMax		:= rChannelMax);
+END_IF
+
+(* Cyclic properties update *)
+fbAnalogOutput.ChannelMin	:= rChannelMin;
+fbAnalogOutput.ChannelMax 	:= rChannelMax;
+fbAnalogOutput.ValueMin 	:= rValueMin;
+fbAnalogOutput.ValueMax 	:= rValueMax;
+
+(* Send value to channel *)
+fbAnalogOutput.Value 		:= rValue;
+fbAnalogOutput();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_AnalogOutput_Test">
+      <LineId Id="56" Count="0" />
+      <LineId Id="31" Count="1" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="76" Count="3" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="73" Count="2" />
+      <LineId Id="72" Count="0" />
+      <LineId Id="81" Count="0" />
+      <LineId Id="80" Count="0" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

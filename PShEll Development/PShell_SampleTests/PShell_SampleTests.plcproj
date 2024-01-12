@@ -1,0 +1,556 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <FileVersion>1.0.0.0</FileVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{f08dcc05-9007-4858-9749-4e540d072538}</ProjectGuid>
+    <SubObjectsSortedByName>True</SubObjectsSortedByName>
+    <DownloadApplicationInfo>true</DownloadApplicationInfo>
+    <WriteProductVersion>true</WriteProductVersion>
+    <GenerateTpy>false</GenerateTpy>
+    <Name>PShell_SampleTests</Name>
+    <ProgramVersion>3.1.4023.0</ProgramVersion>
+    <Application>{1e8d00b5-c76b-4d6e-b030-0e5693748358}</Application>
+    <TypeSystem>{39ae3599-7729-4a45-ba86-5f7c60c75122}</TypeSystem>
+    <Implicit_Task_Info>{0944dcbf-0a11-46e6-9b65-95d016604900}</Implicit_Task_Info>
+    <Implicit_KindOfTask>{ab9b03c9-57ab-467f-a3d0-9a00ccb74751}</Implicit_KindOfTask>
+    <Implicit_Jitter_Distribution>{1decab9c-5f93-4d8c-91de-8460748771db}</Implicit_Jitter_Distribution>
+    <LibraryReferences>{73f88709-11f9-4c32-a7ab-ba7942ff6259}</LibraryReferences>
+    <Released>false</Released>
+    <DocFormat>reStructuredText</DocFormat>
+    <CompilerDefines />
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="DUTs\Fixture\E_FcqFixtureStateGSampleMeas.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Fixture\E_FixtureJigStateAbort.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Fixture\E_FixtureJigStateInit.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Fixture\E_FixtureJigStateReset.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Fixture\E_FixtureLoadNormResult.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Fixture\E_FixtureMeasurementResultExt.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Fixture\E_FixtureState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Fixture\E_FixtureStateAbort.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Fixture\E_FixtureStateInit.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Fixture\E_FixtureStateLoadNorm.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Fixture\E_FixtureStateMeasurement.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Fixture\E_FixtureStateMeasurementDataExchange.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Fixture\E_FixtureStateReset.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Fixture\E_FixtureStateTest.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Fixture\E_GoldenSampleState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_Shell.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_ShellFlags.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_ShellPlatform.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_ShellRecipeData.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GlobalTextList.TcGTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GVLs\GVL.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\Platform Tests\Alarm Control\PRG_AlarmControl.TcPOU">
+      <SubType>Code</SubType>
+      <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="POUs\Platform Tests\Machine Control\FB_MachineControl.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Platform Tests\Machine Control\I_MachineControl.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Platform Tests\Machine Control\PRG_MachineControl.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Platform Tests\Visu Control\FB_VisuControl.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Platform Tests\Visu Control\F_CloseDialog.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Platform Tests\Visu Control\F_OpenDialog.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Platform Tests\Visu Control\PRG_VisuControl.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Platform Tests\Recipes Manager\PRG_RecipesManager.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Alarms\PRG_FB_AlarmControler_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Analog Devices\Analog Input\PRG_FB_AnalogInput_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Analog Devices\Analog Output\PRG_FB_AnalogOutput_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Axis CA\PRG_FB_AxisServoCA_PreTest.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Axis CA\PRG_FB_AxisServoCA_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Axis CA\PRG_FB_MoverCA_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Axis CA\PRG_FB_Axis_JennyScienceEthCA_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Axis\PRG_FB_Axis_Faulhaber_Test.TcPOU">
+      <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Axis\PRG_FB_Axis_JennyScienceEthSingle_Test.TcPOU">
+      <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Axis\PRG_FB_AxisServo_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Communication\Backhoff ADS\PRG_FB_AdsExchanger_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Communication\TcpIp\PRG_FB_TcpClient_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Communication\TcpIp\PRG_FB_TcpServer_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Communication\TcpIp\PRG_FUN_TcpDataConversion_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Cylinder\PRG_FB_SingleCoilCylinder_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Cylinder\PRG_FB_DoubleCoilCylinder_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Digital Devices\Beacon\PRG_FB_Beacon_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Digital Devices\Digital Input\PRG_FB_DigitalInput_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Digital Devices\Digital Input\PRG_FB_DigitalInputExt_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Digital Devices\Digital Output\PRG_FB_DigitalOutput_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Digital Devices\Lamp\PRG_FB_Lamp_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Fixtures\FB_Fixture222.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Fixtures\PRG_FB_FixtureCommTest.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Fixture\FB_FixtureClamp.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Fixture\FB_FixtureJig.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Fixture\FB_Fixture.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Fixture\PRG_FB_FcqFixture_Development_Test.TcPOU">
+      <SubType>Code</SubType>
+      <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Robots\PRG_FB_CR800.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Utilities\Beckhoff UPS\PRG_FB_UpsCx20xx_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Utilities\Beckhoff UPS\PRG_FB_UpsCx50xx_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Utilities\CSV Data Exchanger\PRG_FB_CSVDataExchanger_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Utilities\File Logger\PRG_FB_FileLogger_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Utilities\Recipes Manager\PRG_FB_RecipesManager_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Utilities\StringMerge\PRG_FUN_MergeStringsX_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Utilities\TXT Data Exchanger\PRG_FB_TXTDataExchanger_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\Vision\PRG_FB_Camera_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\XTS\FB_XtsStation.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Universal Blocks\XTS\PRG_XtsControlUnit_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RecipeManager.TcRMO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SampleTests.TcTTO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisualizationManager.TcVMO">
+      <SubType>Code</SubType>
+      <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="VISUs\Platform\Pages\PageAuto.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>VisualizationManager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Platform\Pages\PageInitializing.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>VisualizationManager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Platform\Pages\PageManualOther.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>VisualizationManager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Platform\Pages\PageUninitialized.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>VisualizationManager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Platform\ShellMainVisu.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>VisualizationManager.TcVMO</DependentUpon>
+      <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="VISU_TASK.TcTTO">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DUTs">
+      <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Folder>
+    <Folder Include="DUTs\Fixture" />
+    <Folder Include="GVLs" />
+    <Folder Include="POUs\Platform Tests">
+      <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Folder>
+    <Folder Include="POUs\Platform Tests\Machine Control" />
+    <Folder Include="POUs\Platform Tests\Visu Control">
+      <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Folder>
+    <Folder Include="POUs\Platform Tests\Alarm Control">
+      <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Folder>
+    <Folder Include="POUs\Platform Tests\Recipes Manager" />
+    <Folder Include="POUs\Universal Blocks" />
+    <Folder Include="POUs\Universal Blocks\Analog Devices\Analog Input" />
+    <Folder Include="POUs\Universal Blocks\Analog Devices\Analog Output" />
+    <Folder Include="POUs\Universal Blocks\Axis CA">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Folder>
+    <Folder Include="POUs\Universal Blocks\Communication" />
+    <Folder Include="POUs\Universal Blocks\Axis" />
+    <Folder Include="POUs\Universal Blocks\Communication\Backhoff ADS">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Folder>
+    <Folder Include="POUs\Universal Blocks\Communication\TcpIp" />
+    <Folder Include="POUs\Universal Blocks\Cylinder" />
+    <Folder Include="POUs\Universal Blocks\Digital Devices\Beacon">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Folder>
+    <Folder Include="POUs\Universal Blocks\Digital Devices\Digital Input" />
+    <Folder Include="POUs\Universal Blocks\Digital Devices\Digital Output" />
+    <Folder Include="POUs\Universal Blocks\Analog Devices">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Folder>
+    <Folder Include="POUs\Universal Blocks\Digital Devices" />
+    <Folder Include="POUs\Universal Blocks\Digital Devices\Lamp" />
+    <Folder Include="POUs\Universal Blocks\Fixture" />
+    <Folder Include="POUs\Universal Blocks\Fixtures">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Folder>
+    <Folder Include="POUs\Universal Blocks\Alarms" />
+    <Folder Include="POUs\Universal Blocks\Utilities\CSV Data Exchanger" />
+    <Folder Include="POUs\Universal Blocks\Utilities\TXT Data Exchanger" />
+    <Folder Include="POUs\Universal Blocks\Vision" />
+    <Folder Include="POUs\Universal Blocks\XTS">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Folder>
+    <Folder Include="POUs\Universal Blocks\Robots" />
+    <Folder Include="POUs\Universal Blocks\Utilities" />
+    <Folder Include="POUs\Universal Blocks\Utilities\Beckhoff UPS" />
+    <Folder Include="POUs\Universal Blocks\Utilities\File Logger" />
+    <Folder Include="POUs\Universal Blocks\Utilities\Recipes Manager" />
+    <Folder Include="POUs\Universal Blocks\Utilities\StringMerge" />
+    <Folder Include="POUs" />
+    <Folder Include="VISUs">
+      <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Folder>
+    <Folder Include="VISUs\Platform" />
+    <Folder Include="VISUs\Platform\Pages">
+      <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Folder>
+  </ItemGroup>
+  <ItemGroup>
+    <PlaceholderReference Include="CmpBitmapPool">
+      <DefaultResolution>CmpBitmapPool, * (System)</DefaultResolution>
+      <Namespace>CmpBitmapPool</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="PSE_UniversalBlocks">
+      <DefaultResolution>PShEll Universal Blocks, * (Precision Systems Engineering)</DefaultResolution>
+      <Namespace>PSE_UniversalBlocks</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="RecipeManagement">
+      <DefaultResolution>Recipe Management, 3.3.1.0 (System)</DefaultResolution>
+      <Namespace>Recipe_Management</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+    </PlaceholderReference>
+    <PlaceholderReference Include="System_VisuElemMeter">
+      <DefaultResolution>VisuElemMeter, 3.5.13.0 (System)</DefaultResolution>
+      <Namespace>VisuElemMeter</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
+    </PlaceholderReference>
+    <PlaceholderReference Include="System_VisuElems">
+      <DefaultResolution>VisuElems, 3.5.13.40 (System)</DefaultResolution>
+      <Namespace>VisuElems</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
+    </PlaceholderReference>
+    <PlaceholderReference Include="System_VisuElemsSpecialControls">
+      <DefaultResolution>VisuElemsSpecialControls, 3.5.13.0 (System)</DefaultResolution>
+      <Namespace>VisuElemsSpecialControls</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
+    </PlaceholderReference>
+    <PlaceholderReference Include="System_VisuElemsWinControls">
+      <DefaultResolution>VisuElemsWinControls, 3.5.13.20 (System)</DefaultResolution>
+      <Namespace>VisuElemsWinControls</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
+    </PlaceholderReference>
+    <PlaceholderReference Include="System_VisuElemTextEditor">
+      <DefaultResolution>VisuElemTextEditor, 3.5.13.0 (System)</DefaultResolution>
+      <Namespace>VisuElemTextEditor</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
+    </PlaceholderReference>
+    <PlaceholderReference Include="system_visuinputs">
+      <DefaultResolution>visuinputs, 3.5.13.0 (system)</DefaultResolution>
+      <Namespace>visuinputs</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
+    </PlaceholderReference>
+    <PlaceholderReference Include="System_VisuNativeControl">
+      <DefaultResolution>VisuNativeControl, 3.5.13.0 (System)</DefaultResolution>
+      <Namespace>VisuNativeControl</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_MC2">
+      <DefaultResolution>Tc2_MC2, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_MC2</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Standard">
+      <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Standard</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_System">
+      <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_System</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_TcpIp">
+      <DefaultResolution>Tc2_TcpIp, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_TcpIp</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_EventLogger">
+      <DefaultResolution>Tc3_EventLogger, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_EventLogger</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_McCollisionAvoidance">
+      <DefaultResolution>Tc3_McCollisionAvoidance, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_McCollisionAvoidance</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_McCoordinatedMotion">
+      <DefaultResolution>Tc3_McCoordinatedMotion, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_McCoordinatedMotion</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_Module">
+      <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_Module</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="VisuDialogs">
+      <DefaultResolution>VisuDialogs, * (System)</DefaultResolution>
+      <Namespace>VisuDialogs</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="VisuUserManagement">
+      <DefaultResolution>VisuUserMgmt, * (System)</DefaultResolution>
+      <Namespace>VisuUserManagement</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+    </PlaceholderReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PShell_SampleTests.tmc">
+      <SubType>Content</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PlaceholderResolution Include="CmpBitmapPool">
+      <Resolution>CmpBitmapPool, 3.5.7.0 (System)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="PSE_UniversalBlocks">
+      <Resolution>PShEll Universal Blocks, 1.0.1.1 (Precision Systems Engineering)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_MC2">
+      <Resolution>Tc2_MC2, 3.3.45.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_Standard">
+      <Resolution>Tc2_Standard, 3.3.3.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_System">
+      <Resolution>Tc2_System, 3.4.24.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc3_EventLogger">
+      <Resolution>Tc3_EventLogger, 3.1.30.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc3_McCollisionAvoidance">
+      <Resolution>Tc3_McCollisionAvoidance, 3.1.10.3 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc3_McCoordinatedMotion">
+      <Resolution>Tc3_McCoordinatedMotion, 3.1.10.2 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc3_Module">
+      <Resolution>Tc3_Module, 3.3.21.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="VisuDialogs">
+      <Resolution>VisuDialogs, 3.5.12.0 (System)</Resolution>
+    </PlaceholderResolution>
+  </ItemGroup>
+  <ItemGroup>
+    <LibraryReference Include="VisuSymbols,3.5.10.0,System">
+      <Namespace>VisuSymbols</Namespace>
+    </LibraryReference>
+  </ItemGroup>
+  <ProjectExtensions>
+    <PlcProjectOptions>
+      <XmlArchive>
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
+      <v n="Name">"&lt;ProjectRoot&gt;"</v>
+      <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
+        <v>{8F99A816-E488-41E4-9FA3-846536012284}</v>
+        <o>
+          <v n="Name">"{8F99A816-E488-41E4-9FA3-846536012284}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" />
+        </o>
+        <v>{29BD8D0C-3586-4548-BB48-497B9A01693F}</v>
+        <o>
+          <v n="Name">"{29BD8D0C-3586-4548-BB48-497B9A01693F}"</v>
+          <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
+            <v>Rules</v>
+            <o>
+              <v n="Name">"Rules"</v>
+              <d n="SubKeys" t="Hashtable" />
+              <d n="Values" t="Hashtable" />
+            </o>
+          </d>
+          <d n="Values" t="Hashtable" />
+        </o>
+        <v>{40450F57-0AA3-4216-96F3-5444ECB29763}</v>
+        <o>
+          <v n="Name">"{40450F57-0AA3-4216-96F3-5444ECB29763}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" ckt="String">
+            <v>ActiveVisuExtensionsLength</v>
+            <v>0</v>
+            <v>ActiveVisuExtensions_0</v>
+            <v>"IR0whWr8bwdyBwAA2CM5uwAAAAC4AQAAabXwRAAAAAABAAAAAAAAAAEaUwB5AHMAdABlAG0ALgBTAHQAcgBpAG4AZwACTHsANgBkADQAMgBlADkAMQA4AC0AZQA2AGEANQAtADQAYgAyAGMALQA5ADEANwBiAC0AZQAwADcAMwAxAGIANwA2ADYAYgAxAGYAfQADDkMAbwBtAHAAYQBuAHkABDBCAGUAYwBrAGgAbwBmAGYAIABBAHUAdABvAG0AYQB0AGkAbwBuACAARwBtAGIASAAFDlYAZQByAHMAaQBvAG4ABg4xAC4AMAAuADMALgAwAAcMQQBjAHQAaQB2AGUACAhiAG8AbwBsAAkITgBhAG0AZQAKJFYAaQBzAHUARQBsAGUAbQBFAHYAZQBuAHQAVABhAGIAbABlAAsWUAByAG8AZgBpAGwAZQBEAGEAdABhAAxMewAxADYAZQA1ADUAYgA2ADAALQA3ADAANAAzAC0ANABhADYAMwAtAGIANgA1AGIALQA2ADEANAA3ADEAMwA4ADcAOABkADQAMgB9AA0STABpAGIAcgBhAHIAaQBlAHMADkx7ADMAYgBmAGQANQA0ADUAOQAtAGIAMAA3AGYALQA0AGQANgBlAC0AYQBlADEAYQAtAGEAOAAzADMANQA2AGEANQA1ADEANAAyAH0AD0x7ADkAYwA5ADUAOAA5ADYAOAAtADIAYwA4ADUALQA0ADEAYgBiAC0AOAA4ADcAMQAtADgAOQA1AGYAZgAxAGYAZQBkAGUAMQBhAH0AEAZpAG4AdAARClUAcwBhAGcAZQASClQAaQB0AGwAZQATDFMAeQBzAHQAZQBtABQSVgBpAHMAdQBFAGwAZQBtAHMAFRhWAGkAcwB1AEUAbABlAG0AQgBhAHMAZQAWFFYAaQBzAHUASQBuAHAAdQB0AHMAFyZEAGUAdgBQAGwAYQBjAGUAaABvAGwAZABlAHIAcwBVAHMAZQBkABgiUABsAHUAZwBpAG4AQwBvAG4AcwB0AHIAYQBpAG4AdABzABlMewA0ADMAZAA1ADIAYgBjAGUALQA5ADQAMgBjAC0ANAA0AGQANwAtADkAZQA5ADQALQAxAGIAZgBkAGYAMwAxADAAZQA2ADMAYwB9ABocQQB0AEwAZQBhAHMAdABWAGUAcgBzAGkAbwBuABsUUABsAHUAZwBpAG4ARwB1AGkAZAAcFlMAeQBzAHQAZQBtAC4ARwB1AGkAZAAdSGEAZgBjAGQANQA0ADQANgAtADQAOQAxADQALQA0AGYAZQA3AC0AYgBiADcAOAAtADkAYgBmAGYAZQBiADcAMABmAGQAMQA3AB4UVQBwAGQAYQB0AGUASQBuAGYAbwAfTHsAYgAwADMAMwA2ADYAYQA4AC0AYgA1AGMAMAAtADQAYgA5AGEALQBhADAAMABlAC0AZQBiADgANgAwADEAMQAxADAANABjADMAfQAgDlUAcABkAGEAdABlAHMAIUx7ADEAOAA2ADgAZgBmAGMAOQAtAGUANABmAGMALQA0ADUAMwAyAC0AYQBjADAANgAtADEAZQAzADkAYgBiADUANQA3AGIANgA5AH0AIkx7AGEANQBiAGQANAA4AGMAMwAtADAAZAAxADcALQA0ADEAYgA1AC0AYgAxADYANAAtADUAZgBjADYAYQBkADIAYgA5ADYAYgA3AH0AIxZPAGIAagBlAGMAdABzAFQAeQBwAGUAJFRVAHAAZABhAHQAZQBMAGEAbgBnAHUAYQBnAGUATQBvAGQAZQBsAEYAbwByAEMAbwBuAHYAZQByAHQAaQBiAGwAZQBMAGkAYgByAGEAcgBpAGUAcwAlEEwAaQBiAFQAaQB0AGwAZQAmFEwAaQBiAEMAbwBtAHAAYQBuAHkAJx5VAHAAZABhAHQAZQBQAHIAbwB2AGkAZABlAHIAcwAoOFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ASABhAHMAaAB0AGEAYgBsAGUAKRJ2AGkAcwB1AGUAbABlAG0AcwAqDHMAeQBzAHQAZQBtACtINgBjAGIAMQBjAGQAZQAxAC0AZAA1AGQAYwAtADQAYQAzAGIALQA5ADAANQA0AC0AMgAxAGYAYQA3ADUANgBhADMAZgBhADQALChJAG4AdABlAHIAZgBhAGMAZQBWAGUAcgBzAGkAbwBuAEkAbgBmAG8ALUx7AGMANgAxADEAZQA0ADAAMAAtADcAZgBiADkALQA0AGMAMwA1AC0AYgA5AGEAYwAtADQAZQAzADEANABiADUAOQA5ADYANAAzAH0ALhhNAGEAagBvAHIAVgBlAHIAcwBpAG8AbgAvGE0AaQBuAG8AcgBWAGUAcgBzAGkAbwBuADAMTABlAGcAYQBjAHkAMTBMAGEAbgBnAHUAYQBnAGUATQBvAGQAZQBsAFYAZQByAHMAaQBvAG4ASQBuAGYAbwAyMEwAbwBhAGQATABpAGIAcgBhAHIAaQBlAHMASQBuAHQAbwBQAHIAbwBqAGUAYwB0ADMaQwBvAG0AcABhAHQAaQBiAGkAbABpAHQAeQDQAAIaBtADAS0E0AUBLQbQBwitAdAJAS0K0AsMGgfQDQ4aAUUNDwTQAA8aBEUFEAQBAAAAAAAAAAMAAAAAAAAA0BEQrQIAAADQEgEtCtADAS0T0AAPGgRFBRAEAwAAAAUAAAANAAAAFAAAANAREK0BAAAA0BIBLRTQAwEtE9AADxoERQUQBAMAAAAFAAAADQAAABQAAADQERCtBAAAANASAS0V0AMBLRPQAA8aBEUFEAQDAAAABQAAAA0AAAAAAAAA0BEQrQQAAADQEgEtFtADAS0T0BcIrQFFGBkB0AAZGgJFGhAEAwAAAAUAAAANAAAAAAAAANAbHC0d0B4fGgJFICEC0AAiGgVFBRAEAwAAAAMAAAAAAAAACgAAANAjEK0AAAAA0AkBLSTQJQEtFNAmAS0T0AAiGgVFBRAEAwAAAAMAAAAAAAAACgAAANAjEK0BAAAA0AkBLSTQJQEtFNAmAS0TmicoAUUAAQLQAAEtKdAAAS0q0AAcLSvQLC0aA9AuEK0BAAAA0C8QrRcAAADQMAitANAxLRoD0C4QrQIAAADQLxCtAwAAANAwCK0A0DIIrQDQMwitAA=="</v>
+            <v>ActiveVisuProfile</v>
+            <v>"IR0whWr8bwfwBwAAiD2qpQAAAABVAgAA37x72QAAAAABAAAAAAAAAAEaUwB5AHMAdABlAG0ALgBTAHQAcgBpAG4AZwACTHsAZgA5ADUAYgBiADQAMgA2AC0ANQA1ADIANAAtADQAYgA0ADUALQA5ADQAMAAwAC0AZgBiADAAZgAyAGUANwA3AGUANQAxAGIAfQADCE4AYQBtAGUABDBUAHcAaQBuAEMAQQBUACAAMwAuADEAIABCAHUAaQBsAGQAIAA0ADAAMgA0AC4ANwAFFlAAcgBvAGYAaQBsAGUARABhAHQAYQAGTHsAMQA2AGUANQA1AGIANgAwAC0ANwAwADQAMwAtADQAYQA2ADMALQBiADYANQBiAC0ANgAxADQANwAxADMAOAA3ADgAZAA0ADIAfQAHEkwAaQBiAHIAYQByAGkAZQBzAAhMewAzAGIAZgBkADUANAA1ADkALQBiADAANwBmAC0ANABkADYAZQAtAGEAZQAxAGEALQBhADgAMwAzADUANgBhADUANQAxADQAMgB9AAlMewA5AGMAOQA1ADgAOQA2ADgALQAyAGMAOAA1AC0ANAAxAGIAYgAtADgAOAA3ADEALQA4ADkANQBmAGYAMQBmAGUAZABlADEAYQB9AAoOVgBlAHIAcwBpAG8AbgALBmkAbgB0AAwKVQBzAGEAZwBlAA0KVABpAHQAbABlAA4aVgBpAHMAdQBFAGwAZQBtAE0AZQB0AGUAcgAPDkMAbwBtAHAAYQBuAHkAEAxTAHkAcwB0AGUAbQARElYAaQBzAHUARQBsAGUAbQBzABIwVgBpAHMAdQBFAGwAZQBtAHMAUwBwAGUAYwBpAGEAbABDAG8AbgB0AHIAbwBsAHMAEyhWAGkAcwB1AEUAbABlAG0AcwBXAGkAbgBDAG8AbgB0AHIAbwBsAHMAFCRWAGkAcwB1AEUAbABlAG0AVABlAHgAdABFAGQAaQB0AG8AcgAVIlYAaQBzAHUATgBhAHQAaQB2AGUAQwBvAG4AdAByAG8AbAAWFHYAaQBzAHUAaQBuAHAAdQB0AHMAFwxzAHkAcwB0AGUAbQAYGFYAaQBzAHUARQBsAGUAbQBCAGEAcwBlABkmRABlAHYAUABsAGEAYwBlAGgAbwBsAGQAZQByAHMAVQBzAGUAZAAaCGIAbwBvAGwAGyJQAGwAdQBnAGkAbgBDAG8AbgBzAHQAcgBhAGkAbgB0AHMAHEx7ADQAMwBkADUAMgBiAGMAZQAtADkANAAyAGMALQA0ADQAZAA3AC0AOQBlADkANAAtADEAYgBmAGQAZgAzADEAMABlADYAMwBjAH0AHRxBAHQATABlAGEAcwB0AFYAZQByAHMAaQBvAG4AHhRQAGwAdQBnAGkAbgBHAHUAaQBkAB8WUwB5AHMAdABlAG0ALgBHAHUAaQBkACBIYQBmAGMAZAA1ADQANAA2AC0ANAA5ADEANAAtADQAZgBlADcALQBiAGIANwA4AC0AOQBiAGYAZgBlAGIANwAwAGYAZAAxADcAIRRVAHAAZABhAHQAZQBJAG4AZgBvACJMewBiADAAMwAzADYANgBhADgALQBiADUAYwAwAC0ANABiADkAYQAtAGEAMAAwAGUALQBlAGIAOAA2ADAAMQAxADEAMAA0AGMAMwB9ACMOVQBwAGQAYQB0AGUAcwAkTHsAMQA4ADYAOABmAGYAYwA5AC0AZQA0AGYAYwAtADQANQAzADIALQBhAGMAMAA2AC0AMQBlADMAOQBiAGIANQA1ADcAYgA2ADkAfQAlTHsAYQA1AGIAZAA0ADgAYwAzAC0AMABkADEANwAtADQAMQBiADUALQBiADEANgA0AC0ANQBmAGMANgBhAGQAMgBiADkANgBiADcAfQAmFk8AYgBqAGUAYwB0AHMAVAB5AHAAZQAnVFUAcABkAGEAdABlAEwAYQBuAGcAdQBhAGcAZQBNAG8AZABlAGwARgBvAHIAQwBvAG4AdgBlAHIAdABpAGIAbABlAEwAaQBiAHIAYQByAGkAZQBzACgQTABpAGIAVABpAHQAbABlACkUTABpAGIAQwBvAG0AcABhAG4AeQAqHlUAcABkAGEAdABlAFAAcgBvAHYAaQBkAGUAcgBzACs4UwB5AHMAdABlAG0ALgBDAG8AbABsAGUAYwB0AGkAbwBuAHMALgBIAGEAcwBoAHQAYQBiAGwAZQAsEnYAaQBzAHUAZQBsAGUAbQBzAC1INgBjAGIAMQBjAGQAZQAxAC0AZAA1AGQAYwAtADQAYQAzAGIALQA5ADAANQA0AC0AMgAxAGYAYQA3ADUANgBhADMAZgBhADQALihJAG4AdABlAHIAZgBhAGMAZQBWAGUAcgBzAGkAbwBuAEkAbgBmAG8AL0x7AGMANgAxADEAZQA0ADAAMAAtADcAZgBiADkALQA0AGMAMwA1AC0AYgA5AGEAYwAtADQAZQAzADEANABiADUAOQA5ADYANAAzAH0AMBhNAGEAagBvAHIAVgBlAHIAcwBpAG8AbgAxGE0AaQBuAG8AcgBWAGUAcgBzAGkAbwBuADIMTABlAGcAYQBjAHkAMzBMAGEAbgBnAHUAYQBnAGUATQBvAGQAZQBsAFYAZQByAHMAaQBvAG4ASQBuAGYAbwA0MEwAbwBhAGQATABpAGIAcgBhAHIAaQBlAHMASQBuAHQAbwBQAHIAbwBqAGUAYwB0ADUaQwBvAG0AcABhAHQAaQBiAGkAbABpAHQAeQDQAAIaA9ADAS0E0AUGGgfQBwgaAUUHCQjQAAkaBEUKCwQDAAAABQAAAA0AAAAAAAAA0AwLrQIAAADQDQEtDtAPAS0Q0AAJGgRFCgsEAwAAAAUAAAANAAAAKAAAANAMC60BAAAA0A0BLRHQDwEtENAACRoERQoLBAMAAAAFAAAADQAAAAAAAADQDAutAgAAANANAS0S0A8BLRDQAAkaBEUKCwQDAAAABQAAAA0AAAAUAAAA0AwLrQIAAADQDQEtE9APAS0Q0AAJGgRFCgsEAwAAAAUAAAANAAAAAAAAANAMC60CAAAA0A0BLRTQDwEtENAACRoERQoLBAMAAAAFAAAADQAAAAAAAADQDAutAgAAANANAS0V0A8BLRDQAAkaBEUKCwQDAAAABQAAAA0AAAAAAAAA0AwLrQIAAADQDQEtFtAPAS0X0AAJGgRFCgsEAwAAAAUAAAANAAAAKAAAANAMC60EAAAA0A0BLRjQDwEtENAZGq0BRRscAdAAHBoCRR0LBAMAAAAFAAAADQAAAAAAAADQHh8tINAhIhoCRSMkAtAAJRoFRQoLBAMAAAADAAAAAAAAAAoAAADQJgutAAAAANADAS0n0CgBLRHQKQEtENAAJRoFRQoLBAMAAAADAAAAAAAAAAoAAADQJgutAQAAANADAS0n0CgBLRHQKQEtEJoqKwFFAAEC0AABLSzQAAEtF9AAHy0t0C4vGgPQMAutAQAAANAxC60XAAAA0DIarQDQMy8aA9AwC60CAAAA0DELrQMAAADQMhqtANA0Gq0A0DUarQA="</v>
+          </d>
+        </o>
+        <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
+        <o>
+          <v n="Name">"{192FAD59-8248-4824-A8DE-9177C94C195A}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" />
+        </o>
+        <v>{F66C7017-BDD8-4114-926C-81D6D687E35F}</v>
+        <o>
+          <v n="Name">"{F66C7017-BDD8-4114-926C-81D6D687E35F}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" />
+        </o>
+        <v>{246001F4-279D-43AC-B241-948EB31120E1}</v>
+        <o>
+          <v n="Name">"{246001F4-279D-43AC-B241-948EB31120E1}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" ckt="String">
+            <v>UnicodeStrings</v>
+            <v>false</v>
+            <v>GlobalTextListFilePath</v>
+            <v>""</v>
+            <v>ExtendedSettings</v>
+            <v>false</v>
+            <v>GlobalVisuImageFilePath</v>
+            <v>"%APPLICATIONPATH%;%APPLICATIONPATH%\;%APPLICATIONPATH%;%APPLICATIONPATH%\;%APPLICATIONPATH%;%APPLICATIONPATH%\;%APPLICATIONPATH%;%APPLICATIONPATH%\;%APPLICATIONPATH%;%APPLICATIONPATH%\;%APPLICATIONPATH%;%APPLICATIONPATH%\"</v>
+            <v>GeneralPropertySupport</v>
+            <v>false</v>
+          </d>
+        </o>
+      </d>
+      <d n="Values" t="Hashtable" />
+    </o>
+        </Data>
+        <TypeList>
+          <Type n="Boolean">System.Boolean</Type>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="Int32">System.Int32</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
+    </PlcProjectOptions>
+  </ProjectExtensions>
+</Project>

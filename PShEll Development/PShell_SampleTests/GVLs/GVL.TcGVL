@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <GVL Name="GVL" Id="{48142198-bb7d-4d34-b057-9fa5525af69f}">
+    <Declaration><![CDATA[VAR_GLOBAL
+	stShell : ST_Shell;	(* This structure contains references to Shell modules, recipe parameters and auxilary bit flags *)
+
+	(* Measurement FCQ fixtures *)
+	sFIXTURE_NAME								: STRING		:= 'Fixture';
+	sFIXTURE_HOST								: T_IPv4Addr	:= '192.168.0.';
+	sFIXTURE_AMS_NET_ID							: T_AmsNetID	:= '';
+	iFIXTURE_PORT								: UINT			:= 400;
+	tFIXTURE_TIMEOUT							: TIME			:= DEFAULT_ADS_TIMEOUT;
+	bFIXTURE_USE_LOGGER							: BOOL			:= FALSE;
+	bFIXTURE_USE_CLIENT							: BOOL			:= TRUE;
+	sFIXTURE_LOGGER_NAME						: STRING		:= 'Logger_Fixture_';
+	sFIXTURE_FILE_DIR							: STRING		:= 'C:\Fixture_';
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

@@ -1,0 +1,293 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_Axis_JennyScienceEthSingle_Test" Id="{da3d0536-8bea-46a5-9f34-bfc27d0134d2}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_Axis_JennyScienceEthSingle_Test
+VAR
+	bFirstCycle 	: BOOL := TRUE;
+	
+	bInit					: BOOL;								(* Power on axis and prepare to work *)
+	bDeinit					: BOOL;								(* Power off axis and reset status flags *)
+	bHome					: BOOL;								(* Home to reference point *)
+	bMoveVelocity			: BOOL;								(* Start motion with constant velocity *)
+	bMoveAbsolute			: BOOL;								(* Move to absolute position *)
+	bMoveAdditive			: BOOL;								(* Move by distance *)
+	bMoveRelative			: BOOL;								(* Move by distance *)
+	bJog					: BOOL;								(* Start manual jog movement *)
+	bStop					: BOOL;								(* High priority stop command *)
+	bHalt					: BOOL;								(* Halt current motion, next motion command will abort this command *)
+	bReset					: BOOL;								(* Reset axis and return to READY state *)
+	
+	(* General parameters *)
+	bModulo					: BOOL;								(* Axis is periodic *)								
+	lrOverride				: LREAL;							(* Axis velocity override in percents [%] *)
+	lrVelocity 				: LREAL;							(* Axis velocirt in measurement units per second *)
+	lrAcceleration			: LREAL;							(* Axis acceleration in measurement units per sercond^2 *)
+	lrDeceleration 			: LREAL;							(* Axis deceleration in measurement units per sercond^2 *)
+	lrJerk					: LREAL;							(* Axis jerk in measurement unit per sercond^3 *)
+	lrAbsolutePosition		: LREAL;							(* Target position for MC_MoveAbsolute function *)
+	lrRelativeDistance		: LREAL;							(* Relative distance to move for MC_MoveRelative/Additive fuctions *)
+	lrHomePosition			: LREAL;							(* This parameters is used to set axis position while performing homing procedure *)
+	
+	(* Jog function parameters *)	
+	lrJogPosition			: LREAL;							(* Relative position to move for jog feature *)
+	lrJogVelocity			: LREAL;							(* Jog movement velocity *)
+	lrJogAcceleration		: LREAL;							(* Jog movement acceleration *)
+	lrJogDeceleration		: LREAL;							(* Jog movement deceleration *)
+	lrJogJerk				: LREAL;							(* Jog movement jerk *)
+	eJogMode				: E_JogMode;						(* Jog momement mode *)
+	eJogDirection			: E_AxisJogDirection;				(* Direction of jog movement *)
+	
+	(* Stop function parameters *)
+	lrStopDeceleration		: LREAL;							(* Stop deceleration *)
+	lrStopJerk 				: LREAL;							(* Stop jerk *)
+	
+	(* Other parameters *)
+	stOptions				: ST_MoveOptions;					(* Additional movement options *)
+	eDirection				: Tc2_MC2.MC_Direction;				(* Axis movement direction for MC_MoveVelocity *)
+	mcBufferMode 			: MC_BufferMode := MC_Aborting;		(* Axis buffering mode *)
+	
+	(* Axis status flags *)
+	bActive					: BOOL;
+	bBusy					: BOOL;								(* Function block currently executes one of the requests *)
+	bError					: BOOL;								(* Error status flag *)
+	iErrorID				: UDINT;							(* Error ID *)
+	iAxisErrorID			: UDINT;							(* Axis error ID*)
+	lrActualPosition		: LREAL;							(* Actual axis position in selected units *)
+	rActualVelocity			: REAL;								(* Actual axis velocity in selected units *)
+	bPowerOn 				: BOOL;								(* Power On status bit *)
+	bIsHomed				: BOOL;								(* Axis has been homed even once *)
+	bInVelocity				: BOOL;								(* Axis is moving in target velocity *)
+	bInPostion				: BOOL;								(* Axis reached target position *)
+	bMoveActive				: BOOL;								(* Axis is moving to target position *)
+	bJogDone				: BOOL;								(* Axis manual movement by jog done *)
+	bStopped				: BOOL;								(* Axis movement has been stopped *)
+	bHalted					: BOOL;								(* Axis movement has been halted *)
+	eStatePlcOpen			: E_AxisStatePlcOpen;				(* Current PLCOpen state of axis *)
+	
+	fbAxis					: FB_AxisJennyScienceEthercat;		(* Jenny Science axis instance *)
+	
+	bStartReversingSequence	: BOOL;								(* Starts sample reversing movement*)
+	iReversingSequenceState : USINT;
+	lrTargetPosition1		: LREAL := 5.0;
+	lrTargetPosition2		: LREAL := 300.0;
+	lrTargetVelocity		: LREAL := 200.0;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	
+	fbAxis.MR_FirstCycle('Jenny Science Axis 1','mm', bModulo);
+	
+	lrOverride 			:= 100.0;
+	lrVelocity 			:= 100.0;
+	lrAcceleration		:= 1500.0;
+	lrDeceleration		:= 1500.0;
+	lrJerk				:= 1500.0;
+	lrAbsolutePosition	:= 0.0;
+	lrRelativeDistance	:= 0.0;
+	lrHomePosition		:= 0.0;
+	
+	lrJogPosition		:= 0.0;
+	lrJogVelocity 		:= 25.0;
+	lrJogAcceleration	:= 250.0;
+	lrJogDeceleration	:= 250.0;
+	lrJogJerk			:= 250.0;
+	
+	lrStopDeceleration	:= 250.0;
+	lrStopJerk			:= 250.0;
+	
+END_IF
+
+bActive 			:= fbAxis.Active;
+bBusy 				:= fbAxis.Busy;
+bError 				:= fbAxis.Error;
+iErrorID 			:= fbAxis.ErrorID;
+iAxisErrorID 		:= fbAxis.ErrorID;
+lrActualPosition 	:= fbAxis.ActualPosition;
+rActualVelocity		:= fbAxis.ActualVelocity;
+bPowerOn 			:= fbAxis.PowerOn;
+bIsHomed 			:= fbAxis.IsHomed;
+bInVelocity			:= fbAxis.InVelocity;
+bInPostion 			:= fbAxis.InPosition;
+bMoveActive 		:= fbAxis.MoveActive;
+bJogDone 			:= fbAxis.JogDone;
+bStopped 			:= fbAxis.Stopped;
+bHalted 			:= fbAxis.Halted;
+eStatePlcOpen 		:= fbAxis.StatePlcOpen;
+
+IF bReset THEN
+	IF fbAxis.MR_Reset() THEN
+		bReset := FALSE;
+	END_IF
+END_IF
+
+(* Stop commands *)
+IF bStop THEN
+	bJog := FALSE;
+	bMoveAbsolute := FALSE;
+	bMoveAdditive := FALSE;
+	bMoveRelative := FALSE;
+	bMoveVelocity := FALSE;
+	iReversingSequenceState := 0;
+	
+	fbAxis.MR_Stop();
+	IF fbAxis.Stopped THEN
+		bStop := FALSE;
+	END_IF
+	
+ELSIF bHalt THEN
+	bJog := FALSE;
+	bMoveAbsolute := FALSE;
+	bMoveAdditive := FALSE;
+	bMoveRelative := FALSE;
+	bMoveVelocity := FALSE;
+	iReversingSequenceState := 0;
+	
+	fbAxis.MR_Halt();
+	IF fbAxis.Halted THEN
+		bHalt := FALSE;
+	END_IF
+	
+END_IF
+
+(* Other commands *)
+IF bInit THEN	
+	fbAxis.MR_Init();	
+	IF fbAxis.PowerOn THEN
+		bInit := FALSE;
+	END_IF
+	
+ELSIF bDeinit THEN
+	fbAxis.MR_Abort();
+	IF NOT fbAxis.PowerOn THEN
+		bDeinit := FALSE;
+	END_IF
+	
+ELSIF bHome THEN
+	fbAxis.MR_Home(lrHomePosition);
+	IF fbAxis.IsHomed THEN
+		bHome := FALSE;
+	END_IF
+	
+ELSIF bMoveVelocity THEN
+	fbAxis.MR_MoveVelocity();
+	IF fbAxis.InVelocity THEN
+		bMoveVelocity := FALSE;
+	END_IF
+	
+ELSIF bMoveAbsolute THEN
+	fbAxis.MR_MoveAbsolute(lrAbsolutePosition);
+	IF fbAxis.InPosition THEN
+		bMoveAbsolute := FALSE;
+	END_IF
+
+ELSIF bMoveAdditive THEN
+	fbAxis.MR_MoveAdditive(lrRelativeDistance);
+	IF fbAxis.InPosition THEN
+		bMoveAdditive := FALSE;
+	END_IF
+	
+ELSIF bMoveRelative THEN
+	fbAxis.MR_MoveRelative(lrRelativeDistance);
+	IF fbAxis.InPosition THEN
+		bMoveRelative := FALSE;
+	END_IF
+	
+ELSIF bJog THEN
+	(*fbAxis.MR_Jog(lrJogPosition,eJogDirection);
+	IF fbAxis.JogDone THEN
+		bJog := FALSE;	
+	END_IF
+	*)
+	
+	fbAxis.MR_Jog(bJog);
+	bJog:= FALSE;
+	
+END_IF
+
+CASE iReversingSequenceState OF
+	(* Starts seqence *)
+	0:
+		IF bStartReversingSequence THEN
+			bStartReversingSequence := FALSE;
+			iReversingSequenceState := 10;
+		END_IF	
+		
+	(* Move to first postion *)
+	10:
+		lrVelocity := lrTargetVelocity;
+		fbAxis.MR_MoveAbsolute(lrTargetPosition1);
+		IF fbAxis.InPosition THEN
+			iReversingSequenceState := 20;
+		END_IF
+		
+	(* Move to second position *)
+	20:
+		lrVelocity := lrTargetVelocity;
+		fbAxis.MR_MoveAbsolute(lrTargetPosition2);
+		IF fbAxis.InPosition THEN
+			iReversingSequenceState := 10;
+		END_IF
+		
+END_CASE
+
+fbAxis.Override 		:= lrOverride;
+fbAxis.Velocity 		:= lrVelocity;
+fbAxis.Acceleration		:= lrAcceleration;
+fbAxis.Deceleration 	:= lrDeceleration;
+fbAxis.Jerk 			:= lrJerk;
+fbAxis.JogVelocity 		:= lrJogVelocity;
+fbAxis.JogAcceleration 	:= lrJogAcceleration;
+fbAxis.JogDeceleration 	:= lrJogDeceleration;
+fbAxis.JogJerk 			:= lrJogJerk;
+fbAxis.StopDeceleration := lrStopDeceleration;
+fbAxis.StopJerk 		:= lrStopJerk;
+
+fbAxis();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_Axis_JennyScienceEthSingle_Test">
+      <LineId Id="2548" Count="0" />
+      <LineId Id="2918" Count="0" />
+      <LineId Id="2549" Count="0" />
+      <LineId Id="2919" Count="0" />
+      <LineId Id="2550" Count="50" />
+      <LineId Id="2697" Count="0" />
+      <LineId Id="2601" Count="0" />
+      <LineId Id="2769" Count="0" />
+      <LineId Id="2602" Count="9" />
+      <LineId Id="2696" Count="0" />
+      <LineId Id="2612" Count="0" />
+      <LineId Id="2770" Count="0" />
+      <LineId Id="2613" Count="19" />
+      <LineId Id="2771" Count="0" />
+      <LineId Id="2633" Count="4" />
+      <LineId Id="2772" Count="0" />
+      <LineId Id="2639" Count="4" />
+      <LineId Id="2773" Count="0" />
+      <LineId Id="2645" Count="4" />
+      <LineId Id="2774" Count="0" />
+      <LineId Id="2651" Count="15" />
+      <LineId Id="3005" Count="3" />
+      <LineId Id="2667" Count="0" />
+      <LineId Id="2671" Count="1" />
+      <LineId Id="2845" Count="0" />
+      <LineId Id="2673" Count="4" />
+      <LineId Id="2932" Count="0" />
+      <LineId Id="2846" Count="0" />
+      <LineId Id="2678" Count="0" />
+      <LineId Id="2680" Count="0" />
+      <LineId Id="2682" Count="3" />
+      <LineId Id="2933" Count="0" />
+      <LineId Id="2847" Count="0" />
+      <LineId Id="2686" Count="0" />
+      <LineId Id="2688" Count="0" />
+      <LineId Id="2691" Count="4" />
+      <LineId Id="2670" Count="0" />
+      <LineId Id="2920" Count="0" />
+      <LineId Id="2922" Count="9" />
+      <LineId Id="2921" Count="0" />
+      <LineId Id="2668" Count="1" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

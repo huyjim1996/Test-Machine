@@ -1,0 +1,13 @@
+Id;Default
+0;Uninitialized
+10;Initializing
+20;Ready-Initialized
+30;Auto
+40;Auto to Manual
+50;Manual
+60;Manual to Auto
+70;Reset
+80;Reset done
+-10;Aborting
+-20;Emergency
+;

@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_FixtureClamp" Id="{2b33686c-4ffd-4fa8-be30-dab2062e7898}" SpecialFunc="None">
+    <Declaration><![CDATA[(*
+Copyrights	: Precision Systems Engineering
+Author		: ADBO
+Date		: 07/2022
+Description	: This function block is modyfication of standard FB_DoubleCoilCylinder.
+It allows to operate double coil cylinder with only one sensor - active postion.
+*)
+FUNCTION_BLOCK FB_FixtureClamp EXTENDS FB_DoubleCoilCylinder
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^();]]></ST>
+    </Implementation>
+    <Folder Name="Requests" Id="{0a774776-80c3-4efd-9bf7-2a6813a1e29e}" />
+    <Folder Name="StateMachine" Id="{481f6fc8-5ce0-4638-8e31-4c9ce13c27d4}" />
+    <Method Name="MR_GoHome" Id="{2a1bafef-954b-49db-90ca-a9ddf0019c85}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_GoHome : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eCylinderState = CYLINDER_IDLE AND piActiveSensor.In THEN
+	bBusy := TRUE;
+	bGoHome := TRUE;
+	MR_GoHome := FALSE;
+	
+	eCylinderState := CYLINDER_GO_HOME;
+	eCylinderGoHomeState := CYLINDER_MOVE_START_TRACKING;
+	
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : home position requested'));	
+	
+ELSIF eCylinderState = CYLINDER_GO_HOME_DONE THEN
+	bGoHome := FALSE;
+	MR_GoHome := TRUE;
+	
+	fbMachineLogger.MR_AddLogs(CONCAT(sName,' : home position done'));	
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_GoHome" Id="{dcdf6a05-0b4d-454e-8f0f-0c0568b28ecf}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_GoHome]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[poActiveValve.Out := FALSE;
+poHomeValve.Out := TRUE;
+
+CASE eCylinderGoHomeState OF
+	CYLINDER_MOVE_START_TRACKING:
+		IF NOT piActiveSensor.In THEN
+			IF TIME_TO_INT(tDelay) = 0 THEN
+				eCylinderGoHomeState := CYLINDER_MOVE_DONE;
+			ELSE
+				eCylinderGoHomeState := CYLINDER_MOVE_DELAY;
+			END_IF
+		END_IF
+		
+	CYLINDER_MOVE_DELAY:
+		tonGoActiveDelay( IN := TRUE, PT := tDelay);
+		
+		IF tonGoActiveDelay.Q THEN
+			tonGoActiveDelay( IN := FALSE );
+			eCylinderGoHomeState := CYLINDER_MOVE_DONE;
+		END_IF
+		
+	CYLINDER_MOVE_DONE:
+		eCylinderState := CYLINDER_GO_HOME_DONE;
+		
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_FixtureClamp">
+      <LineId Id="33" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FixtureClamp.MR_GoHome">
+      <LineId Id="3" Count="3" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="7" Count="1" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="9" Count="4" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FixtureClamp.MS_GoHome">
+      <LineId Id="3" Count="23" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

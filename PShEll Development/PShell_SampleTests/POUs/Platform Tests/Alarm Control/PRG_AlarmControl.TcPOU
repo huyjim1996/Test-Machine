@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_AlarmControl" Id="{865274b2-76b8-4626-a1b3-33eb3734ce0f}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_AlarmControl
+VAR CONSTANT
+	sDEFAULT_NAME		: STRING := 'Alarm Controler Test';	
+	sDEFAULT_FILE_PATH	: STRING := 'C:\TwinCAT\Tests\EventLogger\events.csv';
+END_VAR
+VAR
+	bFirstCycle			: BOOL := TRUE;
+	fbAlarmControler 	: FB_AlarmControler;
+	
+	bInit 				: BOOL;
+	bAbort				: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	
+	fbAlarmControler.MR_FirstCycle( sName		:= sDEFAULT_NAME,
+									sFileName	:= sDEFAULT_FILE_PATH);
+									
+	(* Assign machine controler reference to Shell API*)
+	stShell.stPlatform.ref_fbAlarmControler REF= fbAlarmControler;
+	
+	(* Set assignamnet done bit for visu controler *)
+	stShell.stFlags.bAlarmCtrlAssignamentsDone := TRUE;
+END_IF
+
+fbAlarmControler();]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

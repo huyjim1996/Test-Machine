@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_MachineControl" Id="{060380e8-9f13-4409-a4b0-3cef7b843ba9}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_MachineControl
+VAR
+	bFirstCycle 		: BOOL := TRUE;			(*  *)
+	fbMachineControler 	: FB_MachineControl;	(*  *)
+	fbFileLogger 		: FB_FileLogger;		(*	*)
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	
+	(* Assign machine controler reference to Shell API*)
+	stShell.stPlatform.ref_fbMachineControler REF= fbMachineControler;
+	
+	(* Set assignamnet done bit for visu controler *)
+	stShell.stFlags.bMachineCtrlAssignamentsDone := TRUE;
+	
+	fbMachineLogger.MR_FirstCycle( 	sName		:= 'PSE_Shell_Machine_Logger',
+									sFileDir 	:= 'C:\TwinCAT\Projects\Loggers',
+									sFileName 	:= 'PSE_Shell_Machine_Logger',
+									sAmsNetId 	:= '',
+									bAddTimeStamp := FALSE,
+									bAddHeader := FALSE);
+END_IF
+
+IF NOT fbMachineLogger.Active THEN 
+	fbMachineLogger.MR_Init();	
+END_IF
+
+fbMachineTime(bEnable := TRUE);
+fbMachineControler();
+fbMachineLogger();
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_MachineControl">
+      <LineId Id="3" Count="8" />
+      <LineId Id="45" Count="2" />
+      <LineId Id="55" Count="1" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="17" Count="9" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

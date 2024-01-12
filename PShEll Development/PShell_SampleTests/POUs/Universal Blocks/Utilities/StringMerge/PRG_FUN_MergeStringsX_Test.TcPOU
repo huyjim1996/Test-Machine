@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FUN_MergeStringsX_Test" Id="{bd236ed0-2614-42bb-9bcd-78e20cffa982}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FUN_MergeStringsX_Test
+VAR
+	sTestFunMergeLongStrings10	: STRING(2000);
+	sTestFunMergeStrings10		: STRING(255);
+	sTestFunMergeStrings5		: STRING(255);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[sTestFunMergeLongStrings10 := FUN_MergeLongStrings10('1','2','3','4','5','6','7','8','9','10');
+sTestFunMergeStrings10 := FUN_MergeStrings10('1','2','3','4','5','6','7','8','9','10');
+sTestFunMergeStrings5 := FUN_MergeStrings5('1','2','3','4','5');]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FUN_MergeStringsX_Test">
+      <LineId Id="5" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="14" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_TcpClient_Test" Id="{0655dcca-a181-4969-874d-b989a248c528}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_TcpClient_Test
+VAR
+	bFirstCycle 		: BOOL := TRUE;
+	fbTcpClient 		: FB_TcpClient;
+	fbFileLogger		: FB_FileLogger; 
+	
+	iState 				: USINT;
+	
+	bInit 				: BOOL;
+	bAbort 				: BOOL;
+	bNewPar				: BOOL;
+	bSend 				: BOOL;
+	bRecive 			: BOOL;
+	bReciveAndSend		: BOOL;
+	
+	sSendMessage 		: STRING;
+	sSendMessage1		: STRING;
+	sReciveMessage 		: STRING;
+
+	bError				: BOOL;
+	iErrorID			: UDINT;
+	eClientState		: E_TcpIpDeviceState;
+	
+	sHost				: T_IPv4Addr;
+	iPort				: UINT;
+	
+	stSendData 			: ST_TcpBufferData;
+	stReciveData 		: ST_TcpBufferData;
+	
+	arrBufferMessage	: ARRAY[0..10] OF STRING;
+	iMessageIndex	 	: INT;
+	bArrBufferClear 	: BOOL;
+	
+	sDirectoryForSimulation : STRING := 'C:\TwinCAT\Tests\';
+	
+	tAddLogg : TON;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* Setting initial parameters *)
+IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	fbTcpClient.MR_FirstCycle(	sName		:= 'TCP/IP test client',
+								sHost 		:= '192.168.0.100',
+								sAmsNetID	:= '',
+								iPort		:= 12000,
+								tTimeout	:= T#5S);
+								
+	fbFileLogger.MR_FirstCycle( sName		:= 'File Logger',
+								sFileDir 	:= sDirectoryForSimulation,
+								sFileName 	:= 'LoggerVisionTest',
+								sAmsNetId 	:= '',
+								bAddTimeStamp := TRUE,
+								bAddHeader := TRUE);	
+	iState := 0;
+END_IF
+
+bError := fbTcpClient.Error;
+iErrorID := fbTcpClient.ErrorID;
+eClientState := fbTcpClient.State;
+
+
+(* Closing the client connection *)
+IF bAbort THEN
+	bAbort := FALSE;
+	iState := 20;
+END_IF
+
+(* Setting new parameters before initialization*)
+IF bNewPar THEN
+	bNewPar := FALSE;
+	fbTcpClient.Host := sHost;
+	fbTcpClient.Port := iPort;
+END_IF
+
+CASE iState OF
+	(* Waiting for commands *)
+	0:
+		IF bInit THEN
+			bInit := FALSE;
+		//	fbFileLogger.MR_Init();
+		//	IF fbFileLogger.Active THEN
+				iState := 10;
+		//	END_IF
+
+		ELSIF bSend THEN
+			bSend := FALSE;
+			iState := 30;
+			
+		ELSIF bRecive THEN
+			IF NOT bArrBufferClear THEN
+				iState := 60;
+			ELSE
+				bArrBufferClear := 0;
+				bRecive := FALSE;
+				iState := 40;
+			END_IF
+		
+		ELSIF bReciveAndSend THEN
+			bReciveAndSend := FALSE;
+			iState := 45;
+			
+		END_IF
+		
+	(* Client connection initialization *)
+	10:
+		fbTcpClient.MR_Init();
+		IF fbTcpClient.Active THEN
+			iState := 0;
+		END_IF
+		
+	(* Client connection deinitialization *)
+	20:
+		fbTcpClient.MR_Abort();
+		IF NOT fbTcpClient.Active THEN
+			iState := 0;	
+		END_IF
+	
+	(* Sending messages *)
+	30:
+		MEMCPY(ADR(sSendMessage1),ADR(sSendMessage),SIZEOF(sSendMessage));
+		sSendMessage := CONCAT(sSendMessage, ':1$N');
+		FUN_StringToTcpBufferData(ADR(sSendMessage),ADR(stSendData));
+		
+		IF fbTcpClient.MR_AppendToSendBuffer(stSendData) THEN
+			sSendMessage := CONCAT(sSendMessage1, ':2$N');
+			FUN_StringToTcpBufferData(ADR(sSendMessage1),ADR(stSendData));
+			
+			IF fbTcpClient.MR_AppendToSendBuffer(stSendData) THEN
+				iState := 50;
+			END_IF
+		END_IF
+		
+	(* Receiving messages to array buffer *)
+	40:
+		stReciveData := fbTcpClient.NextRecivedMessage;
+		IF stReciveData.iLength > 0 THEN
+			FUN_TcpBufferDataToString(ADR(sReciveMessage),ADR(stReciveData));
+			arrBufferMessage[iMessageIndex] := sReciveMessage;
+			iMessageIndex := iMessageIndex + 1;
+		ELSIF stReciveData.iLength = 0 THEN
+			iMessageIndex := 0;
+			iState := 0;
+
+		END_IF
+		
+	(* Sending last received message *)
+	45:
+		stReciveData := fbTcpClient.LastRecivedMessage;
+		IF stReciveData.iLength > 0 THEN
+			FUN_TcpBufferDataToString(ADR(sReciveMessage),ADR(stReciveData));
+			sSendMessage := CONCAT('Response to: ',sReciveMessage);
+			sSendMessage := CONCAT(sSendMessage, '$N');
+			FUN_StringToTcpBufferData(ADR(sSendMessage),ADR(stSendData));
+			iState := 30;
+			
+		END_IF	
+		
+	(* Clearing buffers *)
+	50:
+		fbTcpClient.MR_ClearAllBuffers();
+		iState := 0;
+		
+	(* Clearing incoming messages array buffer *)
+	60:
+		bArrBufferClear := TRUE;
+		MEMSET(ADR(arrBufferMessage), 0, SIZEOF(arrBufferMessage));
+		iState := 0;
+		
+END_CASE
+
+fbTcpClient();
+fbFileLogger();
+tAddLogg();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_TcpClient_Test">
+      <LineId Id="3" Count="8" />
+      <LineId Id="176" Count="4" />
+      <LineId Id="15" Count="120" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

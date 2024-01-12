@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="ST_VisuCtrlFixtureFrame" Id="{181c3165-826c-418c-a54d-aa9229fc2c9a}">
+    <Declaration><![CDATA[TYPE ST_VisuCtrlFixtureFrame EXTENDS ST_VisuCtrlUnitFrame:
+STRUCT
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

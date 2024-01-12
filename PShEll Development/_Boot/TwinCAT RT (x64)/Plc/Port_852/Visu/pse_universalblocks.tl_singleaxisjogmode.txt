@@ -1,0 +1,7 @@
+Id;Default
+0;Standard slow
+1;Standard fast
+2;Continous
+3;Inching
+4;Inching modulo
+;

@@ -1,0 +1,1447 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <FileVersion>1.0.0.0</FileVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6c5e67ff-9771-4a44-bc12-3527d22e1aca}</ProjectGuid>
+    <SubObjectsSortedByName>True</SubObjectsSortedByName>
+    <DownloadApplicationInfo>true</DownloadApplicationInfo>
+    <WriteProductVersion>true</WriteProductVersion>
+    <GenerateTpy>false</GenerateTpy>
+    <Name>PShEll_UniversalBlocks</Name>
+    <ProgramVersion>3.1.4023.0</ProgramVersion>
+    <Application>{4780b78b-a05a-4ac9-bafe-5da8a7e1392b}</Application>
+    <TypeSystem>{0e9685b4-31ce-4b6c-ab77-109282763f1f}</TypeSystem>
+    <Implicit_Task_Info>{2ba6286d-b8b6-48cb-b34f-8de35a8ac4da}</Implicit_Task_Info>
+    <Implicit_KindOfTask>{72b590a4-40e4-4469-921b-6a3810902df9}</Implicit_KindOfTask>
+    <Implicit_Jitter_Distribution>{3c812beb-44a0-4240-9b3b-4c57c78daeed}</Implicit_Jitter_Distribution>
+    <LibraryReferences>{91de8ba3-ca02-4c95-bba6-786a28a1cadb}</LibraryReferences>
+    <Company>Precision Systems Engineering</Company>
+    <Released>false</Released>
+    <ProjectVersion>1.0.1.1</ProjectVersion>
+    <Author>Control Systems Design Department</Author>
+    <DefaultNamespace>PSE_UniversalBlocks</DefaultNamespace>
+    <Placeholder>PSE_UniversalBlocks</Placeholder>
+    <Title>PShEll Universal Blocks</Title>
+    <Description>PSE Shell - Automation Software Development Kit</Description>
+    <DocFormat>
+    </DocFormat>
+    <CompilerDefines />
+    <DeploymentEvents>
+      <Events>
+        <Event>
+          <CommandType>Copy</CommandType>
+          <DeploymentType>ActivateConfiguration</DeploymentType>
+          <Command1 />
+          <Command2 />
+        </Event>
+      </Events>
+    </DeploymentEvents>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="DUTs\Libs\Alarms\AlarmControler\E_AlarmControlerState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Alarms\VisuEvents\E_EventType.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Alarms\VisuEvents\ST_BaseEvent.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Alarms\VisuEvents\ST_Event.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Axis\Universal Axis\E_AxisJogDirection.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Axis\Universal Axis\E_AxisState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Axis\Universal Axis\E_AxisStateInit.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Axis\Universal Axis\E_AxisStatePlcOpen.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Communication\TcpIp\E_TcpIpDeviceState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Communication\TcpIp\E_TcpIpDeviceStateRecive.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Communication\TcpIp\E_TcpIpDeviceStateSend.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Communication\TcpIp\E_TcpIpServerStateRunning.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Communication\TcpIp\ST_TcpBufferData.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Cylinder\Universal Cylinder\E_CylinderError.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Cylinder\Universal Cylinder\E_CylinderState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Cylinder\Universal Cylinder\E_CylinderStateGo.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Digital Devices\Digital Input\E_DigitalInputExState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Digital Devices\Lamp Indicator\E_LampState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Fixtures\UniversalFixture\E_UniversalFixtureConnectionType.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Fixtures\UniversalFixture\E_UniversalFixtureSampleResult.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Fixtures\UniversalFixture\E_UniversalFixtureState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Fixtures\UniversalFixture\E_UniversalFixtureStateAbort.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Fixtures\UniversalFixture\E_UniversalFixtureStateInit.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Fixtures\UniversalFixture\E_UniversalFixtureStateMeasure.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Fixtures\UniversalFixture\E_UniversalFixtureStateReset.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Common\ST_UniversalPlatform.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Machine\E_MachineCtrlState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Safety\E_SafetyCtrlState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\E_VisuCtrlAlarmControlState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\E_VisuCtrlAxisImgType.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\E_VisuCtrlAxisJogMode.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\E_VisuCtrlCylinderImgType.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\E_VisuCtrlNavBarState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\E_VisuCtrlPageState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\E_VisuCtrlRecipeParameterType.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\E_VisuCtrlRecipesManagerState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\E_VisuCtrlRobotImgType.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\E_VisuCtrlSingleAxisState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\E_VisuCtrlSingleCylinderState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\E_VisuCtrlSingleRobotState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\E_VisuCtrUniversalMachineState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\ST_VisuCtrlAxisFrame.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\ST_VisuCtrlCylinderFrame.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\ST_VisuCtrlFixtureFrame.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\ST_VisuCtrlInputFrame.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\ST_VisuCtrlOutputFrame.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\ST_VisuCtrlRecipeParameter.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\ST_VisuCtrlRecipesManager.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\ST_VisuCtrlRobotFrame.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Platform\Universal Visu\ST_VisuCtrlUnitFrame.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Robots\Mitsubishi\CR800\EtherCAT Registers\ST_CR800EthercatData.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Robots\Mitsubishi\CR800\E_CR800Error.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Robots\Mitsubishi\CR800\StateMachine\E_CR800State.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Robots\Mitsubishi\CR800\StateMachine\E_CR800StateAborting.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Robots\Mitsubishi\CR800\StateMachine\E_CR800StateCommandExchange.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Robots\Mitsubishi\CR800\StateMachine\E_CR800StateCyclePausing.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Robots\Mitsubishi\CR800\StateMachine\E_CR800StateCycleStopping.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Robots\Mitsubishi\CR800\StateMachine\E_CR800StateDoingRequest.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Robots\Mitsubishi\CR800\StateMachine\E_CR800StateHoming.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Robots\Mitsubishi\CR800\StateMachine\E_CR800StateInitializing.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Robots\Mitsubishi\CR800\StateMachine\E_CR800StateSendPosition.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Robots\Mitsubishi\CR800\ST_CR800UserDefinedArea.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Robots\Mitsubishi\E_RobotActions.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Robots\Mitsubishi\E_RobotSystemActions.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\CSV Data Exchanger\E_CSVDataExchangerCountColumnsState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\CSV Data Exchanger\E_CSVDataExchangerInitState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\CSV Data Exchanger\E_CSVDataExchangerInsertIntoTableState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\CSV Data Exchanger\E_CSVDataExchangerSelectAllState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\CSV Data Exchanger\E_CSVDataExchangerSelectRowState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\CSV Data Exchanger\E_CSVDataExchangerSetNewPathState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\CSV Data Exchanger\E_CSVDataExchangerState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\CSV Data Exchanger\ST_CSV_Record.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\File Logger\E_FileLoggerAddLogsState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\File Logger\E_FileLoggerInitState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\File Logger\E_FileLoggerSetNewPathState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\File Logger\E_FileLoggerState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\Recipe Manager\E_RecipesManagerReturns.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\Recipe Manager\E_RecipesManagerState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\Recipe Manager\E_RecipesManagerStateBackup.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\Recipe Manager\E_RecipesManagerStateCreateRemove.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\Recipe Manager\E_RecipesManagerStateInit.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\Recipe Manager\E_RecipesManagerStateReload.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\TXT Data Exchanger\E_TXTDataExchangerAddLogsState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\TXT Data Exchanger\E_TXTDataExchangerInitState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\TXT Data Exchanger\E_TXTDataExchangerSearchForFileState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\TXT Data Exchanger\E_TXTDataExchangerSetNewPathState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Utilities\TXT Data Exchanger\E_TXTDataExchangerState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraGetConnectionStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraGetExprStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraGetFileListStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraGetFileStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraGetJobStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraGetOnlineStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraGetPositionState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraGetPositionStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraGetValueEasyBuilderStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraGetValueSpreadsheetStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraGetValuesState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraGetValuesStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraGetValueStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraImageTriggerStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraInitState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraLoadFileStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraMethodState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraPutLiveStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraPutPortnumStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraPutTimeoutStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraPutUpdateStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraPutWatchStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraResetSystemStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraSetJobStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraSetOnlineStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Libs\Vision\Cognex\E_CognexCameraStoreFileStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Machine\Machine Control\E_MachineCtrlStateInit.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Machine\Machine Control\E_MachineCtrlStateUninitialized.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Machine\Shell API\ST_Shell.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Machine\Shell API\ST_ShellFlags.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Machine\Shell API\ST_ShellPlatform.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Machine\Shell API\ST_ShellRecipeData.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Platform\Universal Visu\ST_VisuCtrlRobotFrame.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GlobalTextList.TcGTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GVLs\GVL.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\Libs\0_Checks\Checks\CheckBounds.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\0_Checks\Checks\CheckDivDInt.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\0_Checks\Checks\CheckDivLInt.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\0_Checks\Checks\CheckDivLReal.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\0_Checks\Checks\CheckDivReal.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\0_Checks\Checks\CheckPointer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\0_Checks\Checks\CheckRangeSigned.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\0_Checks\Checks\CheckRangeUnsigned.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\0_Checks\Checks\P_Checks.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\0_Checks\GVL_Checks.TcGVL">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Alarms\AlarmControler\FB_AlarmControler.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Alarms\AlarmControler\I_AlarmControler.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Alarms\VisuEvents\FB_VisuEventsHandling.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Alarms\VisuEvents\LDT_TO_STRING.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Axis\FB_AxisServo.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Axis\FB_UniversalAxis.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Axis\I_UniversalAxis.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Communication\TcpIp\FUN_StringToTcpBufferData.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Communication\TcpIp\FUN_TcpBufferDataToString.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Communication\TcpIp\Tcp Buffer\FB_TcpBuffer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Communication\TcpIp\Tcp Client\FB_TcpClient.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Communication\TcpIp\Tcp Device\FB_TcpDevice.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Communication\TcpIp\Tcp Device\I_TcpDevice.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Communication\TcpIp\Tcp Server\FB_TcpServer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Cylinder\Double Coil Cylinder\FB_DoubleCoilCylinder.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Cylinder\Double Coil Cylinder\FB_DoubleCoilCylinder2.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Cylinder\Single Coil Cylinder\FB_SingleCoilCylinder.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Cylinder\Single Coil Cylinder\FB_SingleCoilCylinder2.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Cylinder\Universal Cylinder\FB_UniversalCylinder.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Cylinder\Universal Cylinder\I_UniversalCylinder.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Digital Devices\Digital Device\FB_DigitalDevice.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Digital Devices\Digital Device\I_DigitalDevice.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Digital Devices\Digital Input\FB_DigitalInput.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Digital Devices\Digital Input\FB_DigitalInputExt.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Digital Devices\Digital Input\I_DigitalInput.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Digital Devices\Digital Output\FB_DigitalOutput.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Digital Devices\Digital Output\I_DigitalOutput.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Digital Devices\Lamp Indicator\FB_Lamp.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Digital Devices\Lamp Indicator\I_Lamp.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Fixtures\FB_UniversalFixture.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Fixtures\I_UniversalFixture.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Platform\Universal Machine\FB_UniversalMachine.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Platform\Universal Machine\I_UniversalMachine.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Platform\Universal Safety\FB_UniversalSafety.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Platform\Universal Safety\I_UniversalSafety.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Platform\Universal Visu\FB_UniversalVisu.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Platform\Universal Visu\F_CloseDialog.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Platform\Universal Visu\F_OpenDialog.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Robots\Mitsubishi\FB_CR800EtherCAT.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Robots\Mitsubishi\I_CR800EtherCAT.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\Beckhoff UPS\CX2xxx\FB_UpsCx2xxx.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\Beckhoff UPS\CX5xxx\FB_UpsCx50xx.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\Beckhoff UPS\CX5xxx\FB_UpsCx51xx.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\Beckhoff UPS\CX5xxx\FB_UpsCx5xxx.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\Beckhoff UPS\CX5xxx\I_BeckhoffUpsCX5xxx.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\Beckhoff UPS\Universal CX\FB_UniversalCxUps.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\Beckhoff UPS\Universal CX\I_UniversalCxUps.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\CSV Data Exchanger\FB_CSVDataExchanger.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\CSV Data Exchanger\I_CSVDataExchanger.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\File Logger\FB_FileLogger.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\File Logger\I_FileLogger.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\Math\FUN_Ceil.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\Recipes Manager\FB_RecipeParameter.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\Recipes Manager\FB_RecipesControler.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\Recipes Manager\I_RecipeParameter.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\Recipes Manager\I_RecipesManager.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\StringMerge\FUN_MergeLongStrings10.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\StringMerge\FUN_MergeStrings10.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\StringMerge\FUN_MergeStrings3.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\StringMerge\FUN_MergeStrings4.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\StringMerge\FUN_MergeStrings5.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\StringMerge\FUN_MergeStrings6.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\Systemtime to String\FUN_TimestructToDate.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\Systemtime to String\FUN_TimestructToTime.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\TXT Data Exchanger\FB_TXTDataExchanger.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Utilities\TXT Data Exchanger\I_TXTDataExchanger.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Vision\Cognex\FB_CognexCamera.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Libs\Vision\Cognex\I_CognexCamera.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Machine\Alarm Control\PRG_AlarmControl.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Machine\Machine Control\FB_MachineControl.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Machine\Machine Control\I_MachineControl.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Machine\Machine Control\PRG_MachineControl.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Machine\Recipes Manager\PRG_RecipesManager.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Machine\Visu Control\FB_VisuControl.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Machine\Visu Control\F_CloseDialog_1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Machine\Visu Control\F_OpenDialog_1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Machine\Visu Control\PRG_VisuControl.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Test.TcTTO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visualization Manager.TcVMO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Alarms\EventTable.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Alarms\EventTableNew.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Alarms\Image Pools\IP_EventSeverity.TcIPO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Alarms\Image Pools\IP_EventType.TcIPO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Alarms\SingleEvent.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Alarms\Text Lists\TL_EventServerity.TcTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Alarms\Text Lists\TL_EventType.TcTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Headers\Header.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Headers\HeaderWinCE.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Headers\Image Pools\IPHeader.TcIPO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Headers\Text Lists\TL_HeaderMachineState.TcTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Main.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Manual\Image Pools\IPAxis.TcIPO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Manual\Image Pools\IPCylinder.TcIPO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Manual\Image Pools\IPRobots.TcIPO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Manual\SingleAxis.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Manual\SingleFixture.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Manual\SingleAxisJogInching.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Manual\SingleAxisJogContinous.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Manual\SingleAxisJogInchingModulo.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Manual\SingleAxisJogStandardSlow.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Manual\SingleAxisJogStandardFlast.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Manual\SingleCylinder.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Manual\SingleDigitalInput.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Manual\SingleRobot.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Manual\SingleSafeOutput.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="VISUs\Manual\SingleSafeInput.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="VISUs\Manual\SingleDigitalOutput.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Manual\Text Lists\TL_ModeSwitchState.TcTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Manual\Text Lists\TL_SingleAxisJogMode.TcTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Manual\Text Lists\TL_SingleCylinderState.TcTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Manual\Text Lists\TL_SingleAxisState.TcTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Manual\Text Lists\TL_SingleRobotState.TcTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Navigation\NavBarAuto.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Navigation\NavBarAuxilary.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Navigation\NavBarEmpty.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Navigation\NavBarInitializing.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Navigation\NavBarManual.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Navigation\NavBarUninitialized.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Navigation\NavBarUtilities.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Pages\PageInitializing.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Pages\PageXtsEnviroment.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+      <External>false</External>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="VISUs\Pages\PageAborting.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Pages\PageAlarms.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Pages\PageManualCylinders.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Pages\PageManualRobots.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Pages\PageManualInputs.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Pages\PageManualAxis.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Pages\PageManualOutputs.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Pages\PageManualSafety.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="VISUs\Pages\PageReadyInitialized.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Pages\PageRecipesManager.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Pages\PageReset.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Pages\PageSwitchMode.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Pages\PageXtsDiagnostic.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+      <External>false</External>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="VISUs\Recipes\SingleRecipesParameterTypeBool.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Recipes\SingleRecipesParameterTypeInteger.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Recipes\SingleRecipesParameterTypeReal.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Recipes\SingleRecipesParameterTypeString.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\Recipes\Text Lists\TL_RecipesManagerReturns.TcTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\Recipes\Text Lists\TL_RecipesManagerStatus.TcTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISU_TASK.TcTTO">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DUTs" />
+    <Folder Include="DUTs\Libs" />
+    <Folder Include="DUTs\Libs\Alarms" />
+    <Folder Include="DUTs\Libs\Alarms\AlarmControler" />
+    <Folder Include="DUTs\Libs\Alarms\VisuEvents" />
+    <Folder Include="DUTs\Libs\Axis" />
+    <Folder Include="DUTs\Libs\Axis\Universal Axis" />
+    <Folder Include="DUTs\Libs\Communication" />
+    <Folder Include="DUTs\Libs\Communication\TcpIp" />
+    <Folder Include="DUTs\Libs\Cylinder" />
+    <Folder Include="DUTs\Libs\Cylinder\Universal Cylinder" />
+    <Folder Include="DUTs\Libs\Digital Devices" />
+    <Folder Include="DUTs\Libs\Digital Devices\Digital Input" />
+    <Folder Include="DUTs\Libs\Digital Devices\Lamp Indicator" />
+    <Folder Include="DUTs\Libs\Fixtures" />
+    <Folder Include="DUTs\Libs\Fixtures\UniversalFixture" />
+    <Folder Include="DUTs\Libs\Platform" />
+    <Folder Include="DUTs\Libs\Platform\Common" />
+    <Folder Include="DUTs\Libs\Platform\Universal Machine" />
+    <Folder Include="DUTs\Libs\Platform\Universal Safety" />
+    <Folder Include="DUTs\Libs\Platform\Universal Visu" />
+    <Folder Include="DUTs\Libs\Robots" />
+    <Folder Include="DUTs\Libs\Robots\Mitsubishi" />
+    <Folder Include="DUTs\Libs\Robots\Mitsubishi\CR800" />
+    <Folder Include="DUTs\Libs\Robots\Mitsubishi\CR800\EtherCAT Registers" />
+    <Folder Include="DUTs\Libs\Robots\Mitsubishi\CR800\StateMachine" />
+    <Folder Include="DUTs\Libs\Utilities" />
+    <Folder Include="DUTs\Libs\Utilities\CSV Data Exchanger" />
+    <Folder Include="DUTs\Libs\Utilities\File Logger" />
+    <Folder Include="DUTs\Libs\Utilities\Recipe Manager" />
+    <Folder Include="DUTs\Libs\Utilities\TXT Data Exchanger" />
+    <Folder Include="DUTs\Libs\Vision" />
+    <Folder Include="DUTs\Libs\Vision\Cognex" />
+    <Folder Include="DUTs\Machine" />
+    <Folder Include="DUTs\Machine\Machine Control" />
+    <Folder Include="DUTs\Machine\Shell API" />
+    <Folder Include="DUTs\Platform" />
+    <Folder Include="DUTs\Platform\Universal Visu" />
+    <Folder Include="GVLs" />
+    <Folder Include="POUs\Libs" />
+    <Folder Include="POUs\Libs\0_Checks" />
+    <Folder Include="POUs\Libs\0_Checks\Checks" />
+    <Folder Include="POUs\Libs\Alarms" />
+    <Folder Include="POUs\Libs\Alarms\AlarmControler" />
+    <Folder Include="POUs\Libs\Alarms\VisuEvents" />
+    <Folder Include="POUs\Libs\Axis" />
+    <Folder Include="POUs\Libs\Communication" />
+    <Folder Include="POUs\Libs\Communication\TcpIp" />
+    <Folder Include="POUs\Libs\Communication\TcpIp\Tcp Buffer" />
+    <Folder Include="POUs\Libs\Communication\TcpIp\Tcp Client" />
+    <Folder Include="POUs\Libs\Communication\TcpIp\Tcp Device" />
+    <Folder Include="POUs\Libs\Communication\TcpIp\Tcp Server" />
+    <Folder Include="POUs\Libs\Cylinder" />
+    <Folder Include="POUs\Libs\Cylinder\Double Coil Cylinder" />
+    <Folder Include="POUs\Libs\Cylinder\Single Coil Cylinder" />
+    <Folder Include="POUs\Libs\Cylinder\Universal Cylinder" />
+    <Folder Include="POUs\Libs\Digital Devices" />
+    <Folder Include="POUs\Libs\Digital Devices\Digital Device" />
+    <Folder Include="POUs\Libs\Digital Devices\Digital Input" />
+    <Folder Include="POUs\Libs\Digital Devices\Digital Output" />
+    <Folder Include="POUs\Libs\Digital Devices\Lamp Indicator" />
+    <Folder Include="POUs\Libs\Fixtures" />
+    <Folder Include="POUs\Libs\Platform" />
+    <Folder Include="POUs\Libs\Platform\Universal Machine" />
+    <Folder Include="POUs\Libs\Platform\Universal Safety" />
+    <Folder Include="POUs\Libs\Platform\Universal Visu" />
+    <Folder Include="POUs\Libs\Robots" />
+    <Folder Include="POUs\Libs\Robots\Mitsubishi" />
+    <Folder Include="POUs\Libs\Utilities" />
+    <Folder Include="POUs\Libs\Utilities\Beckhoff UPS" />
+    <Folder Include="POUs\Libs\Utilities\Beckhoff UPS\CX2xxx" />
+    <Folder Include="POUs\Libs\Utilities\Beckhoff UPS\CX5xxx" />
+    <Folder Include="POUs\Libs\Utilities\Beckhoff UPS\Universal CX" />
+    <Folder Include="POUs\Libs\Utilities\CSV Data Exchanger" />
+    <Folder Include="POUs\Libs\Utilities\File Logger" />
+    <Folder Include="POUs\Libs\Utilities\Math" />
+    <Folder Include="POUs\Libs\Utilities\Recipes Manager" />
+    <Folder Include="POUs\Libs\Utilities\StringMerge" />
+    <Folder Include="POUs\Libs\Utilities\Systemtime to String" />
+    <Folder Include="POUs\Libs\Utilities\TXT Data Exchanger" />
+    <Folder Include="POUs\Libs\Vision" />
+    <Folder Include="POUs\Libs\Vision\Cognex" />
+    <Folder Include="POUs\Machine" />
+    <Folder Include="POUs\Machine\Alarm Control" />
+    <Folder Include="POUs\Machine\Machine Control" />
+    <Folder Include="POUs\Machine\Recipes Manager" />
+    <Folder Include="POUs\Machine\Visu Control" />
+    <Folder Include="POUs\Robots" />
+    <Folder Include="POUs\Robots\Mitsubishi" />
+    <Folder Include="VISUs" />
+    <Folder Include="POUs">
+      <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Folder>
+    <Folder Include="VISUs\Alarms" />
+    <Folder Include="VISUs\Alarms\Image Pools" />
+    <Folder Include="VISUs\Alarms\Images" />
+    <Folder Include="VISUs\Alarms\Text Lists" />
+    <Folder Include="VISUs\Headers" />
+    <Folder Include="VISUs\Headers\Image Pools" />
+    <Folder Include="VISUs\Headers\Images" />
+    <Folder Include="VISUs\Headers\Text Lists" />
+    <Folder Include="VISUs\Manual\Image Pools" />
+    <Folder Include="VISUs\Manual\Images" />
+    <Folder Include="VISUs\Manual\Images\JennyScience" />
+    <Folder Include="VISUs\Manual\Images\Beckhoff" />
+    <Folder Include="VISUs\Manual\Images\Faulhaber" />
+    <Folder Include="VISUs\Manual\Images\Mitsubishi" />
+    <Folder Include="VISUs\Manual\Images\Cylinders" />
+    <Folder Include="VISUs\Manual\Text Lists" />
+    <Folder Include="VISUs\Navigation" />
+    <Folder Include="VISUs\Pages" />
+    <Folder Include="VISUs\Manual" />
+    <Folder Include="VISUs\Recipes" />
+    <Folder Include="VISUs\Recipes\Text Lists" />
+  </ItemGroup>
+  <ItemGroup>
+    <PlaceholderReference Include="CmpBitmapPool">
+      <DefaultResolution>CmpBitmapPool, * (System)</DefaultResolution>
+      <Namespace>CmpBitmapPool</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="JS_MC_REF">
+      <DefaultResolution>JS_MC_REF, * (Jenny Science AG)</DefaultResolution>
+      <Namespace>Jenny_Science_FB_Xenax_EtherCAT_Homing</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="RecipeManagement">
+      <DefaultResolution>Recipe Management, * (System)</DefaultResolution>
+      <Namespace>Recipe_Management</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="System_VisuElemMeter">
+      <DefaultResolution>VisuElemMeter, 3.5.13.0 (System)</DefaultResolution>
+      <Namespace>VisuElemMeter</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
+    </PlaceholderReference>
+    <PlaceholderReference Include="System_VisuElems">
+      <DefaultResolution>VisuElems, 3.5.13.40 (System)</DefaultResolution>
+      <Namespace>VisuElems</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
+    </PlaceholderReference>
+    <PlaceholderReference Include="System_VisuElemsSpecialControls">
+      <DefaultResolution>VisuElemsSpecialControls, 3.5.13.0 (System)</DefaultResolution>
+      <Namespace>VisuElemsSpecialControls</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
+    </PlaceholderReference>
+    <PlaceholderReference Include="System_VisuElemsWinControls">
+      <DefaultResolution>VisuElemsWinControls, 3.5.13.20 (System)</DefaultResolution>
+      <Namespace>VisuElemsWinControls</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
+    </PlaceholderReference>
+    <PlaceholderReference Include="System_VisuElemTextEditor">
+      <DefaultResolution>VisuElemTextEditor, 3.5.13.0 (System)</DefaultResolution>
+      <Namespace>VisuElemTextEditor</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
+    </PlaceholderReference>
+    <PlaceholderReference Include="system_visuinputs">
+      <DefaultResolution>visuinputs, 3.5.13.0 (system)</DefaultResolution>
+      <Namespace>visuinputs</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
+    </PlaceholderReference>
+    <PlaceholderReference Include="System_VisuNativeControl">
+      <DefaultResolution>VisuNativeControl, 3.5.13.0 (System)</DefaultResolution>
+      <Namespace>VisuNativeControl</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_EtherCAT">
+      <DefaultResolution>Tc2_EtherCAT, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_EtherCAT</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_IoFunctions">
+      <DefaultResolution>Tc2_IoFunctions, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_IoFunctions</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_MC2">
+      <DefaultResolution>Tc2_MC2, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_MC2</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Standard">
+      <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Standard</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_SUPS">
+      <DefaultResolution>Tc2_SUPS, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_SUPS</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_System">
+      <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_System</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_SystemCX">
+      <DefaultResolution>Tc2_SystemCX, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_SystemCX</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_TcpIp">
+      <DefaultResolution>Tc2_TcpIp, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_TcpIp</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Utilities">
+      <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Utilities</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_EventLogger">
+      <DefaultResolution>Tc3_EventLogger, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_EventLogger</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_McCollisionAvoidance">
+      <DefaultResolution>Tc3_McCollisionAvoidance, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_McCollisionAvoidance</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_McCompensations">
+      <DefaultResolution>Tc3_McCompensations, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_McCompensations</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_McCoordinatedMotion">
+      <DefaultResolution>Tc3_McCoordinatedMotion, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_McCoordinatedMotion</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_Module">
+      <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_Module</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_XTS_Utility">
+      <DefaultResolution>Tc3_XTS_Utility, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_XTS_Utility</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="VisuDialogs">
+      <DefaultResolution>VisuDialogs, * (System)</DefaultResolution>
+      <Namespace>VisuDialogs</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="VisuUserManagement">
+      <DefaultResolution>VisuUserMgmt, * (System)</DefaultResolution>
+      <Namespace>VisuUserManagement</Namespace>
+    </PlaceholderReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PShEll_UniversalBlocks.tmc">
+      <SubType>Content</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PlaceholderResolution Include="CmpBitmapPool">
+      <Resolution>CmpBitmapPool, 3.5.7.0 (System)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="JS_MC_REF">
+      <Resolution>JS_MC_REF, 2.1 (Jenny Science AG)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="RecipeManagement">
+      <Resolution>Recipe Management, 3.5.13.0 (System)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_IoFunctions">
+      <Resolution>Tc2_IoFunctions, 3.3.13.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_Math">
+      <Resolution>Tc2_Math, 3.3.1.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_MC2">
+      <Resolution>Tc2_MC2, 3.3.45.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_Standard">
+      <Resolution>Tc2_Standard, 3.3.3.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_SUPS">
+      <Resolution>Tc2_SUPS, 3.3.8.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_System">
+      <Resolution>Tc2_System, 3.4.24.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_SystemCX">
+      <Resolution>Tc2_SystemCX, 3.3.6.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_TcpIp">
+      <Resolution>Tc2_TcpIp, 3.3.6.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc2_Utilities">
+      <Resolution>Tc2_Utilities, 3.3.47.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc3_EventLogger">
+      <Resolution>Tc3_EventLogger, 3.1.30.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc3_McCollisionAvoidance">
+      <Resolution>Tc3_McCollisionAvoidance, 3.1.10.3 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc3_McCoordinatedMotion">
+      <Resolution>Tc3_McCoordinatedMotion, 3.1.10.2 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc3_Module">
+      <Resolution>Tc3_Module, 3.3.21.0 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="Tc3_XTS_Utility">
+      <Resolution>Tc3_XTS_Utility, 3.1.2202.3 (Beckhoff Automation GmbH)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="VisuDialogs">
+      <Resolution>VisuDialogs, 3.5.12.0 (System)</Resolution>
+    </PlaceholderResolution>
+    <PlaceholderResolution Include="VisuUserManagement">
+      <Resolution>VisuUserMgmt, 3.5.13.32 (System)</Resolution>
+    </PlaceholderResolution>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="VISUs\Alarms\Images\alarm.svg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Alarms\Images\critical.svg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Alarms\Images\error.svg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Alarms\Images\info.svg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Alarms\Images\message.svg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Alarms\Images\verbose.svg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Alarms\Images\warning.svg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Headers\Images\pselogopng.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Headers\Images\pselogosvg.svg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Beckhoff\ag1000.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Beckhoff\ag2250.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Beckhoff\am30xx.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Beckhoff\am80xx.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Beckhoff\am85xx.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Beckhoff\am87xx.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Beckhoff\am88xx.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Beckhoff\ami812x.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Beckhoff\amp80xx.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Beckhoff\amp81xx.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Beckhoff\asxxxx.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Beckhoff\xts_mover.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Cylinders\DoubleCoilCylinder.svg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Cylinders\SingleCoilCylinder.svg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Faulhaber\LM1247.jpg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\JennyScience\Elax.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\JennyScience\LinaxLxc.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\JennyScience\LinaxLxe.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\JennyScience\LinaxLxs.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\JennyScience\LinaxLxu.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\JennyScience\Rotax110.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\JennyScience\Rotax28.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\JennyScience\Rotax50.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Mitsubishi\Mitsubishi_6_axis.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="VISUs\Manual\Images\Mitsubishi\Mitsubishi_scara.png">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <LibraryReference Include="Tc2_Math,3.3.1.0,Beckhoff Automation GmbH">
+      <Namespace>Tc2_Math</Namespace>
+    </LibraryReference>
+    <LibraryReference Include="VisuSymbols,3.5.10.0,System">
+      <Namespace>VisuSymbols</Namespace>
+    </LibraryReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PinnedGlobalDataType Include="ST_ShellADSEventClass" />
+    <PinnedGlobalDataType Include="ST_ShellAxesGroupEventClass" />
+    <PinnedGlobalDataType Include="ST_ShellAxisEventClass" />
+    <PinnedGlobalDataType Include="ST_ShellMachineEventClass" />
+    <PinnedGlobalDataType Include="ST_ShellRecipesEventClass" />
+    <PinnedGlobalDataType Include="ST_ShellTcpIpDeviceEventClass" />
+  </ItemGroup>
+  <ItemGroup>
+    <SubObject Include="FB_CR800EtherCAT.UserDefinedArea">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </SubObject>
+    <SubObject Include="FB_CSVDataExchanger.MR_CreateTable">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </SubObject>
+    <SubObject Include="FB_CSVDataExchanger.MR_InsertIntoTable">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </SubObject>
+    <SubObject Include="FB_CSVDataExchanger.MR_ParseString">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </SubObject>
+    <SubObject Include="FB_CSVDataExchanger.M_FileProperties">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </SubObject>
+    <SubObject Include="FB_UniversalSafety.MS_Running">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </SubObject>
+    <SubObject Include="FB_UniversalVisu.MS_ManualSafety">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </SubObject>
+  </ItemGroup>
+  <ProjectExtensions>
+    <PlcProjectOptions>
+      <XmlArchive>
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
+      <v n="Name">"&lt;ProjectRoot&gt;"</v>
+      <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
+        <v>{8F99A816-E488-41E4-9FA3-846536012284}</v>
+        <o>
+          <v n="Name">"{8F99A816-E488-41E4-9FA3-846536012284}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" />
+        </o>
+        <v>{29BD8D0C-3586-4548-BB48-497B9A01693F}</v>
+        <o>
+          <v n="Name">"{29BD8D0C-3586-4548-BB48-497B9A01693F}"</v>
+          <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
+            <v>Rules</v>
+            <o>
+              <v n="Name">"Rules"</v>
+              <d n="SubKeys" t="Hashtable" />
+              <d n="Values" t="Hashtable" />
+            </o>
+          </d>
+          <d n="Values" t="Hashtable" />
+        </o>
+        <v>{40450F57-0AA3-4216-96F3-5444ECB29763}</v>
+        <o>
+          <v n="Name">"{40450F57-0AA3-4216-96F3-5444ECB29763}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" ckt="String">
+            <v>ActiveVisuExtensionsLength</v>
+            <v>0</v>
+            <v>ActiveVisuExtensions_0</v>
+            <v>"IR0whWr8bwdyBwAA2CM5uwAAAAC4AQAAabXwRAAAAAABAAAAAAAAAAEaUwB5AHMAdABlAG0ALgBTAHQAcgBpAG4AZwACTHsANgBkADQAMgBlADkAMQA4AC0AZQA2AGEANQAtADQAYgAyAGMALQA5ADEANwBiAC0AZQAwADcAMwAxAGIANwA2ADYAYgAxAGYAfQADDkMAbwBtAHAAYQBuAHkABDBCAGUAYwBrAGgAbwBmAGYAIABBAHUAdABvAG0AYQB0AGkAbwBuACAARwBtAGIASAAFDlYAZQByAHMAaQBvAG4ABg4xAC4AMAAuADMALgAwAAcMQQBjAHQAaQB2AGUACAhiAG8AbwBsAAkITgBhAG0AZQAKJFYAaQBzAHUARQBsAGUAbQBFAHYAZQBuAHQAVABhAGIAbABlAAsWUAByAG8AZgBpAGwAZQBEAGEAdABhAAxMewAxADYAZQA1ADUAYgA2ADAALQA3ADAANAAzAC0ANABhADYAMwAtAGIANgA1AGIALQA2ADEANAA3ADEAMwA4ADcAOABkADQAMgB9AA0STABpAGIAcgBhAHIAaQBlAHMADkx7ADMAYgBmAGQANQA0ADUAOQAtAGIAMAA3AGYALQA0AGQANgBlAC0AYQBlADEAYQAtAGEAOAAzADMANQA2AGEANQA1ADEANAAyAH0AD0x7ADkAYwA5ADUAOAA5ADYAOAAtADIAYwA4ADUALQA0ADEAYgBiAC0AOAA4ADcAMQAtADgAOQA1AGYAZgAxAGYAZQBkAGUAMQBhAH0AEAZpAG4AdAARClUAcwBhAGcAZQASClQAaQB0AGwAZQATDFMAeQBzAHQAZQBtABQSVgBpAHMAdQBFAGwAZQBtAHMAFRhWAGkAcwB1AEUAbABlAG0AQgBhAHMAZQAWFFYAaQBzAHUASQBuAHAAdQB0AHMAFyZEAGUAdgBQAGwAYQBjAGUAaABvAGwAZABlAHIAcwBVAHMAZQBkABgiUABsAHUAZwBpAG4AQwBvAG4AcwB0AHIAYQBpAG4AdABzABlMewA0ADMAZAA1ADIAYgBjAGUALQA5ADQAMgBjAC0ANAA0AGQANwAtADkAZQA5ADQALQAxAGIAZgBkAGYAMwAxADAAZQA2ADMAYwB9ABocQQB0AEwAZQBhAHMAdABWAGUAcgBzAGkAbwBuABsUUABsAHUAZwBpAG4ARwB1AGkAZAAcFlMAeQBzAHQAZQBtAC4ARwB1AGkAZAAdSGEAZgBjAGQANQA0ADQANgAtADQAOQAxADQALQA0AGYAZQA3AC0AYgBiADcAOAAtADkAYgBmAGYAZQBiADcAMABmAGQAMQA3AB4UVQBwAGQAYQB0AGUASQBuAGYAbwAfTHsAYgAwADMAMwA2ADYAYQA4AC0AYgA1AGMAMAAtADQAYgA5AGEALQBhADAAMABlAC0AZQBiADgANgAwADEAMQAxADAANABjADMAfQAgDlUAcABkAGEAdABlAHMAIUx7ADEAOAA2ADgAZgBmAGMAOQAtAGUANABmAGMALQA0ADUAMwAyAC0AYQBjADAANgAtADEAZQAzADkAYgBiADUANQA3AGIANgA5AH0AIkx7AGEANQBiAGQANAA4AGMAMwAtADAAZAAxADcALQA0ADEAYgA1AC0AYgAxADYANAAtADUAZgBjADYAYQBkADIAYgA5ADYAYgA3AH0AIxZPAGIAagBlAGMAdABzAFQAeQBwAGUAJFRVAHAAZABhAHQAZQBMAGEAbgBnAHUAYQBnAGUATQBvAGQAZQBsAEYAbwByAEMAbwBuAHYAZQByAHQAaQBiAGwAZQBMAGkAYgByAGEAcgBpAGUAcwAlEEwAaQBiAFQAaQB0AGwAZQAmFEwAaQBiAEMAbwBtAHAAYQBuAHkAJx5VAHAAZABhAHQAZQBQAHIAbwB2AGkAZABlAHIAcwAoOFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ASABhAHMAaAB0AGEAYgBsAGUAKRJ2AGkAcwB1AGUAbABlAG0AcwAqDHMAeQBzAHQAZQBtACtINgBjAGIAMQBjAGQAZQAxAC0AZAA1AGQAYwAtADQAYQAzAGIALQA5ADAANQA0AC0AMgAxAGYAYQA3ADUANgBhADMAZgBhADQALChJAG4AdABlAHIAZgBhAGMAZQBWAGUAcgBzAGkAbwBuAEkAbgBmAG8ALUx7AGMANgAxADEAZQA0ADAAMAAtADcAZgBiADkALQA0AGMAMwA1AC0AYgA5AGEAYwAtADQAZQAzADEANABiADUAOQA5ADYANAAzAH0ALhhNAGEAagBvAHIAVgBlAHIAcwBpAG8AbgAvGE0AaQBuAG8AcgBWAGUAcgBzAGkAbwBuADAMTABlAGcAYQBjAHkAMTBMAGEAbgBnAHUAYQBnAGUATQBvAGQAZQBsAFYAZQByAHMAaQBvAG4ASQBuAGYAbwAyMEwAbwBhAGQATABpAGIAcgBhAHIAaQBlAHMASQBuAHQAbwBQAHIAbwBqAGUAYwB0ADMaQwBvAG0AcABhAHQAaQBiAGkAbABpAHQAeQDQAAIaBtADAS0E0AUBLQbQBwitAdAJAS0K0AsMGgfQDQ4aAUUNDwTQAA8aBEUFEAQBAAAAAAAAAAMAAAAAAAAA0BEQrQIAAADQEgEtCtADAS0T0AAPGgRFBRAEAwAAAAUAAAANAAAAFAAAANAREK0BAAAA0BIBLRTQAwEtE9AADxoERQUQBAMAAAAFAAAADQAAABQAAADQERCtBAAAANASAS0V0AMBLRPQAA8aBEUFEAQDAAAABQAAAA0AAAAAAAAA0BEQrQQAAADQEgEtFtADAS0T0BcIrQFFGBkB0AAZGgJFGhAEAwAAAAUAAAANAAAAAAAAANAbHC0d0B4fGgJFICEC0AAiGgVFBRAEAwAAAAMAAAAAAAAACgAAANAjEK0AAAAA0AkBLSTQJQEtFNAmAS0T0AAiGgVFBRAEAwAAAAMAAAAAAAAACgAAANAjEK0BAAAA0AkBLSTQJQEtFNAmAS0TmicoAUUAAQLQAAEtKdAAAS0q0AAcLSvQLC0aA9AuEK0BAAAA0C8QrRcAAADQMAitANAxLRoD0C4QrQIAAADQLxCtAwAAANAwCK0A0DIIrQDQMwitAA=="</v>
+            <v>ActiveVisuProfile</v>
+            <v>"IR0whWr8bwfwBwAAiD2qpQAAAABVAgAA37x72QAAAAABAAAAAAAAAAEaUwB5AHMAdABlAG0ALgBTAHQAcgBpAG4AZwACTHsAZgA5ADUAYgBiADQAMgA2AC0ANQA1ADIANAAtADQAYgA0ADUALQA5ADQAMAAwAC0AZgBiADAAZgAyAGUANwA3AGUANQAxAGIAfQADCE4AYQBtAGUABDBUAHcAaQBuAEMAQQBUACAAMwAuADEAIABCAHUAaQBsAGQAIAA0ADAAMgA0AC4ANwAFFlAAcgBvAGYAaQBsAGUARABhAHQAYQAGTHsAMQA2AGUANQA1AGIANgAwAC0ANwAwADQAMwAtADQAYQA2ADMALQBiADYANQBiAC0ANgAxADQANwAxADMAOAA3ADgAZAA0ADIAfQAHEkwAaQBiAHIAYQByAGkAZQBzAAhMewAzAGIAZgBkADUANAA1ADkALQBiADAANwBmAC0ANABkADYAZQAtAGEAZQAxAGEALQBhADgAMwAzADUANgBhADUANQAxADQAMgB9AAlMewA5AGMAOQA1ADgAOQA2ADgALQAyAGMAOAA1AC0ANAAxAGIAYgAtADgAOAA3ADEALQA4ADkANQBmAGYAMQBmAGUAZABlADEAYQB9AAoOVgBlAHIAcwBpAG8AbgALBmkAbgB0AAwKVQBzAGEAZwBlAA0KVABpAHQAbABlAA4aVgBpAHMAdQBFAGwAZQBtAE0AZQB0AGUAcgAPDkMAbwBtAHAAYQBuAHkAEAxTAHkAcwB0AGUAbQARElYAaQBzAHUARQBsAGUAbQBzABIwVgBpAHMAdQBFAGwAZQBtAHMAUwBwAGUAYwBpAGEAbABDAG8AbgB0AHIAbwBsAHMAEyhWAGkAcwB1AEUAbABlAG0AcwBXAGkAbgBDAG8AbgB0AHIAbwBsAHMAFCRWAGkAcwB1AEUAbABlAG0AVABlAHgAdABFAGQAaQB0AG8AcgAVIlYAaQBzAHUATgBhAHQAaQB2AGUAQwBvAG4AdAByAG8AbAAWFHYAaQBzAHUAaQBuAHAAdQB0AHMAFwxzAHkAcwB0AGUAbQAYGFYAaQBzAHUARQBsAGUAbQBCAGEAcwBlABkmRABlAHYAUABsAGEAYwBlAGgAbwBsAGQAZQByAHMAVQBzAGUAZAAaCGIAbwBvAGwAGyJQAGwAdQBnAGkAbgBDAG8AbgBzAHQAcgBhAGkAbgB0AHMAHEx7ADQAMwBkADUAMgBiAGMAZQAtADkANAAyAGMALQA0ADQAZAA3AC0AOQBlADkANAAtADEAYgBmAGQAZgAzADEAMABlADYAMwBjAH0AHRxBAHQATABlAGEAcwB0AFYAZQByAHMAaQBvAG4AHhRQAGwAdQBnAGkAbgBHAHUAaQBkAB8WUwB5AHMAdABlAG0ALgBHAHUAaQBkACBIYQBmAGMAZAA1ADQANAA2AC0ANAA5ADEANAAtADQAZgBlADcALQBiAGIANwA4AC0AOQBiAGYAZgBlAGIANwAwAGYAZAAxADcAIRRVAHAAZABhAHQAZQBJAG4AZgBvACJMewBiADAAMwAzADYANgBhADgALQBiADUAYwAwAC0ANABiADkAYQAtAGEAMAAwAGUALQBlAGIAOAA2ADAAMQAxADEAMAA0AGMAMwB9ACMOVQBwAGQAYQB0AGUAcwAkTHsAMQA4ADYAOABmAGYAYwA5AC0AZQA0AGYAYwAtADQANQAzADIALQBhAGMAMAA2AC0AMQBlADMAOQBiAGIANQA1ADcAYgA2ADkAfQAlTHsAYQA1AGIAZAA0ADgAYwAzAC0AMABkADEANwAtADQAMQBiADUALQBiADEANgA0AC0ANQBmAGMANgBhAGQAMgBiADkANgBiADcAfQAmFk8AYgBqAGUAYwB0AHMAVAB5AHAAZQAnVFUAcABkAGEAdABlAEwAYQBuAGcAdQBhAGcAZQBNAG8AZABlAGwARgBvAHIAQwBvAG4AdgBlAHIAdABpAGIAbABlAEwAaQBiAHIAYQByAGkAZQBzACgQTABpAGIAVABpAHQAbABlACkUTABpAGIAQwBvAG0AcABhAG4AeQAqHlUAcABkAGEAdABlAFAAcgBvAHYAaQBkAGUAcgBzACs4UwB5AHMAdABlAG0ALgBDAG8AbABsAGUAYwB0AGkAbwBuAHMALgBIAGEAcwBoAHQAYQBiAGwAZQAsEnYAaQBzAHUAZQBsAGUAbQBzAC1INgBjAGIAMQBjAGQAZQAxAC0AZAA1AGQAYwAtADQAYQAzAGIALQA5ADAANQA0AC0AMgAxAGYAYQA3ADUANgBhADMAZgBhADQALihJAG4AdABlAHIAZgBhAGMAZQBWAGUAcgBzAGkAbwBuAEkAbgBmAG8AL0x7AGMANgAxADEAZQA0ADAAMAAtADcAZgBiADkALQA0AGMAMwA1AC0AYgA5AGEAYwAtADQAZQAzADEANABiADUAOQA5ADYANAAzAH0AMBhNAGEAagBvAHIAVgBlAHIAcwBpAG8AbgAxGE0AaQBuAG8AcgBWAGUAcgBzAGkAbwBuADIMTABlAGcAYQBjAHkAMzBMAGEAbgBnAHUAYQBnAGUATQBvAGQAZQBsAFYAZQByAHMAaQBvAG4ASQBuAGYAbwA0MEwAbwBhAGQATABpAGIAcgBhAHIAaQBlAHMASQBuAHQAbwBQAHIAbwBqAGUAYwB0ADUaQwBvAG0AcABhAHQAaQBiAGkAbABpAHQAeQDQAAIaA9ADAS0E0AUGGgfQBwgaAUUHCQjQAAkaBEUKCwQDAAAABQAAAA0AAAAAAAAA0AwLrQIAAADQDQEtDtAPAS0Q0AAJGgRFCgsEAwAAAAUAAAANAAAAKAAAANAMC60BAAAA0A0BLRHQDwEtENAACRoERQoLBAMAAAAFAAAADQAAAAAAAADQDAutAgAAANANAS0S0A8BLRDQAAkaBEUKCwQDAAAABQAAAA0AAAAUAAAA0AwLrQIAAADQDQEtE9APAS0Q0AAJGgRFCgsEAwAAAAUAAAANAAAAAAAAANAMC60CAAAA0A0BLRTQDwEtENAACRoERQoLBAMAAAAFAAAADQAAAAAAAADQDAutAgAAANANAS0V0A8BLRDQAAkaBEUKCwQDAAAABQAAAA0AAAAAAAAA0AwLrQIAAADQDQEtFtAPAS0X0AAJGgRFCgsEAwAAAAUAAAANAAAAKAAAANAMC60EAAAA0A0BLRjQDwEtENAZGq0BRRscAdAAHBoCRR0LBAMAAAAFAAAADQAAAAAAAADQHh8tINAhIhoCRSMkAtAAJRoFRQoLBAMAAAADAAAAAAAAAAoAAADQJgutAAAAANADAS0n0CgBLRHQKQEtENAAJRoFRQoLBAMAAAADAAAAAAAAAAoAAADQJgutAQAAANADAS0n0CgBLRHQKQEtEJoqKwFFAAEC0AABLSzQAAEtF9AAHy0t0C4vGgPQMAutAQAAANAxC60XAAAA0DIarQDQMy8aA9AwC60CAAAA0DELrQMAAADQMhqtANA0Gq0A0DUarQA="</v>
+          </d>
+        </o>
+        <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
+        <o>
+          <v n="Name">"{192FAD59-8248-4824-A8DE-9177C94C195A}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" />
+        </o>
+        <v>{F66C7017-BDD8-4114-926C-81D6D687E35F}</v>
+        <o>
+          <v n="Name">"{F66C7017-BDD8-4114-926C-81D6D687E35F}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" />
+        </o>
+        <v>{246001F4-279D-43AC-B241-948EB31120E1}</v>
+        <o>
+          <v n="Name">"{246001F4-279D-43AC-B241-948EB31120E1}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" ckt="String">
+            <v>UnicodeStrings</v>
+            <v>false</v>
+            <v>GlobalTextListFilePath</v>
+            <v>""</v>
+            <v>ExtendedSettings</v>
+            <v>false</v>
+            <v>GlobalVisuImageFilePath</v>
+            <v>"%APPLICATIONPATH%;%APPLICATIONPATH%\;%APPLICATIONPATH%;%APPLICATIONPATH%\;%APPLICATIONPATH%;%APPLICATIONPATH%\;%APPLICATIONPATH%;%APPLICATIONPATH%\;%APPLICATIONPATH%;%APPLICATIONPATH%\;%APPLICATIONPATH%;%APPLICATIONPATH%\"</v>
+            <v>GeneralPropertySupport</v>
+            <v>false</v>
+          </d>
+        </o>
+      </d>
+      <d n="Values" t="Hashtable" />
+    </o>
+        </Data>
+        <TypeList>
+          <Type n="Boolean">System.Boolean</Type>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="Int32">System.Int32</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
+    </PlcProjectOptions>
+  </ProjectExtensions>
+</Project>

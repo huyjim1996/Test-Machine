@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_FileLogger_Test" Id="{d9b2546f-5e95-41c0-8bce-49d4f3aba79d}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_FileLogger_Test
+VAR
+	bFirstCycle : BOOL := TRUE;
+	
+	sDirectoryForSimulation : STRING := 'C:\TwinCAT\Tests\';
+	sFileDir 					: STRING 	:= 'C:\TwinCAT\Tests\\';
+	sFileName 					: STRING 	:= 'Infile';
+	
+	fbFileLogger : FB_FileLogger;
+	
+	i 					: USINT;
+	
+	bInit				: BOOL;
+	bAbort				: BOOL;
+	bReset				: BOOL;
+	
+	bAddSingleLog 		: BOOL;
+	bAddMaximumLoggs	: BOOL;
+	bAddLogCommand		: BOOL;
+	bSelectPath			: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	fbFileLogger.MR_FirstCycle( sName		:= 'File Logger',
+								sFileDir 	:= sDirectoryForSimulation,
+								sFileName 	:= 'LoggerTest',
+								sAmsNetId 	:= '',
+								bAddTimeStamp := FALSE,
+								bAddHeader := FALSE);
+END_IF
+
+IF bInit THEN
+	fbFileLogger.MR_Init();
+							
+	IF fbFileLogger.Active THEN
+		bInit := FALSE;
+	END_IF
+	
+ELSIF bReset THEN
+	fbFileLogger.MR_Reset();
+	IF fbFileLogger.Busy THEN
+		bReset := FALSE;
+	END_IF
+	
+ELSIF bAbort THEN
+	fbFileLogger.MR_Abort();
+	IF NOT fbFileLogger.Active THEN
+		bAbort := FALSE;
+	END_IF
+	
+ELSIF bAddSingleLog THEN
+	bAddSingleLog := FALSE;
+	fbFileLogger.MR_AddLogs('Test message - 1');
+	fbFileLogger.MR_AddLogs('Test message - 2');
+	
+ELSIF bSelectPath  THEN
+	fbFileLogger.MR_SelectPath(sFileDir := sFileDir,
+								sFileName := sFileName);
+	
+	IF NOT fbFileLogger.Busy THEN
+		bSelectPath := FALSE;
+		
+	END_IF	
+
+// Going outside buffer array (255) causes Windows blue screen
+ELSIF bAddMaximumLoggs THEN
+	FOR i := 0 TO 254 BY 1 DO 
+		fbFileLogger.MR_AddLogs(CONCAT('Test message ',USINT_TO_STRING(i)));
+		IF i = 254 THEN
+			bAddMaximumLoggs := FALSE;
+		END_IF
+	END_FOR
+
+END_IF
+
+fbMachineTime( bEnable := TRUE);
+fbFileLogger();
+fbMachineLogger();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_FileLogger_Test">
+      <LineId Id="241" Count="0" />
+      <LineId Id="243" Count="0" />
+      <LineId Id="245" Count="3" />
+      <LineId Id="334" Count="1" />
+      <LineId Id="244" Count="0" />
+      <LineId Id="242" Count="0" />
+      <LineId Id="190" Count="0" />
+      <LineId Id="193" Count="0" />
+      <LineId Id="265" Count="0" />
+      <LineId Id="194" Count="19" />
+      <LineId Id="352" Count="0" />
+      <LineId Id="361" Count="0" />
+      <LineId Id="370" Count="5" />
+      <LineId Id="368" Count="1" />
+      <LineId Id="282" Count="0" />
+      <LineId Id="215" Count="8" />
+      <LineId Id="317" Count="0" />
+      <LineId Id="316" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="299" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

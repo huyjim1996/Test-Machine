@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_AnalogInput_Test" Id="{cc723b56-65f9-4441-ae21-caa7ac691231}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_AnalogInput_Test
+VAR
+	bFirsCycle		: BOOL := TRUE;		(* First cycle flag *)
+	
+	rValue			: REAL;				(* Value from object property *)
+	rValueForce		: REAL;				(* Value send to force method *)
+	bSetForceValue 	: BOOL;				(* Enable forcing  *)
+	
+	rValueMin 		: REAL := 0.0;		(*  *)
+	rValueMax		: REAL := 10.0;		(*  *)
+	rChannelMin		: REAL := 0.0;		(*  *)
+	rChannelMax		: REAL := 32767.0;	(*  *)
+	
+	fbAnalogInput 	: FB_AnalogInput;	(* Analog input object *)
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* Set properties *)
+IF bFirsCycle THEN
+	bFirsCycle := FALSE;
+	fbAnalogInput.MR_FirstCycle( 	sName 			:= 'My test analog input',
+									rValueScaledMin := rValueMin,
+									rValueScaledMax := rValueMax,
+									rChannelMin 	:= rChannelMin,
+									rChannelMax 	:= rChannelMax);
+END_IF
+
+(* Enable to force channel value *)
+IF bSetForceValue THEN
+	fbAnalogInput.EnableForce := TRUE;
+	fbAnalogInput.MR_SetForceValue(rValueForce);
+ELSE
+	fbAnalogInput.EnableForce := FALSE;
+END_IF
+
+(* Scaned value direct from FB *)
+rValue := fbAnalogInput.Value;
+
+fbAnalogInput.ChannelMin	:= rChannelMin;
+fbAnalogInput.ChannelMax 	:= rChannelMax;
+fbAnalogInput.ValueMin 		:= rValueMin;
+fbAnalogInput.ValueMax 		:= rValueMax;
+fbAnalogInput();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_AnalogInput_Test">
+      <LineId Id="81" Count="0" />
+      <LineId Id="34" Count="1" />
+      <LineId Id="94" Count="4" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="82" Count="0" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="69" Count="0" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="70" Count="1" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="83" Count="0" />
+      <LineId Id="41" Count="1" />
+      <LineId Id="100" Count="3" />
+      <LineId Id="99" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

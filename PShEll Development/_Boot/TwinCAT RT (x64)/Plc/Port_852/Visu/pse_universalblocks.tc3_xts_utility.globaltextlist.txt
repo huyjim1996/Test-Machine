@@ -1,0 +1,579 @@
+Id;Default
+22;$T$T$T$T$T$TXTS Utility
+1340;$TXPlanar Diagnosis
+52;$TXTS Diagnosis
+427;$R$NGroup$R$NNotReady
+425;$R$NGroup$R$NStandby
+394;                   TcIo
+2247;            TcIo
+1074;          TcIo
+2208;         TcIo
+129; %3.2f
+330; %d
+690; %s
+268; %s mV
+979; Max Overall Current $R$NLast 500ms  :
+530;%
+138;%.0f
+1395;%.2f
+140;%.3f
+417;%.d
+58;%2.0f mm
+2045;%2.1f °C
+1370;%2.2f mm
+1928;%3.0f 1/min
+1026;%4.2f
+1954;%4.2f kg
+2209;%4.2f kg*m^2
+989;%4.2f mm
+243;%d
+1187;%d$T%
+2768;%d$T0.1s
+3695;%d$T0.1°C
+992;%d$TmA
+3752;%d$Tms
+2996;%d $T%
+5273;%d $T0.1°C
+838;%d $T1/A
+1960;%d $TmA
+1170;%d $TmV
+244;%d /
+145;%d Axes
+196;%d ms
+1345;%e
+1130;%f
+871;%s
+2270;%s mA
+3366;%x
+245;+
+246;-
+445;...
+1183;.Address
+3646;.Alpha
+1311;.code
+1080;.Module Nr.
+1995;.revision
+2214;.serial
+1104;.Terminal OID
+1367;.vendor
+3502;.X
+2220;.Y
+532;/
+1431;/ %d
+442;/% d
+1514;/%d
+3584;0x%x
+877;1
+571;10
+577;11
+582;12
+587;13
+592;14
+597;15
+603;2
+535;3
+540;4
+545;5
+551;6
+556;7
+561;8
+566;9
+1278;<
+1382;>
+29;A
+1893;A-Axis Inertia
+1704;Abort on Teaching Warning
+149;Abort on Warning
+604;Act. TrackOID
+818;ActPosition
+1739;ActPosition:
+332;ActPosMod
+593;Actual Position
+333;ActVelo
+969;ADC
+31;AdsPort
+2069;Advanced
+2410;All Positions Valid
+165;Amplifier Sett.
+986;AmsNetID
+450;Angle
+1426;Angle$T
+1783;APM4220
+225;APM4330
+2017;APM4550
+601;Area
+1383;Area Count
+4179;Area Current Limiit
+3846;Area Owner
+189;AreaCurrentLimit
+2046;Auto Dump writing
+623;Auto. Dump Writing
+980;Aux 10V :
+983;Aux 24V :
+984;Aux 5V : 
+2470;Auxiliary Vol. 5V
+533;Auxiliary Vol.10V
+606;Auxiliary Vol.24V
+1662;Axis ID$T
+513;Axis Name
+624;Axis Name:
+2059;Axis OID
+379;AxisNr.
+338;B
+101;B-Axis Inertia
+2814;BECKHOFF
+2909;Brake After Bridge Disable
+839;BTN
+775;BTN: %s
+922;C
+599;C-Axis Inertia
+1634;Ca Active
+1550;CA Active
+890;CA Group
+1145;CA Group:
+849;CA Group: %d
+837;CA Group: %d/
+2;CA Passive
+220;Center
+291;Checksum Check
+147;Clear History
+56;Cmd History
+1826;COE
+2458;CoE Update Cyc
+525;Coil
+970;Coil Current
+976;Coil I2T
+2740;Coil Overcurrent Thold
+1707;Coil Peak Curr.
+835;Coil Rated Curr.
+840;Coil Thermal Time Cost
+4331;Com. History
+6066;Coming Soon .......
+874;Command
+3501;Command History
+5274;Command Typ
+153;Command Type
+134;CommandType
+155;Commutation Err. Vel.
+720;Compensation On
+469;Coordinates origin
+844;Correction Factor
+322;Coupled
+49;CRC Info
+135;CtrlLoopClosed
+1147;Current Scaling
+662;Cycle Time Warning Surpressed
+216;D.D. in KM
+974;DC < 20V
+973;DC > 56V
+326;DC Bus $R$NOverall Current  : 
+981;DC Bus 48V :
+966;DC High
+2372;DC Link Voltage
+967;DC Low
+1303;Delay
+3231;Det. Current Ramp
+2409;Det. Cycle Count
+3850;Det. Max Current
+3145;Det. Min Movement
+1241;Det. Mover Count
+2608;Detected
+285;Detected Count: %d
+406;Detection Filter
+2763;Dev. Info
+2057;Diag Data
+5537;DiagHistory
+845;Diagnostic
+339;Distance Driven
+1885;Drive ads.
+2378;Drive BTN
+1778;Drive COE
+1467;Drive Dev. Name
+1182;Drive Dev. Type
+1641;Drive Error
+2345;Drive HW Version
+1476;Drive Info
+2641;Drive State
+1231;Drive SW Version
+891;dsf
+501;East
+3800;Em. Time Out
+386;Emergency Ramp
+851;Enable Brake Chopper
+2159;Enable Overall Current Peak Detection
+507;Enable Overall Neg. Current Change Err.
+1325;Enable Overall Neg. Power Err.
+144;Enable Requested FALSE
+143;Enable Requested TRUE
+218;Enable State 
+139;Enabled
+2802;Encoder
+1958;Encoder Ads.
+2394;Encoder Error
+388;Encoder Info
+2012;eOperationMode
+2475;Error Actual
+790;Error in the Group or in one of the axes
+978;Error Latch
+789;error on the$R$Ngroup or in one$R$Nof the axes
+331;Error: %d
+889;EtherCAT
+50;EtherCAT State
+1622;EtherCatSyncTask
+317;Event Logger
+3341;Exp. Mover Count
+1061;Expected
+928;Expected Count: %d
+354;FAN RPM
+194;Feed Forward
+2979;Feedforward
+2654;Feedforward Type
+850;File Number
+195;Filter
+660;Force Calibration
+686;Frames Per Sec : $T$T%3.2f
+3335;Fri. Comp. Area
+1269;Friction Compensation
+1307;Functions
+964;Gap
+146;General
+1773;Global Number
+2735;Goto Module
+431;Group$R$NErrorDisabled
+430;Group$R$NErrorEnabled
+429;GroupDisabled
+428;GroupErrorStop
+424;GroupMoving
+1959;Groups
+426;GroupStopping
+415;Hardware
+2549;HardwareMod.
+2143;HighPass Damping
+4304;HighPass Frequency
+191;HighPassDamp
+190;HighPassFreq:
+53;Home
+1910;HW %s
+519;HW Version:
+968;I2T
+1044;I2T Diag Data
+573;I2T Error
+711;I2T Warning
+280;ID
+1911;ID Detect. Mode
+1022;ID Detection
+2857;ID Detection Active
+568;ID Detection Error
+893;ID Detection Valid
+595;ID Mode
+683;Identity
+908;Identity Data
+341;In Target
+334;Infeed:
+28;Infeed: %d /
+876;Info
+1404;Info Data
+328;Info Key Values
+1083;Input Check
+2001;Interp. Type
+152;Interpolator
+142;INVALID
+4092;Is Closed
+562;Is Include In Detection
+329;I^2T Information
+1512;KeyValues
+3065;Kp
+3372;Kp Area
+3530;Kp Area Standstill
+411;Kp Standstill
+1261;Kp:
+736;KpAccFFT
+4007;KpAccFFT Area
+1092;KpAccFFTArea:
+1317;KpAccFT:
+1280;KpArea:
+1108;KpAreaStandstill:
+1271;KpStandstill:
+2210;Lag Monitor Enable
+2304;Length
+47;Lost Frames:$T$T%3.2f
+1189;LowPass Damping
+459;LowPass Frequency
+1308;LowPassDamp
+1298;LowPassFreq:
+2660;Magnet Pl. Type
+2419;Magnet Plate type
+2754;Magnet Plate Type
+1530;Mass
+2374;Master NetID
+1982;Master NetId
+1566;Max Current Out.
+327;Max DC Link Voltage $R$NLast 500ms  :
+120;Max DC Vol. 0.5s
+1066;Max OverallCurr. 0.5s
+1569;Max Vel.
+2056;Max. DC Link Vol.
+188;MaxVelocity:
+432;MC_AddAxis
+783;MC_GroupDisable
+786;MC_GroupEnable
+784;MC_GroupHalt
+434;MC_GroupReset
+785;MC_GroupStop
+433;MC_RemAxis
+787;MC_UngroupAllAxes
+2698;Message ID
+261;Message Id
+1233;Min. DC  Link Vol.
+823;MinMechinicalMoverDistance
+0;Module
+1804;Module Count
+927;Module Count: %d
+2265;Module Overview
+1391;Module Side
+277;Module:
+362;Module: %d /
+54;Modules
+1082;ModuloActPos
+605;ModuloActPos:
+1434;ModuloSetPos:
+199;Monitoring
+3624;MotorT. OID
+878;MoveAbs
+55;Mover
+910;Mover Count
+1733;Mover count
+3670;Mover Detected
+1204;Mover Detection
+2092;Mover Distance
+3013;Mover Expected
+1837;Mover Frozen Error Acitvated
+1275;Mover Height
+1363;Mover ID
+1570;Mover online Update Cyc
+209;Mover Overview
+1486;Mover State
+1381;Mover Type
+1923;Mover Width
+335;Mover1Detection
+348;Mover:
+260;Mover: %.2f /
+1364;Mover: %2.0d /
+458;Mover: %2.0f /
+1246;Mover: %2.f /
+248;Mover: %d
+162;Mover: %d /
+5401;MoverNo.
+1116;MoverNr.
+1234;MoverRedetection
+892;Movers
+1355;MoverType
+689;Name
+1445;Name (Com Obj)
+2954;NC Axis
+880;NC3
+512;NcAxisId:
+598;No Cycle Time Warning
+2185;no drive adr.
+872;No.
+1998;North
+137;Not Moving
+1463;Nr.
+48;Num Slaves Expected   :$T%3.2f
+229;Num Tiles
+882;Number
+3656;Object ID
+1912;ObjectID
+2433;Offset
+788;one axis$R$Nnot ready
+3415;OP Mode
+1100;OpenLoop$R$NMoveCurrent
+4394;Openloop M. Current
+2612;Operation Mode
+136;Operational
+2437;OperationMode
+1594;Optimization
+3987;Origin Trans.
+3571;Overall Curr. Gain
+2213;Overall Curr. Offset
+1805;Overall Curr.Filter
+1498;Overall Current
+2293;Overall OverCurr. Hold
+971;OverTemp
+435;Overview
+875;Parameter
+57;Part
+1829;Part Based Handling Activated
+3088;Part Count
+3305;Part count
+2624;Part Info Items
+2448;Part Nr
+858;Part Overview
+2289;Part Position
+668;PartOID
+1549;Parts
+933;Payload
+2349;PCB Temp
+972;PDWatchdog
+843;Polarity
+472;Pos. Feedback Mode
+455;Pos. Index
+1266;Pos. Loop Filter
+709;Pos. Loop Type
+1047;Pos. Lowpass Filter
+2234;Position
+2311;Position Assign.
+2677;Position Assignment
+105;Position Based Error Forwarding
+1870;Position Con.
+770;Position Control
+2601;Position Info
+1200;Position Mode
+1508;Position Noise
+2184;Position Offset
+857;Position Startup Mode
+1123;PosLoopFilter$R$NArea:
+1115;PosLoopFilter:
+2303;ProcessingUnit
+688;Prod. Code: 
+2440;Product Code
+46;Queued Frames Lost :$T%3.2f
+45;Queued Frames Per Sec :$T%3.2f
+416;Rand. Bandwidth
+2832;Random Bandwidth
+1211;Random Mode
+2709;Random Seed
+3194;Random Startup
+1915;Random Startup Bandwidth
+102;Refresh Time
+5276;Refreshing CoE
+687;Revision
+1263;Sc. Module Count
+2207;Sc.Module Count
+2804;Scaling Factor
+4116;SensorT. OID
+84;Serial Nr.
+684;Serial Number:
+665;SetPosition:
+1627;Setting
+2481;Settings
+492;Simulaion Offset
+182;Simulation
+1294;Simulation Mode
+881;Slave Name
+336;Slave:
+807;SoftDrive
+777;Softdrive
+987;SoftDrive OID
+1341;Sort Order
+350;South
+86;Standstill Sw. Time
+1059;Startup ID
+2044;Startup Part
+2943;Startup Pos. Type
+446;Startup Position
+239;Station
+286;Statorfield Compensation
+141;Status
+661;Structure
+1499;Supply Current:
+1365;SW %s
+520;SW Version:
+1255;Sync Task
+227;SyncTask
+939;Task Count
+3388;Task OID
+2138;TaskOID
+1817;Tc3_XPlanarUtility
+2187;Tc3_XtsUtility
+1113;TcIO
+1585;TcIo
+2462;Teaching
+3286;Teaching Changed
+1045;Teaching Valid
+2808;Tem. Error
+1394;Tem. Warning
+965;Temp
+982;Temperature 1  :
+324;Temperature 2  :
+985;Temperature 3  : 
+325;Temperature 4  :
+1124;Text
+1281;Tile
+846;Tile1
+387;Tile2
+836;Tile3
+1073;Tile4
+1118;Tile5
+1299;Tile6
+148;Tiles
+873;Time Stamp
+1507;TimeStamp
+1705;Tn
+1889;Tn Area
+4456;Tn Area Standstill
+3035;Tn Standstill
+183;Tn:
+185;TnArea:
+186;TnAreaStandstill:
+184;TnStandstill:
+2454;Total
+919;Track
+1854;Track Count
+380;Track count
+2148;Track Nr
+2141;Track OID
+959;Track Overview
+2730;Track Position
+157;Tracks
+888;Tuning
+89;TwinCAT
+1191;TwinCAT version
+2328;Type
+1289;Type:
+1152;Usage
+298;Values
+2390;Vel. Feedback Mode
+3029;Vel. Filter Bandwidth
+4136;Vel. Loop Type
+879;Velo=1000, Acc= 5000, Dec=5000, Jerk=50000
+820;Velocity Con.
+193;Velocity Control
+1520;Vendor Data
+1053;Vendor ID
+685;Vendor ID:
+977;Warning
+369;Warning Actual
+2212;West
+1903;X
+1423;X On
+360;XPlanar driver
+1071;XPlanar Processing Unit
+1744;XPU
+1038;Xpu
+1443;Xpu Overview
+2029;Xpu:
+722;Xpus
+1253;XPUs
+1213;XTS
+2238;XTS Diagnosis
+2363;XTS Driver 
+401;XTS Environment
+926;XTS Overview
+347;XTS Processing Unit
+3165;XTS Processing Unit - Module
+1882;XTS Processing Unit - Mover
+2602;XTS Processing Unit - Part
+1771;XTS Processing Unit - Setting
+2314;XTS Processing Unit - Track
+3469;XTS Utility
+1349;XTS:
+247;XTS: %d
+707;XTS: %d / 
+781;Y
+648;Y On
+1329;Z
+1408;Z On
+1372;Z pos at enable
+608;S
+975;S Current

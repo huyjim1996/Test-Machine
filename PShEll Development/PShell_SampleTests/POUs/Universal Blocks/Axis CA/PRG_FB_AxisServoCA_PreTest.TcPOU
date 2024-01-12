@@ -1,0 +1,383 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_AxisServoCA_PreTest" Id="{cebed05c-6946-4e14-83fb-fcfa8617100b}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_AxisServoCA_PreTest
+VAR
+	bFirstCycle : BOOL := TRUE;
+	
+	AxesGroupRef		: AXES_GROUP_REF;
+	stAxisRef			: AXIS_REF;
+	
+	fbAxisCA1			: FB_AxisServoCA;
+	fbAxisCA2			: FB_AxisServoCA;
+	
+	fbAddAxisToGroup 	: MC_AddAxisToGroup;
+	fbGroupEnable		: MC_GroupEnable;
+	fbGroupReset		: MC_GroupReset;
+	
+	fbReadGroupStatus	: MC_GroupReadStatus;
+	fbReadGroupError	: MC_GroupReadError;
+	
+	fbMcMoveAbsCA 		: MC_MoveAbsoluteCA;
+	
+	iState : INT;
+	
+	bAdd		: BOOL;
+	bReset		: BOOL;
+	bInit 		: BOOL;
+	bDeinit 	: BOOL;
+	bHome		: BOOL;
+	bMoveAbsCA1 : BOOL;
+	bMoveAbsCA2 : BOOL;
+	bStop 		: BOOL;
+	bHalt: BOOL;
+	
+	rHomePosition 		: REAL := 0.0;
+	rTargetPositionCA1 	: REAL;
+	rTargetPositionCA2 	: REAL;
+	
+	bAdded : BOOL;
+	
+	lrOverride: LREAL;
+	lrVelocity: LREAL;
+	lrAcceleration: LREAL;
+	lrDeceleration: LREAL;
+	lrJerk: LREAL;
+	lrJogVelocity: LREAL;
+	lrJogAcceleration: LREAL;
+	lrJogDeceleration: LREAL;
+	lrJogJerk: LREAL;
+	lrStopDeceleration: LREAL;
+	lrStopJerk: LREAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+	
+	lrOverride 			:= 100.0;
+	lrVelocity 			:= 50.0;
+	lrAcceleration		:= 150.0;
+	lrDeceleration		:= 150.0;
+	lrJerk				:= 150.0;
+	
+	lrJogVelocity 		:= 25.0;
+	lrJogAcceleration	:= 250.0;
+	lrJogDeceleration	:= 250.0;
+	lrJogJerk			:= 250.0;
+	
+	lrStopDeceleration	:= 250.0;
+	lrStopJerk			:= 250.0;
+	
+	fbAxisCA1.Override 			:= lrOverride;
+	fbAxisCA1.Velocity 			:= lrVelocity;
+	fbAxisCA1.Acceleration 		:= lrAcceleration;
+	fbAxisCA1.Deceleration 		:= lrDeceleration;
+	fbAxisCA1.Jerk 				:= lrJerk;
+	fbAxisCA1.StopDeceleration 	:= lrStopDeceleration;
+	fbAxisCA1.StopJerk			:= lrStopJerk;
+	
+	fbAxisCA2.Override 			:= lrOverride;
+	fbAxisCA2.Velocity 			:= lrVelocity;
+	fbAxisCA2.Acceleration 		:= lrAcceleration;
+	fbAxisCA2.Deceleration 		:= lrDeceleration;
+	fbAxisCA2.Jerk 				:= lrJerk;
+	fbAxisCA2.StopDeceleration 	:= lrStopDeceleration;
+	fbAxisCA2.StopJerk			:= lrStopJerk;
+	
+END_IF
+
+IF bStop THEN
+	bStop := FALSE;
+	iState := 100;
+ELSIF bHalt THEN
+	bHalt := FALSE;
+	iState := 110;
+END_IF
+
+fbReadGroupStatus( AxesGroup := AxesGroupRef, Enable := TRUE);
+fbReadGroupError( AxesGroup := AxesGroupRef, Enable := TRUE);
+
+CASE iState OF
+	0:
+		IF bAdd THEN
+			bAdded := FALSE;
+			bAdd := FALSE;
+			iState := 10;
+		ELSIF bReset THEN
+			bReset := FALSE;
+			iState := 5;
+			
+		ELSIF bInit THEN
+			bInit := FALSE;
+			iState := 50;
+			
+		ELSIF bDeinit THEN
+			bDeinit := FALSE;
+			iState := 60;
+			
+		ELSIF bHome THEN
+			bHome := FALSE;
+			iState := 70;
+		
+		ELSIF bMoveAbsCA1 THEN
+			bMoveAbsCA1 := FALSE;
+			iState := 80;
+			
+		ELSIF bMoveAbsCA2 THEN
+			bMoveAbsCA2 := FALSE;
+			iState := 90;
+			
+		END_IF
+	5:
+		fbGroupReset( AxesGroup := AxesGroupRef, Execute := TRUE);
+		
+		IF fbGroupReset.Done THEN
+			fbGroupReset( AxesGroup := AxesGroupRef, Execute := FALSE);
+			iState := 0;
+		END_IF
+		
+	10:
+		stAxisRef := fbAxisCA1.AxisRef;
+		fbAddAxisToGroup( 	AxesGroup := AxesGroupRef,
+							Axis := stAxisRef,
+							Execute := TRUE,
+							IdentInGroup := UDINT_TO_IDENTINGROUP(1));
+							
+		IF fbAddAxisToGroup.Done THEN
+			iState := 20;
+		END_IF
+		
+	20:
+		fbAddAxisToGroup( AxesGroup := AxesGroupRef , Axis := stAxisRef, Execute := FALSE);
+		
+		IF NOT fbAddAxisToGroup.Busy THEN
+			iState := 30;
+		END_IF
+		
+	30:
+		stAxisRef := fbAxisCA2.AxisRef;
+		fbAddAxisToGroup( 	AxesGroup := AxesGroupRef,
+							Axis := stAxisRef,
+							Execute := TRUE,
+							IdentInGroup := UDINT_TO_IDENTINGROUP(2));
+							
+		IF fbAddAxisToGroup.Done THEN
+			iState := 40;
+		END_IF
+		
+	40:
+		fbAddAxisToGroup( AxesGroup := AxesGroupRef , Axis := stAxisRef, Execute := FALSE);
+		
+		IF NOT fbAddAxisToGroup.Busy THEN
+			bAdded := TRUE;
+			iState := 45;
+		END_IF
+		
+	45:
+		
+		fbGroupEnable( AxesGroup := AxesGroupRef, Execute := TRUE);
+		
+		IF fbGroupEnable.Done THEN
+			fbGroupEnable( AxesGroup := AxesGroupRef, Execute := FALSE);
+			iState := 0;
+		END_IF
+		
+	50:
+		fbAxisCA1.MR_Init();
+		IF fbAxisCA1.State = E_AxisState.AXIS_READY THEN
+			iState := 55;
+		END_IF
+		
+	55:
+	
+		fbAxisCA2.MR_Init();
+		IF fbAxisCA2.State = E_AxisState.AXIS_READY THEN
+			iState := 0;
+		END_IF
+		
+	60:
+		fbAxisCA1.MR_Deinit();
+		fbAxisCA2.MR_Deinit();
+		
+		IF NOT fbAxisCA1.PowerOn AND NOT fbAxisCA2.PowerOn THEN
+			iState := 0;
+		END_IF
+		
+	70:
+		fbAxisCA1.MR_Home(0.0);
+		
+		IF fbAxisCA1.IsHomed THEN
+			iState := 75;
+		END_IF
+		
+	75:
+		fbAxisCA2.MR_Home(3000.0);
+		
+		IF fbAxisCA2.IsHomed THEN
+			iState := 0;
+		END_IF
+		
+	80:
+		fbAxisCA1.MR_MoveAbsolute(rTargetPositionCA1);
+		
+		IF fbAxisCA1.InPosition THEN
+			iState := 0;
+		END_IF
+		
+	90:
+		fbAxisCA2.MR_MoveAbsolute(rTargetPositionCA2);
+		
+		IF fbAxisCA2.InPosition THEN
+			iState := 0;
+		END_IF
+		
+	100:
+		fbAxisCA1.MR_Stop();
+		fbAxisCA2.MR_Stop();
+
+		IF fbAxisCA1.Stopped AND fbAxisCA2.Stopped THEN
+			iState := 0;
+		END_IF;	
+	110:
+		fbAxisCA1.MR_Halt();
+		fbAxisCA2.MR_Halt();
+		
+		IF fbAxisCA1.Halted AND fbAxisCA2.Halted THEN
+			iState := 0;
+		END_IF
+		
+END_CASE
+
+fbAxisCA1();
+fbAxisCA2();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_AxisServoCA_PreTest">
+      <LineId Id="319" Count="7" />
+      <LineId Id="330" Count="0" />
+      <LineId Id="332" Count="6" />
+      <LineId Id="355" Count="1" />
+      <LineId Id="359" Count="3" />
+      <LineId Id="371" Count="0" />
+      <LineId Id="358" Count="0" />
+      <LineId Id="372" Count="0" />
+      <LineId Id="374" Count="5" />
+      <LineId Id="373" Count="0" />
+      <LineId Id="339" Count="0" />
+      <LineId Id="317" Count="1" />
+      <LineId Id="181" Count="0" />
+      <LineId Id="184" Count="0" />
+      <LineId Id="179" Count="0" />
+      <LineId Id="254" Count="1" />
+      <LineId Id="258" Count="0" />
+      <LineId Id="183" Count="0" />
+      <LineId Id="291" Count="0" />
+      <LineId Id="290" Count="0" />
+      <LineId Id="293" Count="0" />
+      <LineId Id="180" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="237" Count="0" />
+      <LineId Id="96" Count="0" />
+      <LineId Id="113" Count="0" />
+      <LineId Id="296" Count="0" />
+      <LineId Id="298" Count="1" />
+      <LineId Id="104" Count="0" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="97" Count="0" />
+      <LineId Id="114" Count="0" />
+      <LineId Id="105" Count="0" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="98" Count="0" />
+      <LineId Id="115" Count="0" />
+      <LineId Id="103" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="100" Count="0" />
+      <LineId Id="116" Count="0" />
+      <LineId Id="107" Count="2" />
+      <LineId Id="117" Count="0" />
+      <LineId Id="111" Count="0" />
+      <LineId Id="110" Count="0" />
+      <LineId Id="112" Count="0" />
+      <LineId Id="118" Count="0" />
+      <LineId Id="106" Count="0" />
+      <LineId Id="90" Count="0" />
+      <LineId Id="171" Count="0" />
+      <LineId Id="301" Count="0" />
+      <LineId Id="303" Count="2" />
+      <LineId Id="307" Count="0" />
+      <LineId Id="306" Count="0" />
+      <LineId Id="302" Count="0" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="245" Count="0" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="67" Count="1" />
+      <LineId Id="185" Count="0" />
+      <LineId Id="69" Count="3" />
+      <LineId Id="170" Count="0" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="75" Count="3" />
+      <LineId Id="169" Count="0" />
+      <LineId Id="53" Count="0" />
+      <LineId Id="247" Count="0" />
+      <LineId Id="79" Count="2" />
+      <LineId Id="186" Count="0" />
+      <LineId Id="82" Count="2" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="168" Count="0" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="85" Count="2" />
+      <LineId Id="238" Count="0" />
+      <LineId Id="88" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="273" Count="2" />
+      <LineId Id="278" Count="0" />
+      <LineId Id="282" Count="1" />
+      <LineId Id="286" Count="0" />
+      <LineId Id="284" Count="1" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="130" Count="0" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="120" Count="1" />
+      <LineId Id="308" Count="3" />
+      <LineId Id="314" Count="1" />
+      <LineId Id="313" Count="0" />
+      <LineId Id="166" Count="0" />
+      <LineId Id="62" Count="0" />
+      <LineId Id="141" Count="4" />
+      <LineId Id="123" Count="0" />
+      <LineId Id="165" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="249" Count="0" />
+      <LineId Id="138" Count="2" />
+      <LineId Id="128" Count="0" />
+      <LineId Id="266" Count="6" />
+      <LineId Id="146" Count="2" />
+      <LineId Id="155" Count="3" />
+      <LineId Id="457" Count="0" />
+      <LineId Id="150" Count="0" />
+      <LineId Id="149" Count="0" />
+      <LineId Id="159" Count="0" />
+      <LineId Id="161" Count="1" />
+      <LineId Id="160" Count="0" />
+      <LineId Id="163" Count="0" />
+      <LineId Id="151" Count="1" />
+      <LineId Id="173" Count="0" />
+      <LineId Id="175" Count="0" />
+      <LineId Id="174" Count="0" />
+      <LineId Id="176" Count="0" />
+      <LineId Id="178" Count="0" />
+      <LineId Id="172" Count="0" />
+      <LineId Id="259" Count="2" />
+      <LineId Id="263" Count="2" />
+      <LineId Id="262" Count="0" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="44" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

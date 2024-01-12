@@ -1,0 +1,564 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <RecipeManager Name="RecipeManager" Id="{8f122d14-bbc7-4c3a-9448-e9301a57c123}">
+    <XmlArchive>
+      <Data>
+        <o xml:space="preserve" t="RecipeManObject">
+          <o n="LMGuids" t="LanguageModelGuidHelper">
+            <d n="NamesAndGuids" t="Hashtable" ckt="String" cvt="Guid">
+              <v>GVL_RECIPEMANAGEMENT_3300</v>
+              <v>e8d6c969-1cdd-470c-8d8f-8cf622cc2475</v>
+              <v>RECIPEFACTORY</v>
+              <v>0b990e24-d99d-4f17-a25f-005adb8b210b</v>
+              <v>RECIPEMANAGEMENTINITFB_INIT</v>
+              <v>31ec9e3b-7e3e-42cd-a085-4de9a61ff03a</v>
+              <v>RECIPEFACTORYFREERECIPE</v>
+              <v>1ccc1651-6ee2-43a4-9cfa-9ae182689968</v>
+              <v>RECIPEFACTORYFB_INIT</v>
+              <v>7f86d389-f2e7-41d4-8d23-67ab0dbd0e4d</v>
+              <v>RECIPEMANAGEMENTINITFB_REINIT</v>
+              <v>fecb7385-5008-44c0-ae02-6b58fc1932c3</v>
+              <v>RECIPEMANAGEMENTINIT</v>
+              <v>20704e02-5b36-4127-90b2-9c414e908b66</v>
+              <v>RECIPEMANAGEMENTINITINITIALIZE</v>
+              <v>e7e0de03-182f-4271-b186-578b5d61b974</v>
+              <v>RECIPEFACTORYCREATERECIPE</v>
+              <v>65759457-2099-480b-a767-b460b65c141c</v>
+            </d>
+          </o>
+          <o n="StorageSettings" t="RecipeManagerStorageSettings">
+            <v n="StorageType">1U</v>
+            <v n="LoadType">0U</v>
+            <v n="WriteType">0U</v>
+            <v n="FileExtension">".txtrecipe"</v>
+            <v n="FilePath">"C:\TwinCAT\Tests\Recipes"</v>
+            <v n="TokenSeparator">";"</v>
+            <v n="ColumnList">"1|0|2|3|4|5|6"</v>
+            <v n="AutoSaveRecipes">true</v>
+          </o>
+          <v n="RecipesInPlc">true</v>
+          <v n="RecipesInPlcAssigned">false</v>
+        </o>
+      </Data>
+      <TypeList>
+        <Type n="Boolean">System.Boolean</Type>
+        <Type n="Guid">System.Guid</Type>
+        <Type n="Hashtable">System.Collections.Hashtable</Type>
+        <Type n="LanguageModelGuidHelper">{3bce4913-f2c1-4b54-84e8-6d7ec1809176}</Type>
+        <Type n="RecipeManagerStorageSettings">{9af4bea6-fc90-45e0-8fd7-eb50506b56da}</Type>
+        <Type n="RecipeManObject">{09ecc42e-586d-4a08-932f-5bdcac20bb55}</Type>
+        <Type n="String">System.String</Type>
+        <Type n="UInt32">System.UInt32</Type>
+      </TypeList>
+    </XmlArchive>
+    <RecipeDefinition Name="Recipes" Id="{34088afa-dd30-4d1b-9a77-21d2c3b5ae56}">
+      <XmlArchive>
+        <Data>
+          <o xml:space="preserve" t="RecipeDefinitionObject">
+            <v n="UniqueIdGenerator">"53"</v>
+            <o n="Recipes" t="RecipeList">
+              <l n="Recipes" t="ArrayList" cet="Recipe">
+                <o>
+                  <l n="Values" t="ArrayList" cet="RecipeValue">
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"1.1"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"1.2"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"1.3"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">"3"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">"4"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">"5"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">"'Var7Test'"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">"'Var8Test'"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">"'Var9Test'"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Bool</v>
+                      <v n="Value">"TRUE"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">""</v>
+                    </o>
+                  </l>
+                  <v n="Name">"R1"</v>
+                  <v n="Id">3</v>
+                </o>
+                <o>
+                  <l n="Values" t="ArrayList" cet="RecipeValue">
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"10.1"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"10.3"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"10.3"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">"5"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">"6"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">"7"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">"'Var7Test1'"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">"'Var8Test1'"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">"'Var9Test1'"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Bool</v>
+                      <v n="Value">"FALSE"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">""</v>
+                    </o>
+                  </l>
+                  <v n="Name">"R2"</v>
+                  <v n="Id">4</v>
+                </o>
+                <o>
+                  <l n="Values" t="ArrayList" cet="RecipeValue">
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"100.1"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"101.1"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"102.1"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">"505"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">"506"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">"507"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">"'Var7Test2'"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">"'Var8Test2'"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">"'Var9Test2'"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Bool</v>
+                      <v n="Value">"TRUE"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">""</v>
+                    </o>
+                  </l>
+                  <v n="Name">"R3"</v>
+                  <v n="Id">7</v>
+                </o>
+                <o>
+                  <l n="Values" t="ArrayList" cet="RecipeValue">
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"201"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"12.0"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Bool</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">""</v>
+                    </o>
+                  </l>
+                  <v n="Name">"R4"</v>
+                  <v n="Id">8</v>
+                </o>
+                <o>
+                  <l n="Values" t="ArrayList" cet="RecipeValue">
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"2"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"0.0"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Bool</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">""</v>
+                    </o>
+                  </l>
+                  <v n="Name">"R7"</v>
+                  <v n="Id">9</v>
+                </o>
+                <o>
+                  <l n="Values" t="ArrayList" cet="RecipeValue">
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"12.1"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"13.1"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Real</v>
+                      <v n="Value">"11.1"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">"53"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">"34"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">"3"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">"'Var7Test2'"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">"'Var7Test2'"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">String</v>
+                      <v n="Value">"'Var7Test2'"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">Bool</v>
+                      <v n="Value">"TRUE"</v>
+                    </o>
+                    <o>
+                      <v n="Type" t="TypeClass">DInt</v>
+                      <v n="Value">""</v>
+                    </o>
+                  </l>
+                  <v n="Name">"Rec123"</v>
+                  <v n="Id">10</v>
+                </o>
+              </l>
+            </o>
+            <o n="RecipeVariables" t="RecipeVariableList">
+              <l n="Variables" t="ArrayList" cet="RecipeVariable">
+                <o>
+                  <v n="VarName">"stShell.stRecipeData.rpVar1.rValue"</v>
+                  <v n="VarType" t="TypeClass">Real</v>
+                  <v n="VarTypeAsString">"REAL"</v>
+                  <v n="Name">"Var1"</v>
+                  <o n="Boundaries" t="RecipeVariableBoundaries">
+                    <v n="Type" t="TypeClass">Real</v>
+                    <v n="LowerBound">"0.0"</v>
+                    <v n="UpperBound">"140"</v>
+                  </o>
+                  <v n="Id">14</v>
+                  <v n="Comment">"Var1"</v>
+                  <v n="VarUserDefTypeAsString">"Invalid Type"</v>
+                </o>
+                <o>
+                  <v n="VarName">"stShell.stRecipeData.rpVar2.rValue"</v>
+                  <v n="VarType" t="TypeClass">Real</v>
+                  <v n="VarTypeAsString">"REAL"</v>
+                  <v n="Name">"Var2"</v>
+                  <o n="Boundaries" t="RecipeVariableBoundaries">
+                    <v n="Type" t="TypeClass">Real</v>
+                    <v n="LowerBound">"0.0"</v>
+                    <v n="UpperBound">"120.0"</v>
+                  </o>
+                  <v n="Id">2</v>
+                  <v n="Comment">"Var2"</v>
+                  <v n="VarUserDefTypeAsString">"REAL"</v>
+                </o>
+                <o>
+                  <v n="VarName">"stShell.stRecipeData.rpVar3.rValue"</v>
+                  <v n="VarType" t="TypeClass">Real</v>
+                  <v n="VarTypeAsString">"REAL"</v>
+                  <v n="Name">"Var3"</v>
+                  <o n="Boundaries" t="RecipeVariableBoundaries">
+                    <v n="Type" t="TypeClass">Real</v>
+                    <v n="LowerBound">""</v>
+                    <v n="UpperBound">""</v>
+                  </o>
+                  <v n="Id">36</v>
+                  <v n="Comment">"Var3"</v>
+                  <v n="VarUserDefTypeAsString">"REAL"</v>
+                </o>
+                <o>
+                  <v n="VarName">"stShell.stRecipeData.rpVar4.iValue"</v>
+                  <v n="VarType" t="TypeClass">DInt</v>
+                  <v n="VarTypeAsString">"DINT"</v>
+                  <v n="Name">"Var4"</v>
+                  <o n="Boundaries" t="RecipeVariableBoundaries">
+                    <v n="Type" t="TypeClass">DInt</v>
+                    <v n="LowerBound">""</v>
+                    <v n="UpperBound">""</v>
+                  </o>
+                  <v n="Id">40</v>
+                  <v n="Comment">"Var4"</v>
+                  <v n="VarUserDefTypeAsString">"DINT"</v>
+                </o>
+                <o>
+                  <v n="VarName">"stShell.stRecipeData.rpVar5.iValue"</v>
+                  <v n="VarType" t="TypeClass">DInt</v>
+                  <v n="VarTypeAsString">"DINT"</v>
+                  <v n="Name">"Var5"</v>
+                  <o n="Boundaries" t="RecipeVariableBoundaries">
+                    <v n="Type" t="TypeClass">DInt</v>
+                    <v n="LowerBound">""</v>
+                    <v n="UpperBound">""</v>
+                  </o>
+                  <v n="Id">41</v>
+                  <v n="Comment">"Var5"</v>
+                  <v n="VarUserDefTypeAsString">"DINT"</v>
+                </o>
+                <o>
+                  <v n="VarName">"stShell.stRecipeData.rpVar6.iValue"</v>
+                  <v n="VarType" t="TypeClass">DInt</v>
+                  <v n="VarTypeAsString">"DINT"</v>
+                  <v n="Name">"Var6"</v>
+                  <o n="Boundaries" t="RecipeVariableBoundaries">
+                    <v n="Type" t="TypeClass">DInt</v>
+                    <v n="LowerBound">""</v>
+                    <v n="UpperBound">""</v>
+                  </o>
+                  <v n="Id">42</v>
+                  <v n="Comment">"Var6"</v>
+                  <v n="VarUserDefTypeAsString">"DINT"</v>
+                </o>
+                <o>
+                  <v n="VarName">"stShell.stRecipeData.rpVar7.sValue"</v>
+                  <v n="VarType" t="TypeClass">String</v>
+                  <v n="VarTypeAsString">"STRING"</v>
+                  <v n="Name">"Var7"</v>
+                  <o n="Boundaries" t="RecipeVariableBoundaries">
+                    <v n="Type" t="TypeClass">String</v>
+                    <v n="LowerBound">""</v>
+                    <v n="UpperBound">""</v>
+                  </o>
+                  <v n="Id">45</v>
+                  <v n="Comment">"Var7"</v>
+                  <v n="VarUserDefTypeAsString">"Invalid Type"</v>
+                </o>
+                <o>
+                  <v n="VarName">"stShell.stRecipeData.rpVar8.sValue"</v>
+                  <v n="VarType" t="TypeClass">String</v>
+                  <v n="VarTypeAsString">"STRING"</v>
+                  <v n="Name">"Var8"</v>
+                  <o n="Boundaries" t="RecipeVariableBoundaries">
+                    <v n="Type" t="TypeClass">String</v>
+                    <v n="LowerBound">""</v>
+                    <v n="UpperBound">""</v>
+                  </o>
+                  <v n="Id">46</v>
+                  <v n="Comment">"Var8"</v>
+                  <v n="VarUserDefTypeAsString">"STRING"</v>
+                </o>
+                <o>
+                  <v n="VarName">"stShell.stRecipeData.rpVar9.sValue"</v>
+                  <v n="VarType" t="TypeClass">String</v>
+                  <v n="VarTypeAsString">"STRING"</v>
+                  <v n="Name">"Var9"</v>
+                  <o n="Boundaries" t="RecipeVariableBoundaries">
+                    <v n="Type" t="TypeClass">String</v>
+                    <v n="LowerBound">""</v>
+                    <v n="UpperBound">""</v>
+                  </o>
+                  <v n="Id">47</v>
+                  <v n="Comment">"Var9"</v>
+                  <v n="VarUserDefTypeAsString">"STRING"</v>
+                </o>
+                <o>
+                  <v n="VarName">"stShell.stRecipeData.rpVar10.bValue"</v>
+                  <v n="VarType" t="TypeClass">Bool</v>
+                  <v n="VarTypeAsString">"BOOL"</v>
+                  <v n="Name">"Var10"</v>
+                  <o n="Boundaries" t="RecipeVariableBoundaries">
+                    <v n="Type" t="TypeClass">Bool</v>
+                    <v n="LowerBound">""</v>
+                    <v n="UpperBound">""</v>
+                  </o>
+                  <v n="Id">48</v>
+                  <v n="Comment">"Var10"</v>
+                  <v n="VarUserDefTypeAsString">"BOOL"</v>
+                </o>
+                <o>
+                  <v n="VarName">"stShell.stRecipeData.rpVar3.iValue"</v>
+                  <v n="VarType" t="TypeClass">DInt</v>
+                  <v n="VarTypeAsString">"DINT"</v>
+                  <v n="Name">""</v>
+                  <o n="Boundaries" t="RecipeVariableBoundaries">
+                    <v n="Type" t="TypeClass">DInt</v>
+                    <v n="LowerBound">""</v>
+                    <v n="UpperBound">""</v>
+                  </o>
+                  <v n="Id">53</v>
+                  <v n="Comment">""</v>
+                  <v n="VarUserDefTypeAsString">"DINT"</v>
+                </o>
+              </l>
+            </o>
+            <o n="LMGuids" t="LanguageModelGuidHelper">
+              <d n="NamesAndGuids" t="Hashtable" ckt="String" cvt="Guid">
+                <v>VALUESINIT</v>
+                <v>1fc3b000-2af7-4eb8-8915-daa0b9a4bd57</v>
+                <v>FILLDESCRIPTION</v>
+                <v>53eefc6b-c48a-4fe6-9ccb-7dcb3859a41b</v>
+                <v>NAMESET</v>
+                <v>e32a0c59-dfab-4c9c-ae3b-1e2ee67b6357</v>
+                <v>PRVFILLDATASERVERSTRUCTURES</v>
+                <v>8558f8f0-fc7b-4e07-95c3-c74af198c2f1</v>
+                <v>NAME</v>
+                <v>9425ce97-cb5a-40c9-888a-4f4e90955fe5</v>
+                <v>UPDATEFROMDESCRIPTION</v>
+                <v>f2c44b7b-569e-48d4-ac0d-a5f010e693f2</v>
+                <v>WRITE</v>
+                <v>e8b69ab3-423e-4285-9714-33c6587c7369</v>
+                <v>READ</v>
+                <v>23e26d5c-bfbd-43fe-b4f5-dafe0a6b8c8b</v>
+                <v>REC_DS_PRG__3610DB29C5354E19B9F646C388DD13B5</v>
+                <v>0ab2e231-ba98-4d24-9043-caca05bfd958</v>
+              </d>
+            </o>
+          </o>
+        </Data>
+        <TypeList>
+          <Type n="ArrayList">System.Collections.ArrayList</Type>
+          <Type n="Guid">System.Guid</Type>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="Int32">System.Int32</Type>
+          <Type n="LanguageModelGuidHelper">{3bce4913-f2c1-4b54-84e8-6d7ec1809176}</Type>
+          <Type n="Recipe">{53080c72-c79f-4271-9865-791f591dcef8}</Type>
+          <Type n="RecipeDefinitionObject">{6b3dfb6a-1865-4356-a39b-1fe0ef89651c}</Type>
+          <Type n="RecipeList">{361612e3-b6f9-4397-98a8-756875b9e479}</Type>
+          <Type n="RecipeValue">{57d4d5a5-2244-4adb-b7c3-3e65da497dcc}</Type>
+          <Type n="RecipeVariable">{53eb36d9-3360-453b-901e-ca88bd8f0cba}</Type>
+          <Type n="RecipeVariableBoundaries">{27f9af88-23e7-4a13-82aa-c97c4e06a71a}</Type>
+          <Type n="RecipeVariableList">{97841042-ff4f-47b5-923e-538f1387df5a}</Type>
+          <Type n="String">System.String</Type>
+          <Type n="TypeClass">{16f7aa24-038f-444e-9d81-b001bc091d35}</Type>
+        </TypeList>
+      </XmlArchive>
+    </RecipeDefinition>
+  </RecipeManager>
+</TcPlcObject>

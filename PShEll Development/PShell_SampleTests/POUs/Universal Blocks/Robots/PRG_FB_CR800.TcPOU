@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_CR800" Id="{1a56e7bb-c977-4ee6-a8a8-8563d43a409f}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_CR800
+VAR
+	fbCr800 : FB_CR800EtherCAT;
+	
+	(* HMI *)
+	bInit 			: BOOL ;
+	bAbort 			: BOOL ;
+	bGoHome			: BOOL ;
+	bGoAuto			: BOOL ;
+	bCycleStop 		: BOOL ;
+	bCyclePause		: BOOL ;
+	bCycleRestore	: BOOL ;
+	bDoAction		: BOOL ;
+	bResetFBErr 	: BOOL ;
+	bResetCR800Err	: BOOL ;
+	bResetProgram 	: BOOL ;
+	bUpdateRecipies	: BOOL ;
+	btest 			: bool ;
+	
+	sState			: STRING ;
+	sErrorName		: STRING ;
+	
+	iNumber			: UINT := 51;
+	bRestoreAuto	: BOOL;
+	bDoActionEnum	: BOOL;
+	eRobotActions	: E_RobotActions ;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bInit THEN
+	IF fbCr800.MR_Init() THEN
+		bInit := FALSE ;
+	END_IF
+END_IF
+
+IF bAbort THEN
+	IF fbCr800.MR_Abort() THEN
+		bAbort := FALSE ;
+	END_IF
+END_IF
+
+IF bGoHome THEN
+	IF fbCr800.MR_GoHome() THEN
+		bGoHome := FALSE ;
+	END_IF
+END_IF
+
+IF bGoAuto THEN
+	IF fbCr800.MR_GoAuto() THEN
+		bGoAuto := FALSE ;
+	END_IF
+END_IF
+
+IF bCycleStop THEN
+	IF fbCr800.MR_CycleStop() THEN
+		bCycleStop := FALSE ;
+	END_IF
+END_IF
+
+IF bCyclePause THEN
+	IF fbCr800.MR_CyclePause() THEN
+		bCyclePause := FALSE ;
+	END_IF
+END_IF
+
+IF bCycleRestore THEN
+	IF fbCr800.MR_RestoreCycle() THEN
+		bCycleRestore := FALSE ;
+	END_IF
+END_IF
+
+IF bDoAction THEN
+	IF fbCr800.MR_DoAction(iActionNumber :=iNumber) THEN
+		bDoAction := FALSE ;
+	END_IF
+END_IF
+
+IF bResetFBErr THEN
+	IF fbCr800.MR_Reset()  THEN
+		bResetFBErr := FALSE ;
+	END_IF
+END_IF
+
+IF bResetCR800Err THEN
+	IF fbCr800.MR_ResetCR800Err()  THEN
+		bResetCR800Err := FALSE ;
+	END_IF
+END_IF
+
+IF bRestoreAuto THEN
+	IF fbCr800.MR_RestoreAuto() THEN 
+		bRestoreAuto := FALSE ;
+	END_IF
+END_IF
+
+IF bDoActionEnum THEN
+	IF fbCr800.MR_DoAction(iActionNumber :=E_RobotActions.PICK_AND_PLACE) THEN
+		bDoActionEnum := FALSE ;
+	END_IF
+END_IF
+
+IF bUpdateRecipies THEN
+	IF fbCr800.MR_UpdateRecipies() THEN
+		bUpdateRecipies := FALSE ;
+	END_IF
+END_IF
+
+sState := fbCr800.MainStateMachine ;
+sErrorName := fbCr800.Errorname ;
+
+fbCr800();]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

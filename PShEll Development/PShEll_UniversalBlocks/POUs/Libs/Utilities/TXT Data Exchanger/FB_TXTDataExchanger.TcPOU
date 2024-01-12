@@ -1,0 +1,1152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_TXTDataExchanger" Id="{1a3ada84-04d4-4555-a76e-ba1e0f62a9de}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_TXTDataExchanger IMPLEMENTS I_TXTDataExchanger
+VAR CONSTANT
+	iBUFFER_SIZE 						: UINT := 255;
+END_VAR
+VAR
+	sName : STRING;
+	
+	(* First cycle bits used for selecting file logging mode *)
+	bAddTimeStamp						: BOOL;
+	bAddHeader							: BOOL;
+	bCreateFileAtStart					: BOOL;    
+                        		
+	(* Internal status *)       		
+	bActive 							: BOOL;										(*  *)
+	bBusy								: BOOL;										(*  *)
+	bError								: BOOL;										(*  *)
+	iErrorID							: UDINT;									(*  *)
+	                                                                            	
+	eTXTDataExchangerState 				: E_TXTDataExchangerState;					(*  *)
+	eTXTDataExchangerInitState 			: E_TXTDataExchangerInitState;				(*  *)
+	eTXTDataExchangerAddLogsState		: E_TXTDataExchangerAddLogsState; 			(*  *)
+	eTXTDataExchangerSetNewPathState 	: E_TXTDataExchangerSetNewPathState;
+	eTXTDataExchangerSearchForFileState : E_TXTDataExchangerSearchForFileState;
+	
+	(* Internal parameters *)
+	sFileName 							: STRING;									(*  *)
+	sFileDir							: STRING;									(*  *)
+	sFilePath							: STRING;									(*  *)
+                   				      		
+	hFile								: UINT;										(*  *)
+
+	sAmsNetId							: T_AmsNetID;								(*  *)
+	stTime								: TIMESTRUCT;								(*  *)
+	sTime								: STRING;									(*  *)
+	sFileDate							: STRING;									(*  *)
+
+	sLogMessage							: STRING;									(*  *)
+
+	sSearchFileName						: STRING; 
+	bFileFound							: BOOL;                       		
+	
+	(* Buffer arrays *)         		
+	iCurrentBufferLine					: UINT := 1;								(*  *)
+	iCurrentBufferLineForFile			: UINT := 1;								(*  *)
+	arrMessageBuffer 					: ARRAY [1..iBUFFER_SIZE] OF STRING(300);	(*  *)
+	arrMessageBufferPresence			: ARRAY [1..iBUFFER_SIZE] OF BOOL(255);		(*  *)
+	
+	(* Function blocks - file handling *)
+	fbFileOpen							: FB_FileOpen;								(*  *)
+	fbFileClose							: FB_FileClose;								(*  *)
+	fbCreateDir							: FB_CreateDir;								(*  *)
+	fbFilePuts							: FB_FilePuts;								(*  *)
+	fbEnumFindFileEntry					: FB_EnumFindFileEntry;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[bActive := eTXTDataExchangerState >= TXT_DATA_EXCHANGER_READY;
+
+IF fbMachineTime.bValid THEN
+	stTime := fbMachineTime.systemTime;
+	sTime := SYSTEMTIME_TO_STRING(stTime);
+	
+END_IF
+
+StateMachine();]]></ST>
+    </Implementation>
+    <Folder Name="FirstCycle" Id="{1dd2ade0-cafa-4fdb-9516-ce06347d9323}" />
+    <Folder Name="Internal" Id="{237f2c8d-39bd-45e4-a467-94f9beb94055}" />
+    <Folder Name="Properties" Id="{ed94c300-77dd-4d6e-9b79-3098ed6f9fa7}">
+      <Folder Name="Parameters" Id="{319916c7-d9d7-427f-86a9-2501160b1f87}" />
+      <Folder Name="Status" Id="{3771faaf-8ca4-46c1-bcbe-a06d00726d64}" />
+    </Folder>
+    <Folder Name="Requests" Id="{f24ad5f0-c66b-430d-b202-4b76428b888e}" />
+    <Folder Name="StateMachine" Id="{bd87b044-912f-4b85-bbb6-0052c7a5810c}" />
+    <Property Name="Active" Id="{ef71fc8b-26e1-4460-bfce-65a2005cc7b4}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY Active : REFERENCE TO BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{e3284859-0a8f-426b-8554-303b97e2fdd0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Active REF= bActive;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="AmsNetId" Id="{a57c9008-8f6d-46d6-ac3c-ad2896ec069e}" FolderPath="Properties\Parameters\">
+      <Declaration><![CDATA[PROPERTY AmsNetId : STRING]]></Declaration>
+      <Get Name="Get" Id="{64eb65ab-8e69-47d6-97bd-8b335cad7e18}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[AmsNetID := sAmsNetId;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{de30aa7e-b6a2-4c61-964d-84d42d66dece}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[sAmsNetId := AmsNetId;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Busy" Id="{5ad0da15-2b97-4188-9197-21f425c1fb39}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY Busy : REFERENCE TO BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{611b1048-0a45-48b8-a8b6-e40ae9a9cfa1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Busy REF= bBusy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{30b73de8-fc64-426a-900d-fbb02d12cd7d}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY Error : REFERENCE TO BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{7fe8308d-4e5a-459e-bead-68837762acc8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error REF= bError;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ErrorID" Id="{cf2a4bce-7e99-4df2-bdbf-2194c7985e51}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY ErrorID : REFERENCE TO UDINT
+]]></Declaration>
+      <Get Name="Get" Id="{cac29d90-5369-4273-8fed-b7dc894e32de}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ErrorID REF= iErrorID;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="FileDir" Id="{dbd902e6-860e-4d53-b0d0-72b8a054924f}" FolderPath="Properties\Parameters\">
+      <Declaration><![CDATA[PROPERTY FileDir : STRING]]></Declaration>
+      <Get Name="Get" Id="{fd60c011-e53f-434c-9294-c72e9ae3ad69}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[FileDir := sFileDir;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{ca9c95c6-5a97-4c4c-ade2-35c2d24b0f9a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[sFileDir := FileDir;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="FileName" Id="{bc042983-795c-4cb4-a333-d6444566baf9}" FolderPath="Properties\Parameters\">
+      <Declaration><![CDATA[PROPERTY FileName : STRING]]></Declaration>
+      <Get Name="Get" Id="{1e668bcb-9986-4909-b994-9c42fcb71f6c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[FileName := sFileName;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{2d4d74d7-a6e5-49b2-ac33-54f00db52866}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[sFileName := FileName;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="M_ResetParameters" Id="{9a370994-42c4-4f1c-b077-4efbcd9f2e53}" FolderPath="Internal\">
+      <Declaration><![CDATA[METHOD M_ResetParameters : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbCreateDir( bExecute := FALSE);
+fbFileOpen( bExecute := FALSE);
+fbFilePuts( bExecute := FALSE);
+fbFileClose( bExecute := FALSE);
+
+FOR iCurrentBufferLine := 1 TO iBUFFER_SIZE BY 1 DO
+	MEMSET(ADR(arrMessageBuffer[iCurrentBufferLine]),0,SIZEOF(arrMessageBuffer[iCurrentBufferLine]));
+	arrMessageBufferPresence[iCurrentBufferLine] := FALSE;
+END_FOR
+
+iCurrentBufferLine := 1;
+iCurrentBufferLineForFile := 1;
+
+bError 		:= FALSE;
+iErrorID 	:= 0;
+
+MEMSET(ADR(sLogMessage),0,SIZEOF(sLogMessage));
+
+eTXTDataExchangerInitState := 0;
+eTXTDataExchangerAddLogsState := 0;
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="M_SetNewPath" Id="{92d1eb7b-cedc-423b-9025-3187ac31c19c}" FolderPath="Internal\">
+      <Declaration><![CDATA[METHOD M_SetNewPath : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eTXTDataExchangerSetNewPathState OF
+	TXT_DATA_EXCHANGER_SET_NEW_PATH_CHANGE_PATH:
+		M_SetNewPath := FALSE;
+		sFilePath := FUN_MergeStrings3(sStr1 := sFileDir, sStr2 := sFileName, sStr3 :=  '.txt');
+		eTXTDataExchangerSetNewPathState := TXT_DATA_EXCHANGER_SET_NEW_PATH_DONE;
+	
+	TXT_DATA_EXCHANGER_SET_NEW_PATH_DONE:
+		M_SetNewPath := TRUE;
+		eTXTDataExchangerSetNewPathState := TXT_DATA_EXCHANGER_SET_NEW_PATH_CHANGE_PATH;
+			
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_Abort" Id="{631c74f0-7146-4340-b4a4-6b79b406d46e}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_Abort : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eTXTDataExchangerState >= TXT_DATA_EXCHANGER_READY THEN
+	bBusy := TRUE;
+	MR_Abort := FALSE;
+	eTXTDataExchangerState := TXT_DATA_EXCHANGER_ABORTING;
+	
+ELSIF eTXTDataExchangerState = TXT_DATA_EXCHANGER_UNINITIALIZED THEN
+	bBusy := FALSE;
+	MR_Abort := TRUE;
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_AddLogs" Id="{6fd86b1b-ab07-4f96-9b44-cf3b33aea90a}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_AddLogs : BOOL
+VAR_INPUT
+	sLogMessage 	: STRING;		
+	
+END_VAR
+VAR
+	sCurrentTime 	: STRING;
+	sCurrentDate	: STRING;
+	sLog			: STRING(300);
+	
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF iCurrentBufferLine >= iBUFFER_SIZE THEN	
+	iCurrentBufferLine := 1;
+		
+ELSE
+	sCurrentDate := LEFT(sTime,10);
+	sCurrentTime := RIGHT(sTime,12);
+	MEMSET(ADR(sLog),0,SIZEOF(sLog));
+	
+	IF bAddTimeStamp THEN
+		sLog := FUN_MergeStrings6(sCurrentDate,'$t',sCurrentTime,'$t',sLogMessage,'$n'); 
+	ELSE
+		sLog := CONCAT(sLogMessage,'$n'); 
+	END_IF
+	
+	MEMSET(ADR(arrMessageBuffer[iCurrentBufferLine]),0,SIZEOF(arrMessageBuffer[iCurrentBufferLine]));
+	arrMessageBuffer[iCurrentBufferLine] := sLog;
+	iCurrentBufferLine := iCurrentBufferLine + 1;
+	
+	MR_AddLogs := TRUE;
+	
+END_IF
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_AddMESCommand" Id="{dd4df726-842d-4d70-a31b-5fbeeb375aeb}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_AddMESCommand : BOOL
+VAR_INPUT
+	sMachineID		: STRING;
+	sOperatorID		: STRING;
+	sPO				: STRING;
+	sProductItem	: STRING;
+	bLogOn			: BOOL;
+END_VAR
+
+VAR
+	sLog			: STRING(300);
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF iCurrentBufferLine >= iBUFFER_SIZE THEN	
+	iCurrentBufferLine := 1;
+		
+ELSE
+	MEMSET(ADR(sLog),0,SIZEOF(sLog));
+
+	IF bLogOn THEN
+		sLog := FUN_MergeStrings10(sStr1 := 'DLG=A_P_AN|MNR=', 
+									sStr2 := sMachineID,
+									sStr3 := '|KNR=',
+									sStr4 := sOperatorID,
+									sStr5 := '|AUNR=',
+									sStr6 := sPO,									
+									sStr7 := '|ATK=',
+									sStr8 := sProductItem,
+									sStr9 := '|M_HS=1',
+									sStr10 :='$n');  
+									
+	ELSE
+		sLog := FUN_MergeStrings10(sStr1 := 'DLG=A_AB|MNR=', 
+									sStr2 := sMachineID,
+									sStr3 := '|KNR=',
+									sStr4 := sOperatorID,
+									sStr5 := '|AUNR=',
+									sStr6 := sPO,									
+									sStr7 := '|ATK=',
+									sStr8 := sProductItem,
+									sStr9 := '|M_HS=2',
+									sStr10 :='$n');  
+									
+	END_IF
+	
+	MEMSET(ADR(arrMessageBuffer[iCurrentBufferLine]),0,SIZEOF(arrMessageBuffer[iCurrentBufferLine]));
+	arrMessageBuffer[iCurrentBufferLine] := sLog;
+	iCurrentBufferLine := iCurrentBufferLine + 1;
+	
+	MR_AddMESCommand := TRUE;
+	
+END_IF
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_FirstCycle" Id="{b89de474-da9f-443e-b1b1-a5c45d17d08e}" FolderPath="FirstCycle\">
+      <Declaration><![CDATA[METHOD MR_FirstCycle : BOOL
+VAR_INPUT
+	sName 					: STRING;
+	sFileDir				: STRING(255);
+	sFileName				: STRING(255);
+	sAmsNetId				: T_AmsNetID;		
+	bAddTimeStamp			: BOOL;				(* If true the time stamp will be added to each log *)
+	bAddHeader				: BOOL;				(* If true the header will be added to the file at the start-up *)
+	bCreateFileAtStart		: BOOL;				(* If true the file will be created at the start-up *)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.sName := sName;
+THIS^.sFileDir := sFileDir;
+THIS^.sFileName := sFileName;
+THIS^.sAmsNetId := sAmsNetId;
+THIS^.bAddTimeStamp := bAddTimeStamp;
+THIS^.bAddHeader := bAddHeader;
+THIS^.bCreateFileAtStart := bCreateFileAtStart;
+
+M_SetNewPath();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_Init" Id="{18370ca5-11a1-4371-b8fa-f305110c19d0}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_Init : BOOL
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eTXTDataExchangerState = TXT_DATA_EXCHANGER_UNINITIALIZED THEN
+	bBusy := TRUE;
+	MR_Init := FALSE;
+	eTXTDataExchangerState := TXT_DATA_EXCHANGER_INITIALIZING;
+	
+ELSIF eTXTDataExchangerState >= TXT_DATA_EXCHANGER_READY THEN
+	bBusy := FALSE;
+	MR_Init := TRUE;
+	
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_Reset" Id="{d565da08-4dc2-45d6-a9f1-7094c275eea6}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_Reset : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eTXTDataExchangerState >= TXT_DATA_EXCHANGER_IDLE AND eTXTDataExchangerState <> TXT_DATA_EXCHANGER_METHOD_DONE THEN
+	bBusy := TRUE;
+	MR_Reset := FALSE;
+	eTXTDataExchangerState := TXT_DATA_EXCHANGER_RESET;	
+
+ELSIF eTXTDataExchangerState = TXT_DATA_EXCHANGER_METHOD_DONE THEN
+	bBusy := FALSE;
+	MR_Reset := TRUE;
+
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_SearchForFile" Id="{e98733aa-949c-4b7e-b0c5-39542333ad93}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_SearchForFile : BOOL
+VAR_INPUT
+	sSearchFileName		: STRING;			(* Whole name of the search file (e.g.: "DemoFile.txt" *)
+END_VAR
+
+VAR_OUTPUT
+	bFileFound	: BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eTXTDataExchangerState = TXT_DATA_EXCHANGER_IDLE THEN
+	THIS^.sSearchFileName := sSearchFileName;
+	bFileFound	:= FALSE;
+	bBusy := TRUE;
+	MR_SearchForFile := FALSE;
+	eTXTDataExchangerState := TXT_DATA_EXCHANGER_SEARCH_FOR_FILE;
+	
+ELSIF eTXTDataExchangerState = TXT_DATA_EXCHANGER_METHOD_DONE THEN
+	bFileFound := THIS^.bFileFound;
+	bBusy := FALSE;
+	MR_SearchForFile := TRUE;
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MR_SelectPath" Id="{35634623-aa82-428f-8665-abd18b4cf7af}" FolderPath="Requests\">
+      <Declaration><![CDATA[METHOD MR_SelectPath : BOOL
+VAR_INPUT
+	sFileDir								: STRING; 			(* CSV source file directory name *)
+	sFileName 								: STRING; 			(* CSV source file name *)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF eTXTDataExchangerState = TXT_DATA_EXCHANGER_IDLE THEN
+	THIS^.sFileDir := sFileDir;	
+	THIS^.sFileName := sFileName;	
+	bBusy := TRUE;
+	MR_SelectPath := FALSE;
+	eTXTDataExchangerState := TXT_DATA_EXCHANGER_SELECT_PATH;
+	
+ELSIF eTXTDataExchangerState = TXT_DATA_EXCHANGER_METHOD_DONE THEN
+	bBusy := FALSE;
+	MR_SelectPath := TRUE;
+	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Aborting" Id="{6abc35c7-e046-42b2-a411-30f9fb36de79}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Aborting
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbCreateDir( bExecute := FALSE);
+fbFileOpen( bExecute := FALSE);
+fbFilePuts( bExecute := FALSE);
+fbFileClose( bExecute := FALSE);
+
+FOR iCurrentBufferLine := 1 TO iBUFFER_SIZE BY 1 DO
+	MEMSET(ADR(arrMessageBuffer[iCurrentBufferLine]),0,SIZEOF(arrMessageBuffer[iCurrentBufferLine]));
+	arrMessageBufferPresence[iCurrentBufferLine] := FALSE;
+	
+END_FOR
+
+iCurrentBufferLine := 1;
+iCurrentBufferLineForFile := 1;
+
+MEMSET(ADR(sTime),0,SIZEOF(sTime));
+MEMSET(ADR(sFileDate),0,SIZEOF(sFileDate));
+MEMSET(ADR(sLogMessage),0,SIZEOF(sLogMessage));
+
+stTime.wDay 			:= 0;
+stTime.wDayOfWeek 		:= 0;
+stTime.wHour 			:= 0;
+stTime.wMilliseconds 	:= 0;
+stTime.wMinute 			:= 0;
+stTime.wMonth 			:= 0;
+stTime.wSecond 			:= 0;
+stTime.wYear 			:= 0;
+
+bActive		:= FALSE;
+bBusy 		:= FALSE;
+bError 		:= FALSE;
+iErrorID 	:= 0;
+
+eTXTDataExchangerInitState := TXT_DATA_EXCHANGER_INIT_GET_TIME;
+eTXTDataExchangerAddLogsState := TXT_DATA_EXCHANGER_ADD_LOGS_OPEN;
+eTXTDataExchangerState := TXT_DATA_EXCHANGER_UNINITIALIZED;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_AddLogs" Id="{a77aba60-7e24-4b64-bbdf-2d910dd5d63c}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_AddLogs
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eTXTDataExchangerAddLogsState OF
+	TXT_DATA_EXCHANGER_ADD_LOGS_OPEN:
+		IF NOT fbFileOpen.bError THEN
+			fbFileOpen( sNetId 		:= sAmsNetId,
+						sPathName 	:= sFilePath,
+						bExecute 	:= TRUE,
+						tTimeout	:= DEFAULT_ADS_TIMEOUT,
+						nMode		:= FOPEN_MODEAPPEND OR FOPEN_MODEPLUS);
+							
+			IF NOT fbFileOpen.bBusy THEN
+				fbFileOpen(bExecute := FALSE);				
+				hFile := fbFileOpen.hFile;;
+				eTXTDataExchangerAddLogsState := TXT_DATA_EXCHANGER_ADD_LOGS_WRITE;
+			
+			END_IF
+		ELSE
+			fbFileOpen( bExecute := FALSE);
+			bError := fbFileOpen.bError;
+			iErrorID := fbFileOpen.nErrId;
+
+		END_IF
+	
+
+	TXT_DATA_EXCHANGER_ADD_LOGS_WRITE:
+		IF NOT fbFilePuts.bError THEN
+			fbFilePuts( sNetId		:= sAmsNetId,
+						hFile 		:= hFile,
+						sLine 		:= arrMessageBuffer[iCurrentBufferLineForFile],
+						bExecute 	:= TRUE,
+						tTimeout 	:= DEFAULT_ADS_TIMEOUT);	
+					
+			IF NOT fbFilePuts.bBusy THEN				
+				eTXTDataExchangerAddLogsState := TXT_DATA_EXCHANGER_ADD_LOGS_WRITE_DONE;
+				
+			END_IF
+			
+		ELSE
+			fbFilePuts( bExecute := FALSE);
+			bError := fbFilePuts.bError;
+			iErrorID := fbFilePuts.nErrId;
+			
+		END_IF	
+
+		
+	TXT_DATA_EXCHANGER_ADD_LOGS_WRITE_DONE:
+		fbFilePuts( bExecute := FALSE);	
+		iCurrentBufferLineForFile := iCurrentBufferLineForFile + 1;	
+		
+		IF iCurrentBufferLineForFile >= iBUFFER_SIZE THEN
+			iCurrentBufferLineForFile := 1;
+			
+		ELSIF iCurrentBufferLineForFile < iCurrentBufferLine THEN
+			eTXTDataExchangerAddLogsState := TXT_DATA_EXCHANGER_ADD_LOGS_WRITE;			
+	
+		ELSIF iCurrentBufferLineForFile >= iCurrentBufferLine THEN
+			eTXTDataExchangerAddLogsState := TXT_DATA_EXCHANGER_ADD_LOGS_CLOSE;
+			
+		END_IF;
+
+	
+	TXT_DATA_EXCHANGER_ADD_LOGS_CLOSE:
+		IF NOT fbFileClose.bError THEN
+			fbFileClose(	sNetId := sAmsNetId,
+							hFile := hFile,
+							bExecute := TRUE,
+							tTimeout := DEFAULT_ADS_TIMEOUT);
+							
+			IF NOT fbFileClose.bBusy THEN
+				fbFileClose(bExecute := FALSE);
+				eTXTDataExchangerAddLogsState := TXT_DATA_EXCHANGER_ADD_LOGS_OPEN;
+				eTXTDataExchangerState := TXT_DATA_EXCHANGER_IDLE;
+
+			END_IF
+		ELSE
+			bError := fbFileClose.bError;
+			iErrorID := fbFileClose.nErrId;
+			fbFileClose( bExecute := FALSE);
+			
+		END_IF
+		
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Idle" Id="{db1bc726-252f-4c03-aa4d-9e25c54fc7e2}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Idle
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF iCurrentBufferLineForFile < iCurrentBufferLine THEN
+	eTXTDataExchangerState := TXT_DATA_EXCHANGER_ADD_LOGS;
+
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Initializing" Id="{14e1fde6-1d3a-4806-8cd1-6eab3ea9b532}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Initializing //C:\TwinCAT\log\filelog.txt
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eTXTDataExchangerInitState OF
+	TXT_DATA_EXCHANGER_INIT_CREATE_DIR:
+		IF bCreateFileAtStart THEN
+			fbCreateDir(sNetId 		:= sAmsNetId,
+						sPathName 	:= sFileDir,
+						bExecute 	:= TRUE,
+						tTimeout 	:= DEFAULT_ADS_TIMEOUT);
+						
+			IF NOT fbCreateDir.bBusy THEN
+				eTXTDataExchangerInitState := TXT_DATA_EXCHANGER_INIT_GET_TIME;
+				fbCreateDir( bExecute := FALSE);
+				
+			END_IF
+		ELSE
+			eTXTDataExchangerInitState := TXT_DATA_EXCHANGER_INIT_DONE;
+			
+		END_IF
+		
+	TXT_DATA_EXCHANGER_INIT_GET_TIME:
+		IF fbMachineTime.bValid THEN
+			stTime := fbMachineTime.systemTime;
+			sTime := SYSTEMTIME_TO_STRING(stTime);
+			sFileDate := LEFT(sTime,10);
+			eTXTDataExchangerInitState := TXT_DATA_EXCHANGER_INIT_CREATE_FILE;
+			
+		END_IF
+		
+	TXT_DATA_EXCHANGER_INIT_CREATE_FILE:
+		IF NOT fbFileOpen.bError THEN
+			fbFileOpen( sNetId 		:= sAmsNetId,
+						sPathName 	:= sFilePath,
+						bExecute 	:= TRUE,
+						tTimeout	:= DEFAULT_ADS_TIMEOUT,
+						nMode		:= FOPEN_MODEAPPEND OR FOPEN_MODEPLUS);
+							
+			IF NOT fbFileOpen.bBusy THEN
+				hFile := fbFileOpen.hFile;
+				fbFileOpen(bExecute := FALSE);		
+				
+				IF bAddHeader THEN 
+					eTXTDataExchangerInitState := TXT_DATA_EXCHANGER_INIT_ADD_HEADER;
+					
+				ELSE
+					eTXTDataExchangerInitState := TXT_DATA_EXCHANGER_INIT_CLOSE_FILE;
+					
+				END_IF							
+			END_IF
+		ELSE
+			bError := fbFileOpen.bError;
+			iErrorID := fbFileOpen.nErrId;
+			fbFileOpen( bExecute := FALSE);
+			
+		END_IF
+		
+	TXT_DATA_EXCHANGER_INIT_ADD_HEADER:
+		IF NOT fbFilePuts.bError THEN
+			fbFilePuts(	sNetId := sAmsNetId,
+						hFile := hFile,
+						sLine := CONCAT('----- Logger file initialized at ',CONCAT(LEFT(sTime,23),' ----- $n')),
+						bExecute := TRUE,
+						tTimeout := DEFAULT_ADS_TIMEOUT);
+
+			IF NOT fbFilePuts.bBusy THEN
+				eTXTDataExchangerInitState := TXT_DATA_EXCHANGER_INIT_CLOSE_FILE;
+				fbFilePuts( bExecute := FALSE);
+				
+			END_IF	
+		ELSE
+			bError := fbFilePuts.bError;
+			iErrorID := fbFilePuts.nErrId;
+			fbFilePuts( bExecute := FALSE);
+			
+		END_IF
+	
+	TXT_DATA_EXCHANGER_INIT_CLOSE_FILE:
+		IF NOT fbFileClose.bError THEN
+			fbFileClose( sNetId 		:= sAmsNetId,
+							hFile 		:= hFile,
+							bExecute 	:= TRUE,
+							tTimeout 	:= DEFAULT_ADS_TIMEOUT);
+							
+			IF NOT fbFileClose.bBusy THEN
+				eTXTDataExchangerInitState := TXT_DATA_EXCHANGER_INIT_DONE;
+				fbFileClose( bExecute := FALSE);
+				
+			END_IF
+		ELSE
+			bError := fbFileClose.bError;
+			iErrorID := fbFileClose.nErrId;
+			fbFileClose( bExecute := FALSE);
+			
+		END_IF
+	
+	TXT_DATA_EXCHANGER_INIT_DONE:
+		eTXTDataExchangerInitState := TXT_DATA_EXCHANGER_INIT_CREATE_DIR;
+		eTXTDataExchangerState := TXT_DATA_EXCHANGER_IDLE;
+		
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_MethodDone" Id="{2f3fd77c-c6ee-4a6e-8cfb-79b7ecd1c52b}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_MethodDone
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT bBusy THEN
+	eTXTDataExchangerState := TXT_DATA_EXCHANGER_IDLE;
+
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Ready" Id="{e18836d8-72f2-47a8-97b3-1fe6b1c659db}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Ready
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eTXTDataExchangerState := TXT_DATA_EXCHANGER_IDLE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Reset" Id="{fb5d8fc6-5068-4e3e-94b6-f28af10d6aac}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF M_ResetParameters() THEN
+	eTXTDataExchangerState := TXT_DATA_EXCHANGER_METHOD_DONE;
+	
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_SearchForFile" Id="{d5869d26-d7d9-4d2f-9cb7-73b2d86f9cb7}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD MS_SearchForFile : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eTXTDataExchangerSearchForFileState OF
+    TXT_DATA_EXCHANGER_SEARCH_FOR_FILE_ENUM_FIRST_ENTRY:
+		bFileFound := FALSE;
+		fbEnumFindFileEntry (sNetID := sAmsNetId, 
+							 tTimeout := T#5S, 
+							 sPathName := CONCAT(STR1 := sFileDir, STR2 := '*.*'));
+		
+		fbEnumFindFileEntry.eCmd := eEnumCmd_First;    (* enum first entry *)
+		
+		eTXTDataExchangerSearchForFileState := TXT_DATA_EXCHANGER_SEARCH_FOR_FILE_ENUM_NEXT_ENTRY;
+
+    TXT_DATA_EXCHANGER_SEARCH_FOR_FILE_ENUM_NEXT_ENTRY:    (* enum one entry *)
+        fbEnumFindFileEntry( bExecute := FALSE );
+        fbEnumFindFileEntry( bExecute := TRUE );
+		
+        eTXTDataExchangerSearchForFileState := TXT_DATA_EXCHANGER_SEARCH_FOR_FILE_WAIT_FOR_READING;
+
+    TXT_DATA_EXCHANGER_SEARCH_FOR_FILE_WAIT_FOR_READING:    (* wait until function block not busy *)
+        fbEnumFindFileEntry( bExecute := FALSE );
+		
+        IF NOT fbEnumFindFileEntry.bBusy THEN
+            IF NOT fbEnumFindFileEntry.bError THEN
+                IF NOT fbEnumFindFileEntry.bEOE THEN
+                   	IF sSearchFileName = fbEnumFindFileEntry.stFindFile.sFileName THEN
+						bFileFound := TRUE;
+						eTXTDataExchangerSearchForFileState := TXT_DATA_EXCHANGER_SEARCH_FOR_FILE_DONE;
+						
+					END_IF
+                    fbEnumFindFileEntry.eCmd := eEnumCmd_Next; (* enum next entry *)
+					
+                    eTXTDataExchangerSearchForFileState := TXT_DATA_EXCHANGER_SEARCH_FOR_FILE_ENUM_NEXT_ENTRY;
+					
+                ELSE (* no more entries *)
+                    eTXTDataExchangerSearchForFileState := TXT_DATA_EXCHANGER_SEARCH_FOR_FILE_DONE;
+					
+                END_IF
+            ELSE (* log error *)       
+				bError := fbEnumFindFileEntry.bError;
+				iErrorID := fbEnumFindFileEntry.nErrID;
+				eTXTDataExchangerSearchForFileState := TXT_DATA_EXCHANGER_SEARCH_FOR_FILE_DONE;
+				
+            END_IF
+        END_IF
+		
+	TXT_DATA_EXCHANGER_SEARCH_FOR_FILE_DONE:
+			eTXTDataExchangerSearchForFileState := TXT_DATA_EXCHANGER_SEARCH_FOR_FILE_ENUM_FIRST_ENTRY;
+			eTXTDataExchangerState := TXT_DATA_EXCHANGER_METHOD_DONE;
+		
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_SelectPath" Id="{4fb457ee-747b-41e1-a5f7-8fbe8f662bae}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD MS_SelectPath : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF M_SetNewPath() THEN
+	eTXTDataExchangerState := TXT_DATA_EXCHANGER_METHOD_DONE;
+	
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MS_Uninitialized" Id="{a2dbf8a9-4867-41f8-b176-07f2375a7b52}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED MS_Uninitialized 
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Name" Id="{37d6402b-4711-420d-8da0-ef91dc38d80d}" FolderPath="Properties\Parameters\">
+      <Declaration><![CDATA[PROPERTY Name : STRING]]></Declaration>
+      <Get Name="Get" Id="{d090d2fb-84ad-4b4b-a9cd-7c2b1e67d897}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Name := sName;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{3eea3c8c-f2fa-4faa-bfae-67339695a1ff}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[sName := Name;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="StateMachine" Id="{b3b23c31-97e9-4c87-8c8c-7c47bcaf2578}" FolderPath="StateMachine\">
+      <Declaration><![CDATA[METHOD PROTECTED StateMachine
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE eTXTDataExchangerState OF
+	TXT_DATA_EXCHANGER_UNINITIALIZED:
+		MS_Uninitialized();
+		
+	TXT_DATA_EXCHANGER_INITIALIZING:
+		MS_Initializing();
+		
+	TXT_DATA_EXCHANGER_IDLE:
+		MS_Idle();
+		
+	TXT_DATA_EXCHANGER_ADD_LOGS:
+		MS_AddLogs();	
+		
+	TXT_DATA_EXCHANGER_SELECT_PATH:
+		MS_SelectPath();			
+		
+	TXT_DATA_EXCHANGER_SEARCH_FOR_FILE:
+		MS_SearchForFile();			
+	
+	TXT_DATA_EXCHANGER_RESET:
+		MS_Reset();
+		
+	TXT_DATA_EXCHANGER_METHOD_DONE:
+		MS_MethodDone();
+	
+	TXT_DATA_EXCHANGER_ABORTING:
+		MS_Aborting();
+	
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_TXTDataExchanger">
+      <LineId Id="145" Count="0" />
+      <LineId Id="147" Count="3" />
+      <LineId Id="209" Count="0" />
+      <LineId Id="151" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.Active.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.AmsNetId.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.AmsNetId.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.Busy.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.Error.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.ErrorID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.FileDir.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.FileDir.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.FileName.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.FileName.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.M_ResetParameters">
+      <LineId Id="59" Count="3" />
+      <LineId Id="64" Count="7" />
+      <LineId Id="76" Count="2" />
+      <LineId Id="86" Count="4" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.M_SetNewPath">
+      <LineId Id="21" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="19" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MR_Abort">
+      <LineId Id="3" Count="1" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="5" Count="5" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MR_AddLogs">
+      <LineId Id="3" Count="2" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="7" Count="2" />
+      <LineId Id="34" Count="2" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="11" Count="4" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="29" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MR_AddMESCommand">
+      <LineId Id="3" Count="2" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="77" Count="0" />
+      <LineId Id="76" Count="0" />
+      <LineId Id="79" Count="0" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="87" Count="0" />
+      <LineId Id="90" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="88" Count="0" />
+      <LineId Id="93" Count="2" />
+      <LineId Id="107" Count="0" />
+      <LineId Id="81" Count="0" />
+      <LineId Id="96" Count="8" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="106" Count="0" />
+      <LineId Id="80" Count="0" />
+      <LineId Id="105" Count="0" />
+      <LineId Id="11" Count="4" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="29" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MR_FirstCycle">
+      <LineId Id="3" Count="2" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="24" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MR_Init">
+      <LineId Id="3" Count="0" />
+      <LineId Id="23" Count="1" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="5" Count="4" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="12" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MR_Reset">
+      <LineId Id="3" Count="1" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="7" Count="3" />
+      <LineId Id="12" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MR_SearchForFile">
+      <LineId Id="6" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="9" Count="4" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="14" Count="2" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MR_SelectPath">
+      <LineId Id="35" Count="0" />
+      <LineId Id="46" Count="1" />
+      <LineId Id="36" Count="7" />
+      <LineId Id="33" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MS_Aborting">
+      <LineId Id="3" Count="3" />
+      <LineId Id="8" Count="3" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="12" Count="3" />
+      <LineId Id="19" Count="17" />
+      <LineId Id="41" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MS_AddLogs">
+      <LineId Id="3" Count="23" />
+      <LineId Id="28" Count="20" />
+      <LineId Id="50" Count="4" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="55" Count="1" />
+      <LineId Id="88" Count="0" />
+      <LineId Id="57" Count="1" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="59" Count="3" />
+      <LineId Id="64" Count="7" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="72" Count="6" />
+      <LineId Id="82" Count="0" />
+      <LineId Id="79" Count="0" />
+      <LineId Id="83" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MS_Idle">
+      <LineId Id="3" Count="1" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MS_Initializing">
+      <LineId Id="3" Count="1" />
+      <LineId Id="103" Count="0" />
+      <LineId Id="5" Count="7" />
+      <LineId Id="102" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="104" Count="0" />
+      <LineId Id="106" Count="1" />
+      <LineId Id="105" Count="0" />
+      <LineId Id="14" Count="6" />
+      <LineId Id="101" Count="0" />
+      <LineId Id="21" Count="11" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="100" Count="0" />
+      <LineId Id="87" Count="1" />
+      <LineId Id="99" Count="0" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="35" Count="4" />
+      <LineId Id="98" Count="0" />
+      <LineId Id="40" Count="2" />
+      <LineId Id="44" Count="9" />
+      <LineId Id="94" Count="0" />
+      <LineId Id="54" Count="4" />
+      <LineId Id="95" Count="0" />
+      <LineId Id="59" Count="11" />
+      <LineId Id="96" Count="0" />
+      <LineId Id="71" Count="4" />
+      <LineId Id="97" Count="0" />
+      <LineId Id="76" Count="2" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="80" Count="0" />
+      <LineId Id="82" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MS_MethodDone">
+      <LineId Id="3" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MS_Ready">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MS_Reset">
+      <LineId Id="44" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MS_SearchForFile">
+      <LineId Id="165" Count="1" />
+      <LineId Id="233" Count="0" />
+      <LineId Id="207" Count="1" />
+      <LineId Id="206" Count="0" />
+      <LineId Id="204" Count="0" />
+      <LineId Id="169" Count="0" />
+      <LineId Id="217" Count="0" />
+      <LineId Id="170" Count="0" />
+      <LineId Id="172" Count="1" />
+      <LineId Id="178" Count="1" />
+      <LineId Id="216" Count="0" />
+      <LineId Id="180" Count="3" />
+      <LineId Id="215" Count="0" />
+      <LineId Id="184" Count="3" />
+      <LineId Id="220" Count="0" />
+      <LineId Id="222" Count="1" />
+      <LineId Id="221" Count="0" />
+      <LineId Id="188" Count="0" />
+      <LineId Id="218" Count="0" />
+      <LineId Id="189" Count="0" />
+      <LineId Id="214" Count="0" />
+      <LineId Id="250" Count="0" />
+      <LineId Id="191" Count="0" />
+      <LineId Id="213" Count="0" />
+      <LineId Id="192" Count="1" />
+      <LineId Id="219" Count="0" />
+      <LineId Id="245" Count="0" />
+      <LineId Id="244" Count="0" />
+      <LineId Id="212" Count="0" />
+      <LineId Id="196" Count="3" />
+      <LineId Id="232" Count="0" />
+      <LineId Id="231" Count="0" />
+      <LineId Id="209" Count="0" />
+      <LineId Id="154" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MS_SelectPath">
+      <LineId Id="155" Count="1" />
+      <LineId Id="158" Count="0" />
+      <LineId Id="157" Count="0" />
+      <LineId Id="154" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.MS_Uninitialized">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.Name.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.Name.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TXTDataExchanger.StateMachine">
+      <LineId Id="3" Count="11" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="35" Count="1" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="20" Count="7" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

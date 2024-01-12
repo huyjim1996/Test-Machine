@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_MachineCtrlStateUninitialized" Id="{b9fdefb4-3200-4e13-b096-7e163c427a60}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_MachineCtrlStateUninitialized :
+(
+	MACHINE_STATE_UNINITIALIZED_CR800_ETHERCAT_STATUS_CHECK 		:= 0,
+	MACHINE_STATE_UNINITIALIZED_CR800_ETHERCAT_STATUS_CHECK_DONE	:= 10,
+	MACHINE_STATE_UNINITIALIZED_CR800_ETHERCAT_ERROR_RESET			:= 20,
+	MACHINE_STATE_UNINITIALIZED_CR800_ETHERCAT_REQUEST_OP_STATE		:= 30,	(*  *)
+	MACHINE_STATE_UNINITIALIZED_CR800_CHECK_POWER_REGISTER			:= 40,	(*  *)
+	MACHINE_STATE_UNINITIALIZED_DONE								:= 50	(*  *)
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

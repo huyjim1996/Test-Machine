@@ -1,0 +1,94 @@
+Id;Default
+331;%d
+617;%f
+976;%s
+937;(* Add fields for process parameters according to machine specs*)
+396;(* Add process parameters here *)
+487;Active Alarms
+960;Active alarms
+649;Active critical
+488;Active errors
+582;Active warrnings
+755;Add new recipe with current Values
+518;Admin
+431;Alarms
+50;All
+917;Change pass.
+902;Clear Alarm
+349;Clear All Alarms
+277;Close
+410;Close HMI
+852;Confirm Alarm
+351;Confirm All Alarms
+197;Current value:
+507;Errors
+368;Event history
+86;Event ID
+606;Event JSON Attribute
+619;Event Text
+297;Event Type
+232;Events history
+231;Export
+77;Export to file
+464;Label
+715;Lights
+332;Log In
+198;Log Out
+372;Maintenance
+947;Mechine running
+417;None
+104;Operator
+615;Page Auto
+750;Page Init
+478;Page Manual
+20;Page Manual Cylinders
+5;Page Manual Inputs
+216;Page Manual Motors
+1674;Page Manual Other
+226;Page Manual Outputs
+946;Page Manual Safety
+554;Page Recipes
+979;Page Uninitialized
+495;PageAuto
+847;Process
+108;Raise Alarm
+156;Raise Alarm 2
+910;Recipe variable 10:
+311;Recipe variable 11:
+455;Recipe variable 12:
+766;Recipe variable 13:
+596;Recipe variable 14:
+883;Recipe variable 15:
+978;Recipe variable 16:
+334;Recipe variable 17:
+918;Recipe variable 18:
+273;Recipe variable 19:
+271;Recipe variable 1:
+567;Recipe variable 20:
+540;Recipe variable 21:
+977;Recipe variable 22:
+572;Recipe variable 23:
+324;Recipe variable 24:
+256;Recipe variable 2:
+323;Recipe variable 3:
+683;Recipe variable 4:
+342;Recipe variable 5:
+545;Recipe variable 6:
+718;Recipe variable 7:
+305;Recipe variable 8:
+51;Recipe variable 9:
+538;Recipe1:
+575;Recipes
+112;Selected recipe value:
+858;Selected recipe:
+289;Send Alarm
+698;Send Message
+909;Service
+853;Set JSON
+536;Severity
+586;Step mode on
+848;Time Cleared
+730;Time Confirmed
+9;Time Raised
+10;Total active alarms
+951;Warnings

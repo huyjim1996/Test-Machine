@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="PRG_FB_MoverCA_Test" Id="{3b1c6c01-d271-4e35-93f8-103f0891a4fe}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FB_MoverCA_Test
+VAR
+	bFirstCycle 		: BOOL := TRUE;
+	
+	stAxisRef			: AXIS_REF;
+	iAxisRemoveID		: UINT;
+	
+	fbAxesGroupCA		: FB_AxesGroupCA;
+	fbAxisCA1			: FB_XtsMover;
+	fbAxisCA2			: FB_XtsMover;
+	
+	iState 				: INT;
+	
+	bInit 				: BOOL;
+	bGroupInit			: BOOL;
+	bGroupAbort 		: BOOL;
+	bAdd				: BOOL;
+	bRemove				: BOOL;
+
+	bMoveAbsCA1 		: BOOL;
+	bMoveAbsCA2 		: BOOL;
+	bStop 				: BOOL;
+	bHalt				: BOOL;
+	bHaltCA				: BOOL;
+	
+	lrTargetPositionCA1	: LREAL;
+	lrTargetPositionCA2	: LREAL;
+	
+	lrDistanceCA1		: LREAL;
+	lrDistanceCA2		: LREAL;
+	
+	lrOverride			: LREAL;
+	lrVelocity			: LREAL;
+	lrAcceleration		: LREAL;
+	lrDeceleration		: LREAL;
+	lrJerk				: LREAL;
+	lrJogVelocity		: LREAL;
+	lrJogAcceleration	: LREAL;
+	lrJogDeceleration	: LREAL;
+	lrJogJerk			: LREAL;
+	lrStopDeceleration	: LREAL;
+	lrStopJerk			: LREAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirstCycle THEN
+	bFirstCycle := FALSE;
+
+	
+	lrOverride 			:= 100.0;
+	lrVelocity 			:= 100.0;
+	lrAcceleration		:= 1000.0;
+	lrDeceleration		:= 1000.0;
+	lrJerk				:= 10000.0;
+	
+	lrJogVelocity 		:= 50.0;
+	lrJogAcceleration	:= 1000.0;
+	lrJogDeceleration	:= 1000.0;
+	lrJogJerk			:= 10000.0;
+	
+	lrStopDeceleration	:= 1000.0;
+	lrStopJerk			:= 1000.0;
+	
+	fbAxesGroupCA.MR_FirstCycle('Axes group CA',lrDeceleration, lrJerk);
+	
+	fbAxisCA1.Override 			:= lrOverride;
+	fbAxisCA1.Velocity 			:= lrVelocity;
+	fbAxisCA1.Acceleration 		:= lrAcceleration;
+	fbAxisCA1.Deceleration 		:= lrDeceleration;
+	fbAxisCA1.Jerk 				:= lrJerk;
+	fbAxisCA1.StopDeceleration 	:= lrStopDeceleration;
+	fbAxisCA1.StopJerk			:= lrStopJerk;
+	
+	fbAxisCA2.Override 			:= lrOverride;
+	fbAxisCA2.Velocity 			:= lrVelocity;
+	fbAxisCA2.Acceleration 		:= lrAcceleration;
+	fbAxisCA2.Deceleration 		:= lrDeceleration;
+	fbAxisCA2.Jerk 				:= lrJerk;
+	fbAxisCA2.StopDeceleration 	:= lrStopDeceleration;
+	fbAxisCA2.StopJerk			:= lrStopJerk;
+	
+END_IF
+
+IF bStop THEN
+	bStop := FALSE;
+	iState := 255;
+ELSIF bHalt THEN
+	bHalt := FALSE;
+	iState := 254;
+END_IF
+
+CASE iState OF
+	0:	
+		IF bInit THEN
+			bInit := FALSE;
+			iState := 10;
+			
+		ELSIF bGroupInit THEN
+			bGroupInit := FALSE;
+			iState := 30;
+			
+		ELSIF bGroupAbort THEN
+			bGroupAbort := FALSE;
+			iState := 60;
+		
+		ELSIF bMoveAbsCA1 THEN
+			bMoveAbsCA1 := FALSE;
+			iState := 110;
+			
+		ELSIF bMoveAbsCA2 THEN
+			bMoveAbsCA2 := FALSE;
+			iState := 120;
+			
+		ELSIF bRemove THEN
+			bRemove := FALSE;
+			iState := 130;
+			
+		END_IF
+	10:
+		fbAxisCA1.MR_Init();
+		
+		IF fbAxisCA1.PowerOn THEN
+			iState := 15;
+		END_IF
+		
+	15:
+		fbAxisCA1.MR_MoveAbsolute( lrAbsolutePosition := 2000.0);
+		
+		IF fbAxisCA1.InPosition THEN
+			iState := 20;
+		END_IF
+		
+	20:
+		fbAxisCA2.MR_Init();
+		
+		IF fbAxisCA2.PowerOn THEN
+			iState := 25;
+		END_IF
+	
+	25:
+		fbAxisCA2.MR_MoveAbsolute( lrAbsolutePosition := 1000.0);
+		
+		IF FBAxisCA2.InPosition THEN
+			iState := 0;
+		END_IF
+	30:
+		fbAxesGroupCA.MR_Init();
+		
+		IF fbAxesGroupCA.Active THEN
+			iState := 40;
+		END_IF
+		
+	40:
+		stAxisRef := fbAxisCA1.AxisRef;
+		fbAxesGroupCA.MR_Add(stAxisRef,1);
+		
+		IF fbAxesGroupCA.AxisAdded THEN
+			iState := 50;
+		END_IF
+		
+	50:
+		stAxisRef := fbAxisCA2.AxisRef;
+		fbAxesGroupCA.MR_Add(stAxisRef,2);
+		
+		IF fbAxesGroupCA.AxisAdded THEN
+			iState := 0;
+		END_IF
+		
+	60:
+		fbAxesGroupCA.MR_Abort();
+		
+		IF NOT fbAxesGroupCA.Active THEN
+			iState := 0;
+		END_IF
+		
+	110:
+		fbAxisCA1.Gap := 150.0;
+		fbAxisCA1.MR_MoveAbsoluteCA(lrAbsolutePosition := lrTargetPositionCA1);
+		
+		IF fbAxisCA1.InPosition THEN
+			iState := 0;
+		END_IF
+	120:
+		fbAxisCA2.Gap := 150.0;
+		fbAxisCA2.MR_MoveAbsoluteCA(lrAbsolutePosition := lrTargetPositionCA2);
+		
+		IF fbAxisCA2.InPosition THEN
+			iState := 0;
+		END_IF
+		
+	130:
+		fbAxesGroupCA.MR_Remove(iAxisRemoveID);
+		
+		IF fbAxesGroupCA.AxisRemoved THEN
+			iState := 0;
+		END_IF
+		
+	140:
+		fbAxisCA1.MR_MoveRelativeCA( lrRelativeDistance := lrDistanceCA1);
+		
+		IF fbAxisCA1.InPosition THEN
+			iState := 0;
+		END_IF
+		
+	150:
+		fbAxisCA2.MR_MoveRelativeCA( lrRelativeDistance := lrDistanceCA2);
+		
+		IF fbAxisCA2.InPosition THEN
+			iState := 0;
+		END_IF
+	254:
+		fbAxisCA1.MR_Halt();
+		fbAxisCA2.MR_Halt();
+		
+		IF fbAxisCA1.Halted AND fbAxisCA2.Halted THEN
+			iState := 0;
+		END_IF
+	255:
+		fbAxisCA1.MR_Stop();
+		fbAxisCA2.MR_Stop();
+		
+		IF fbAxisCA1.Stopped AND fbAxisCA2.Stopped THEN
+			iState := 0;
+		END_IF
+END_CASE
+
+fbAxisCA1();
+fbAxisCA2();
+fbAxesGroupCA();]]></ST>
+    </Implementation>
+    <LineIds Name="PRG_FB_MoverCA_Test">
+      <LineId Id="1923" Count="17" />
+      <LineId Id="2206" Count="0" />
+      <LineId Id="1941" Count="0" />
+      <LineId Id="2207" Count="0" />
+      <LineId Id="1942" Count="57" />
+      <LineId Id="2091" Count="6" />
+      <LineId Id="2000" Count="6" />
+      <LineId Id="2098" Count="4" />
+      <LineId Id="2104" Count="0" />
+      <LineId Id="2103" Count="0" />
+      <LineId Id="2008" Count="28" />
+      <LineId Id="2049" Count="1" />
+      <LineId Id="2089" Count="0" />
+      <LineId Id="2051" Count="5" />
+      <LineId Id="2090" Count="0" />
+      <LineId Id="2057" Count="11" />
+      <LineId Id="2145" Count="2" />
+      <LineId Id="2151" Count="4" />
+      <LineId Id="2157" Count="2" />
+      <LineId Id="2069" Count="0" />
+      <LineId Id="2161" Count="1" />
+      <LineId Id="2070" Count="17" />
+      <LineId Id="252" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

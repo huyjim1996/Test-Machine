@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="E_FixtureStateAbort" Id="{d39c75fe-c47e-48be-9071-868b337f0ef7}">
+    <Declaration><![CDATA[{attribute 'strict'}
+TYPE E_FixtureStateAbort :
+(
+	FIXTURE_ABORT_CLAMP		:= 0,	(*  *)
+	FIXTURE_ABORT_COVER		:= 20,	(*  *)
+	FIXTURE_ABORT_DONE	:= 10	(*  *)
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
